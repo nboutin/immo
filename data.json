@@ -1,0 +1,10 @@
+{
+    "prix_achat": 50000,
+    "agence_immo": {
+        "honoraire_taux": 0,
+        "honoraire_montant": 0},
+    "notaire": {
+        "honoraire_taux": 0,
+        "honoraire_montant":0 },
+    "loyers": [300]
+}
