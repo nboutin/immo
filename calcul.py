@@ -15,3 +15,8 @@ def rendement_methode_larcher(loyers_mensuel_total, invest_initial):
     '''
 
     return (loyers_mensuel_total * 9) / invest_initial
+
+
+def rendement_net(loyer_annuel_total, charges_annuel_total, invest_initial):
+
+    return (loyer_annuel_total - charges_annuel_total) / invest_initial

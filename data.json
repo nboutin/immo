@@ -2,38 +2,44 @@
     "prix_achat": 120000,
     "agence_immo": {
         "honoraire_taux": 0.05,
-        "honoraire_montant": 0},
+        "honoraire_montant": 0
+    },
     "notaire": {
         "honoraire_taux": 0.1,
-        "honoraire_montant": 0 },
-    "charges": {
-        "taxe_fonciere": 1080, 
-        "copropriete": 0,
-        "PNO": 0,
-        "gestion_agence": 0
+        "honoraire_montant": 0
     },
-    "charges_futur": {
-        "travaux": 0
-    },
-    "lots":[
-        {   "type": "T1",
+    "taxe_fonciere": 1080,
+    "travaux_provision": 0.01,
+    "lots": [
+        {
+            "type": "T1",
             "surface": 50,
             "loyer_mensuel": 400,
-            "charges": 15,
-            "vacance_locative": 0.083
+            "charges_locataire": 15,
+            "vacance_locative": 0.083,
+            "copropriete": 0,
+            "assurance_pno": 100,
+            "gestion_agence": 0
         },
-        {   "type": "T2",
+        {
+            "type": "T2",
             "surface": 50,
             "loyer_mensuel": 400,
-            "charges": 15,
-            "vacance_locative": 0.0416
+            "charges_locataire": 15,
+            "vacance_locative": 0.0416,
+            "copropriete": 0,
+            "assurance_pno": 100,
+            "gestion_agence": 0
         },
-        {   "type": "T2",
+        {
+            "type": "T2",
             "surface": 50,
             "loyer_mensuel": 300,
-            "charges": 15
-            ,
-            "vacance_locative": 0.0416
+            "charges_locataire": 15,
+            "vacance_locative": 0.0416,
+            "copropriete": 0,
+            "assurance_pno": 100,
+            "gestion_agence": 0
         }
     ]
 }

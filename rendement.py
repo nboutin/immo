@@ -16,6 +16,7 @@ def main():
 
     calcul_rendement_brut(bien_immo)
     calcul_rendement_methode_larcher(bien_immo)
+    calcul_rendement_net(bien_immo)
 
     print_repport(bien_immo)
 
@@ -52,6 +53,21 @@ def prepare_inputs(bien_immo):
 
     bien_immo['invest_initial'] = bien_immo['prix_achat'] + bien_immo['notaire']['honoraire_montant'] + bien_immo['agence_immo']['honoraire_montant']
 
+    calcul_charges_annuel(bien_immo)
+
+
+def calcul_charges_annuel(bien_immo):
+
+    bien_immo['charges_annuel_total'] = bien_immo['taxe_fonciere']
+
+    for lot in bien_immo['lots']:
+        loyer = lot['loyer_mensuel']
+        bien_immo['charges_annuel_total'] += bien_immo['travaux_provision'] * loyer * 12
+        bien_immo['charges_annuel_total'] += lot['vacance_locative'] * loyer * 12
+        bien_immo['charges_annuel_total'] += lot['assurance_pno']
+        bien_immo['charges_annuel_total'] += lot['gestion_agence'] * loyer * 12
+        bien_immo['charges_annuel_total'] += lot['copropriete']
+
 
 def calcul_rendement_brut(bien_immo):
 
@@ -59,12 +75,15 @@ def calcul_rendement_brut(bien_immo):
 
 
 def calcul_rendement_methode_larcher(bien_immo):
-    
+
     bien_immo['r_larcher'] = calcul.rendement_methode_larcher(bien_immo['loyers_mensuel_total'], bien_immo['invest_initial'])
 
-def compute_rendement_net(bien_immo):
 
-    return 0
+def calcul_rendement_net(bien_immo):
+
+    bien_immo['r_net'] = calcul.rendement_net(bien_immo['loyers_annuel_total'],
+                                              bien_immo['charges_annuel_total'],
+                                              bien_immo['invest_initial'])
 
 
 def print_repport(bien_immo):

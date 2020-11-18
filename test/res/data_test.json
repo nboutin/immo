@@ -1,0 +1,35 @@
+{
+    "prix_achat": 0,
+    "agence_immo": {
+        "honoraire_taux": 0,
+        "honoraire_montant": 0
+    },
+    "notaire": {
+        "honoraire_taux": 0,
+        "honoraire_montant": 0
+    },
+    "taxe_fonciere": 0,
+    "travaux_provision": 0,
+    "lots": [
+        {
+            "type": "",
+            "surface": 0,
+            "loyer_mensuel": 0,
+            "charges_locataire": 0,
+            "vacance_locative": 0,
+            "copropriete": 0,
+            "assurance_pno": 0,
+            "gestion_agence": 0
+        },
+        {
+            "type": "",
+            "surface": 0,
+            "loyer_mensuel": 0,
+            "charges_locataire": 0,
+            "vacance_locative": 0,
+            "copropriete": 0,
+            "assurance_pno": 0,
+            "gestion_agence": 0
+        }
+    ]
+}

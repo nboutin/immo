@@ -16,6 +16,11 @@ class TestCalcul(unittest.TestCase):
         rlarcher = calcul.rendement_methode_larcher(500, 50000)
         self.assertEqual(rlarcher, 0.09)
 
+    def testRendementNet(self):
+
+        r_net = calcul.rendement_net(500 * 12, 1500, 50000)
+        self.assertEqual(r_net, 0.09)
+
 
 if __name__ == '__main__':
     unittest.main()
