@@ -8,26 +8,26 @@ __DATA_FILENAME = "data.json"
 
 
 def main():
-    
+
     with open(__DATA_FILENAME, 'r') as file:
         bien_immo = json.load(file)
-    
+
     prepare_inputs(bien_immo)
-    
+
     calcul_rendement_brut(bien_immo)
-    
+
     print_repport(bien_immo)
 
 
 def prepare_inputs(bien_immo):
-    
+
     bien_immo['loyers_mensuel_total'] = 0
     for lot in bien_immo['lots']:
         bien_immo['loyers_mensuel_total'] += lot['loyer_mensuel']
-    
+
     bien_immo['loyers_annuel_total'] = bien_immo['loyers_mensuel_total'] * 12
-    
-    taux = bien_immo['notaire']['honoraire_taux'] 
+
+    taux = bien_immo['notaire']['honoraire_taux']
     montant = bien_immo['notaire']['honoraire_montant']
     if taux * bien_immo['prix_achat'] != montant:
         if taux == 0:
@@ -37,8 +37,8 @@ def prepare_inputs(bien_immo):
         else:
             print('Error: notaire')
             quit()
-            
-    taux = bien_immo['agence_immo']['honoraire_taux'] 
+
+    taux = bien_immo['agence_immo']['honoraire_taux']
     montant = bien_immo['agence_immo']['honoraire_montant']
     if taux * bien_immo['prix_achat'] != montant:
         if taux == 0:
@@ -49,19 +49,21 @@ def prepare_inputs(bien_immo):
             print('Error: agence_immo')
             quit()
 
+    bien_immo['invest_initial'] = bien_immo['prix_achat'] + bien_immo['notaire']['honoraire_montant'] + bien_immo['agence_immo']['honoraire_montant']
+
 
 def calcul_rendement_brut(bien_immo):
-    
-    bien_immo['r_brut'] = calcul.rendement_brut(bien_immo['loyers_annuel_total'], bien_immo['prix_achat'])
+
+    bien_immo['r_brut'] = calcul.rendement_brut(bien_immo['loyers_annuel_total'], bien_immo['invest_initial'])
 
 
 def compute_rendement_net(bien_immo):
-    
+
     return 0
 
 
 def print_repport(bien_immo):
-    
+
     print(bien_immo)
 
 

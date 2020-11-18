@@ -2,6 +2,6 @@
 # -*- coding: utf-8 -*-
 
 
-def rendement_brut(loyer_annuel_total, prix_achat):
+def rendement_brut(loyer_annuel_total, invest_initial):
     
-    return loyer_annuel_total / prix_achat
+    return loyer_annuel_total / invest_initial

@@ -1,13 +1,13 @@
 {
-    "prix_achat": 120000,
+    "prix_achat": 0,
     "agence_immo": {
-        "honoraire_taux": 0.05,
+        "honoraire_taux": 0,
         "honoraire_montant": 0},
     "notaire": {
-        "honoraire_taux": 0.1,
+        "honoraire_taux": 0,
         "honoraire_montant": 0 },
     "charges": {
-        "taxe_fonciere": 1080, 
+        "taxe_fonciere": 0,
         "copropriete": 0,
         "PNO": 0,
         "gestion_agence": 0
@@ -19,18 +19,11 @@
     "lots":[
         {   "type": "T1",
             "surface": 50,
-            "loyer_mensuel": 400,
-            "charges": 15
+            "loyer_mensuel": 100
         },
-        {   "type": "T2",
+        {   "type": "T1",
             "surface": 50,
-            "loyer_mensuel": 400,
-            "charges": 15
-        },
-        {   "type": "T2",
-            "surface": 50,
-            "loyer_mensuel": 300,
-            "charges": 15
+            "loyer_mensuel": 250
         }
     ]
 }
