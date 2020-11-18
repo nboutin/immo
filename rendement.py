@@ -15,6 +15,7 @@ def main():
     prepare_inputs(bien_immo)
 
     calcul_rendement_brut(bien_immo)
+    calcul_rendement_methode_larcher(bien_immo)
 
     print_repport(bien_immo)
 
@@ -56,6 +57,10 @@ def calcul_rendement_brut(bien_immo):
 
     bien_immo['r_brut'] = calcul.rendement_brut(bien_immo['loyers_annuel_total'], bien_immo['invest_initial'])
 
+
+def calcul_rendement_methode_larcher(bien_immo):
+    
+    bien_immo['r_larcher'] = calcul.rendement_methode_larcher(bien_immo['loyers_mensuel_total'], bien_immo['invest_initial'])
 
 def compute_rendement_net(bien_immo):
 

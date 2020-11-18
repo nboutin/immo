@@ -98,6 +98,14 @@ class TestRendement(unittest.TestCase):
         rendement.calcul_rendement_brut(bien_immo)
         self.assertAlmostEqual(bien_immo['r_brut'], 0.052, 3)
 
+    def testRendementMethodeLarcher(self):
+        with open(TestRendement.__DATA_A_PATHNAME, 'r') as file:
+            bien_immo = json.load(file)
+
+        rendement.prepare_inputs(bien_immo)
+        rendement.calcul_rendement_methode_larcher(bien_immo)
+        self.assertEqual(bien_immo['r_larcher'], 0.045)
+
 
 if __name__ == '__main__':
     unittest.main()
