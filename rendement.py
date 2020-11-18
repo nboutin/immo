@@ -25,7 +25,29 @@ def prepare_inputs(bien_immo):
     for lot in bien_immo['lots']:
         bien_immo['loyers_mensuel_total'] += lot['loyer_mensuel']
     
-    bien_immo['loyers_annuel_total'] = bien_immo['loyers_mensuel_total'] * 12 
+    bien_immo['loyers_annuel_total'] = bien_immo['loyers_mensuel_total'] * 12
+    
+    taux = bien_immo['notaire']['honoraire_taux'] 
+    montant = bien_immo['notaire']['honoraire_montant']
+    if taux * bien_immo['prix_achat'] != montant:
+        if taux == 0:
+            bien_immo['notaire']['honoraire_taux'] = montant / bien_immo['prix_achat']
+        elif montant == 0:
+            bien_immo['notaire']['honoraire_montant'] = bien_immo['prix_achat'] * taux
+        else:
+            print('Error: notaire')
+            quit()
+            
+    taux = bien_immo['agence_immo']['honoraire_taux'] 
+    montant = bien_immo['agence_immo']['honoraire_montant']
+    if taux * bien_immo['prix_achat'] != montant:
+        if taux == 0:
+            bien_immo['agence_immo']['honoraire_taux'] = montant / bien_immo['prix_achat']
+        elif montant == 0:
+            bien_immo['agence_immo']['honoraire_montant'] = bien_immo['prix_achat'] * taux
+        else:
+            print('Error: agence_immo')
+            quit()
 
 
 def calcul_rendement_brut(bien_immo):

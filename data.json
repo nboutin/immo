@@ -2,10 +2,10 @@
     "prix_achat": 50000,
     "agence_immo": {
         "honoraire_taux": 0,
-        "honoraire_montant": 0},
+        "honoraire_montant": 3000},
     "notaire": {
         "honoraire_taux": 0,
-        "honoraire_montant": 0 },
+        "honoraire_montant": 1000 },
     "charges": {
         "taxe_fonciere": 0,
         "copropriete": 0,
