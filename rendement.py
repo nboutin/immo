@@ -21,7 +21,10 @@ def main():
 
 def prepare_inputs(bien_immo):
     
-    bien_immo['loyers_mensuel_total'] = sum(bien_immo['loyers_mensuel'])
+    bien_immo['loyers_mensuel_total'] = 0
+    for lot in bien_immo['lots']:
+        bien_immo['loyers_mensuel_total'] += lot['loyer_mensuel']
+    
     bien_immo['loyers_annuel_total'] = bien_immo['loyers_mensuel_total'] * 12 
 
 

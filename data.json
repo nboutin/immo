@@ -6,7 +6,6 @@
     "notaire": {
         "honoraire_taux": 0,
         "honoraire_montant": 0 },
-    "loyers_mensuel": [300],
     "charges": {
         "taxe_fonciere": 0,
         "copropriete": 0,
@@ -16,5 +15,11 @@
     "charges_futur": {
         "travaux": 0,
         "vacance_locative": 0
-    }
+    },
+    "lots":[
+        {   "type": "T1",
+            "surface": 50,
+            "loyer_mensuel": 500
+        }
+    ]
 }
