@@ -125,8 +125,16 @@ def calcul_cashflow(bien_immo):
 
 
 def print_repport(bien_immo):
+    from tabulate import tabulate
 
-    print(bien_immo)
+    table = [
+        ['Rdt Brut', '{:.2f}%'.format(bien_immo['r_brut'] * 100)],
+        ['Rdt Net', '{:.2f}%'.format(bien_immo['r_net'] * 100)],
+        ['Rdt Larcher', '{:.2f}%'.format(bien_immo['r_larcher'] * 100)],
+        ['Cashflow', '{:.2f}'.format(bien_immo['cashflow_mensuel'])]
+    ]
+
+    print(tabulate(table))
 
 
 if __name__ == '__main__':

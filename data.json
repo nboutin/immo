@@ -1,5 +1,5 @@
 {
-    "prix_achat": 120000,
+    "prix_achat": 136000,
     "agence_immo": {
         "honoraire_taux": 0.05,
         "honoraire_montant": 0
@@ -43,10 +43,10 @@
         }
     ],
     "credit": {
-        "capital_emprunt": 0,
-        "duree_annee": 0,
-        "taux_interet": 0,
-        "taux_assurance": 0,
+        "capital_emprunt": 136000,
+        "duree_annee": 20,
+        "taux_interet": 0.015,
+        "taux_assurance": 0.0035,
         "frais_dossier": 0,
         "frais_garantie": 0
     }
