@@ -5,7 +5,7 @@ import json
 import calcul
 
 __NAME = 'Rendement Locatif'
-__VERSION = '1.0.0'
+__VERSION = '1.0.0-dev'
 __DATA_FILENAME = "data.json"
 
 
