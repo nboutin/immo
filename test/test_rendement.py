@@ -5,6 +5,78 @@ import unittest
 import json
 import rendement
 
+# TODO
+# - Use setup function to load data_test.json
+
+
+class TestCredit(unittest.TestCase):
+
+    __DATA_TEST_PATHNAME = "test/res/data_test.json"
+
+    def testMensualiteHorsAssurance(self):
+        with open(TestCredit.__DATA_TEST_PATHNAME, 'r') as file:
+            bien_immo = json.load(file)
+
+        bien_immo['credit']['capital_emprunt'] = 136000
+        bien_immo['credit']['duree_annee'] = 20
+        bien_immo['credit']['taux_interet'] = 0.018
+
+        rendement.calcul_credit(bien_immo)
+        self.assertAlmostEqual(bien_immo['credit']['mensualite_hors_assurance'], 675.19, 2)
+
+    def testMensualiteAssurance(self):
+        with open(TestCredit.__DATA_TEST_PATHNAME, 'r') as file:
+            bien_immo = json.load(file)
+
+        bien_immo['credit']['capital_emprunt'] = 136000
+        bien_immo['credit']['taux_assurance'] = 0.0036
+        rendement.calcul_credit(bien_immo)
+        self.assertAlmostEqual(bien_immo['credit']['mensualite_assurance'], 40.80, 2)
+
+    def testMensualiteTotal(self):
+        with open(TestCredit.__DATA_TEST_PATHNAME, 'r') as file:
+            bien_immo = json.load(file)
+
+        bien_immo['credit']['capital_emprunt'] = 136000
+        bien_immo['credit']['duree_annee'] = 20
+        bien_immo['credit']['taux_interet'] = 0.018
+        bien_immo['credit']['taux_assurance'] = 0.0036
+        rendement.calcul_credit(bien_immo)
+        self.assertAlmostEqual(bien_immo['credit']['mensualite_total'], 715.99, 2)
+
+    def testCoutInteret(self):
+        with open(TestCredit.__DATA_TEST_PATHNAME, 'r') as file:
+            bien_immo = json.load(file)
+
+        bien_immo['credit']['capital_emprunt'] = 136000
+        bien_immo['credit']['duree_annee'] = 20
+        bien_immo['credit']['taux_interet'] = 0.018
+        rendement.calcul_credit(bien_immo)
+        self.assertAlmostEqual(bien_immo['credit']['cout_interet'], 26046.52, 2)
+
+    def testCoutAssurance(self):
+        with open(TestCredit.__DATA_TEST_PATHNAME, 'r') as file:
+            bien_immo = json.load(file)
+
+        bien_immo['credit']['capital_emprunt'] = 136000
+        bien_immo['credit']['duree_annee'] = 20
+        bien_immo['credit']['taux_assurance'] = 0.0036
+        rendement.calcul_credit(bien_immo)
+        self.assertAlmostEqual(bien_immo['credit']['cout_assurance'], 9792, 2)
+
+    def testCoutCredit(self):
+        with open(TestCredit.__DATA_TEST_PATHNAME, 'r') as file:
+            bien_immo = json.load(file)
+
+        bien_immo['credit']['capital_emprunt'] = 136000
+        bien_immo['credit']['duree_annee'] = 20
+        bien_immo['credit']['taux_interet'] = 0.018
+        bien_immo['credit']['taux_assurance'] = 0.0036
+        bien_immo['credit']['frais_dossier'] = 40
+        bien_immo['credit']['frais_garantie'] = 60
+        rendement.calcul_credit(bien_immo)
+        self.assertAlmostEqual(bien_immo['credit']['cout_credit'], 35938.52, 2)
+
 
 class TestPrepareInput(unittest.TestCase):
 
@@ -14,7 +86,7 @@ class TestPrepareInput(unittest.TestCase):
 
         with open(TestPrepareInput.__DATA_TEST_PATHNAME, 'r') as file:
             bien_immo = json.load(file)
-            
+
         bien_immo['lots'][0]['loyer_mensuel'] = 500
         rendement.prepare_inputs(bien_immo)
 
@@ -24,7 +96,7 @@ class TestPrepareInput(unittest.TestCase):
 
         with open(TestPrepareInput.__DATA_TEST_PATHNAME, 'r') as file:
             bien_immo = json.load(file)
-        
+
         bien_immo['lots'][0]['loyer_mensuel'] = 100
         bien_immo['lots'][1]['loyer_mensuel'] = 250
         rendement.prepare_inputs(bien_immo)
@@ -34,7 +106,7 @@ class TestPrepareInput(unittest.TestCase):
 
         with open(TestPrepareInput.__DATA_TEST_PATHNAME, 'r') as file:
             bien_immo = json.load(file)
-        
+
         bien_immo['lots'][0]['loyer_mensuel'] = 100
         bien_immo['lots'][1]['loyer_mensuel'] = 250
         rendement.prepare_inputs(bien_immo)
@@ -161,7 +233,7 @@ class TestRendement(unittest.TestCase):
             bien_immo = json.load(file)
 
         bien_immo['lots'][0]['loyer_mensuel'] = 500
-        bien_immo['lots'][0]['vacance_locative'] = 1/24
+        bien_immo['lots'][0]['vacance_locative'] = 1 / 24
         rendement.prepare_inputs(bien_immo)
         bien_immo['invest_initial'] = 115000
         rendement.calcul_rendement_net(bien_immo)

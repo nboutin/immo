@@ -18,6 +18,8 @@ def main():
     calcul_rendement_methode_larcher(bien_immo)
     calcul_rendement_net(bien_immo)
 
+    calcul_credit(bien_immo)
+
     print_repport(bien_immo)
 
 
@@ -84,6 +86,34 @@ def calcul_rendement_net(bien_immo):
     bien_immo['r_net'] = calcul.rendement_net(bien_immo['loyers_annuel_total'],
                                               bien_immo['charges_annuel_total'],
                                               bien_immo['invest_initial'])
+
+
+def calcul_credit(bien_immo):
+
+    bien_immo['credit']['mensualite_hors_assurance'] = \
+        calcul.credit_remboursement_constant(bien_immo['credit']['capital_emprunt'],
+                                             bien_immo['credit']['duree_annee'],
+                                             bien_immo['credit']['taux_interet'])
+
+    bien_immo['credit']['mensualite_assurance'] = \
+        calcul.mensualite_assurance(bien_immo['credit']['capital_emprunt'],
+                                    bien_immo['credit']['taux_assurance'])
+
+    bien_immo['credit']['mensualite_total'] = \
+        bien_immo['credit']['mensualite_hors_assurance'] + bien_immo['credit']['mensualite_assurance']
+
+    bien_immo['credit']['cout_interet'] = \
+        calcul.cout_interet(bien_immo['credit']['capital_emprunt'],
+                            bien_immo['credit']['duree_annee'],
+                            bien_immo['credit']['mensualite_hors_assurance'])
+
+    bien_immo['credit']['cout_assurance'] = \
+        calcul.cout_assurance(bien_immo['credit']['mensualite_assurance'],
+                              bien_immo['credit']['duree_annee'])
+
+    bien_immo['credit']['cout_credit'] = \
+        bien_immo['credit']['cout_interet'] + bien_immo['credit']['cout_assurance'] \
+        +bien_immo['credit']['frais_dossier'] + bien_immo['credit']['frais_garantie']
 
 
 def print_repport(bien_immo):

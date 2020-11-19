@@ -41,5 +41,13 @@
             "assurance_pno": 100,
             "gestion_agence": 0
         }
-    ]
+    ],
+    "credit": {
+        "capital_emprunt": 0,
+        "duree_annee": 0,
+        "taux_interet": 0,
+        "taux_assurance": 0,
+        "frais_dossier": 0,
+        "frais_garantie": 0
+    }
 }
