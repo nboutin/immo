@@ -1,5 +1,6 @@
 {
     "prix_achat": 0,
+    "travaux_budget": 0,
     "apport": 0,
     "agence_immo": {
         "honoraire_taux": 0,

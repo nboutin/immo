@@ -58,7 +58,7 @@ def prepare_inputs(bien_immo):
             quit()
 
     bien_immo['invest_initial'] = bien_immo['prix_achat'] + bien_immo['notaire']['honoraire_montant'] \
-        +bien_immo['agence_immo']['honoraire_montant'] - bien_immo['apport']
+        +bien_immo['agence_immo']['honoraire_montant'] + bien_immo['travaux_budget'] - bien_immo['apport']
 
     calcul_charges_annuel(bien_immo)
 
@@ -136,6 +136,7 @@ def print_report(bien_immo):
 
     input_achat = [
         ['Prix achat', bien_immo['prix_achat']],
+        ['Travaux', bien_immo['travaux_budget']],
         ['Apport', bien_immo['apport']],
         ['Notaire honoraire', bien_immo['notaire']['honoraire_montant']],
         ['Agence honoraire', bien_immo['agence_immo']['honoraire_montant']],

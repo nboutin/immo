@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Prise en compte de l'apport personnel pour les calculs de rendements
+- Ajout du budget travaux dans le calcul de l'investissement initial
 
 ### Added
 - Calcul du rendement locatif Brut, Net, Larcher

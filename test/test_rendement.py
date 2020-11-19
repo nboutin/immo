@@ -181,10 +181,11 @@ class TestPrepareInput(unittest.TestCase):
 
         bien_immo['prix_achat'] = 130000
         bien_immo['apport'] = 10000
+        bien_immo['travaux_budget'] = 15000
         bien_immo['agence_immo']['honoraire_montant'] = 9000
         bien_immo['notaire']['honoraire_montant'] = 6000
         rendement.prepare_inputs(bien_immo)
-        self.assertEqual(bien_immo['invest_initial'], 135000)
+        self.assertEqual(bien_immo['invest_initial'], 150000)
 
 
 class TestRendement(unittest.TestCase):
