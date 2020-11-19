@@ -44,6 +44,7 @@
     ],
     "credit": {
         "capital_emprunt": 136000,
+        "apport": 0,
         "duree_annee": 20,
         "taux_interet": 0.015,
         "taux_assurance": 0.0035,

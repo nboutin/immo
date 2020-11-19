@@ -20,7 +20,7 @@ def main():
     calcul_credit(bien_immo)
     calcul_cashflow(bien_immo)
 
-    print_repport(bien_immo)
+    print_report(bien_immo)
 
 
 def prepare_inputs(bien_immo):
@@ -124,17 +124,50 @@ def calcul_cashflow(bien_immo):
                                 bien_immo['charges_annuel_total'])
 
 
-def print_repport(bien_immo):
+def print_report(bien_immo):
     from tabulate import tabulate
 
-    table = [
+    input_achat = [
+        ['Prix achat', bien_immo['prix_achat']],
+        ['Notaire honoraire', bien_immo['notaire']['honoraire_montant']],
+        ['Agence honoraire', bien_immo['agence_immo']['honoraire_montant']],
+        ['Invest initial', bien_immo['invest_initial']],
+    ]
+
+    input_location = [
+        ['Loyer mensuel', bien_immo['loyers_mensuel_total']],
+        ['Charges annuel', bien_immo['charges_annuel_total']],
+    ]
+
+    input_credit = [
+        ['Capital', bien_immo['credit']['capital_emprunt']],
+        ['Apport', bien_immo['credit']['apport']],
+        ['Durée', bien_immo['credit']['duree_annee']],
+        ['Taux interet', '{:.2f}%'.format(bien_immo['credit']['taux_interet'] * 100)],
+        ['Taux assurance', '{:.2f}%'.format(bien_immo['credit']['taux_assurance'] * 100)],
+    ]
+
+    output_credit = [
+        ['Mensualite hors assurance', '{:.2f}'.format(bien_immo['credit']['mensualite_hors_assurance'])],
+        ['Mensualite assurance', '{:.2f}'.format(bien_immo['credit']['mensualite_assurance'])],
+        ['Mensualite total', '{:.2f}'.format(bien_immo['credit']['mensualite_total'])],
+        ['Cout interet', '{:.2f}'.format(bien_immo['credit']['cout_interet'])],
+        ['Cout assurance', '{:.2f}'.format(bien_immo['credit']['cout_assurance'])],
+        ['Cout credit', '{:.2f}'.format(bien_immo['credit']['cout_credit'])],
+    ]
+
+    output = [
         ['Rdt Brut', '{:.2f}%'.format(bien_immo['r_brut'] * 100)],
         ['Rdt Net', '{:.2f}%'.format(bien_immo['r_net'] * 100)],
         ['Rdt Larcher', '{:.2f}%'.format(bien_immo['r_larcher'] * 100)],
         ['Cashflow', '{:.2f}'.format(bien_immo['cashflow_mensuel'])]
     ]
 
-    print(tabulate(table))
+    print(tabulate(input_achat))
+    print(tabulate(input_location))
+    print(tabulate(input_credit))
+    print(tabulate(output_credit))
+    print(tabulate(output))
 
 
 if __name__ == '__main__':
