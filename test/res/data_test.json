@@ -1,5 +1,6 @@
 {
     "prix_achat": 0,
+    "apport": 0,
     "agence_immo": {
         "honoraire_taux": 0,
         "honoraire_montant": 0
@@ -33,7 +34,6 @@
         }
     ],
     "credit": {
-        "capital_emprunt": 0,
         "duree_annee": 0,
         "taux_interet": 0,
         "taux_assurance": 0,

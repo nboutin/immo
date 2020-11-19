@@ -17,7 +17,7 @@ class TestCashflow(unittest.TestCase):
         with open(TestCashflow.__DATA_TEST_PATHNAME, 'r') as file:
             bien_immo = json.load(file)
 
-        bien_immo['credit']['capital_emprunt'] = 136000
+        bien_immo['prix_achat'] = 136000
         bien_immo['taxe_fonciere'] = 1500
         bien_immo['travaux_provision'] = 0.05
         bien_immo['lots'][0]['loyer_mensuel'] = 1000
@@ -174,6 +174,17 @@ class TestPrepareInput(unittest.TestCase):
         rendement.prepare_inputs(bien_immo)
 
         self.assertEqual(bien_immo['agence_immo']['honoraire_taux'], 0.065)
+
+    def testInvestInitial(self):
+        with open(TestPrepareInput.__DATA_TEST_PATHNAME, 'r') as file:
+            bien_immo = json.load(file)
+
+        bien_immo['prix_achat'] = 130000
+        bien_immo['apport'] = 10000
+        bien_immo['agence_immo']['honoraire_montant'] = 9000
+        bien_immo['notaire']['honoraire_montant'] = 6000
+        rendement.prepare_inputs(bien_immo)
+        self.assertEqual(bien_immo['invest_initial'], 135000)
 
 
 class TestRendement(unittest.TestCase):

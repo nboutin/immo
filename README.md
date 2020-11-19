@@ -14,7 +14,6 @@ Run Unittest
 
 # Todo
 
-- [ ] Ajouter parametre d'entree apport personnel
 - [ ] Evaluer restauration de la tresorerie avec le différré d'amortissement
 - [ ] Calculer rendement net-net (net d'impot)
 - [ ] Capacité d'investissement 70% loyer >= credit
@@ -22,6 +21,7 @@ Run Unittest
 - [ ] Cout copropriete au m²
 - [ ] Indicateur global Go/NoGo
 - [ ] Prendre en compte les impots dans le calcul du cashflow
+- [x] Ajouter parametre d'entree apport personnel
 
 # Dependencies
 

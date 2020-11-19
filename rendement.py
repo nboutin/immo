@@ -57,9 +57,12 @@ def prepare_inputs(bien_immo):
             print('Error: agence_immo')
             quit()
 
-    bien_immo['invest_initial'] = bien_immo['prix_achat'] + bien_immo['notaire']['honoraire_montant'] + bien_immo['agence_immo']['honoraire_montant']
+    bien_immo['invest_initial'] = bien_immo['prix_achat'] + bien_immo['notaire']['honoraire_montant'] \
+        +bien_immo['agence_immo']['honoraire_montant'] - bien_immo['apport']
 
     calcul_charges_annuel(bien_immo)
+
+    bien_immo['credit']['capital_emprunt'] = bien_immo['invest_initial']
 
 
 def calcul_charges_annuel(bien_immo):
@@ -133,6 +136,7 @@ def print_report(bien_immo):
 
     input_achat = [
         ['Prix achat', bien_immo['prix_achat']],
+        ['Apport', bien_immo['apport']],
         ['Notaire honoraire', bien_immo['notaire']['honoraire_montant']],
         ['Agence honoraire', bien_immo['agence_immo']['honoraire_montant']],
         ['Invest initial', bien_immo['invest_initial']],
@@ -144,9 +148,8 @@ def print_report(bien_immo):
     ]
 
     input_credit = [
-        ['Capital', bien_immo['credit']['capital_emprunt']],
-        ['Apport', bien_immo['credit']['apport']],
-        ['Durée', bien_immo['credit']['duree_annee']],
+        ['Capital emprunté', bien_immo['credit']['capital_emprunt']],
+        ['Durée', '{} ans'.format(bien_immo['credit']['duree_annee'])],
         ['Taux interet', '{:.2f}%'.format(bien_immo['credit']['taux_interet'] * 100)],
         ['Taux assurance', '{:.2f}%'.format(bien_immo['credit']['taux_assurance'] * 100)],
     ]
