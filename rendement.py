@@ -4,10 +4,14 @@
 import json
 import calcul
 
+__NAME = 'Rendement Locatif'
+__VERSION = '1.0.0'
 __DATA_FILENAME = "data.json"
 
 
 def main():
+
+    print('{} {}'.format(__NAME, __VERSION))
 
     with open(__DATA_FILENAME, 'r') as file:
         bien_immo = json.load(file)
