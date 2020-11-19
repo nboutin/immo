@@ -9,6 +9,29 @@ import rendement
 # - Use setup function to load data_test.json
 
 
+class TestCashflow(unittest.TestCase):
+
+    __DATA_TEST_PATHNAME = "test/res/data_test.json"
+
+    def testCashflowMensuel(self):
+        with open(TestCashflow.__DATA_TEST_PATHNAME, 'r') as file:
+            bien_immo = json.load(file)
+
+        bien_immo['credit']['capital_emprunt'] = 136000
+        bien_immo['taxe_fonciere'] = 1500
+        bien_immo['travaux_provision'] = 0.05
+        bien_immo['lots'][0]['loyer_mensuel'] = 1000
+        bien_immo['lots'][0]['assurance_pno'] = 100
+        bien_immo['credit']['duree_annee'] = 20
+        bien_immo['credit']['taux_interet'] = 0.018
+        bien_immo['credit']['taux_assurance'] = 0.0036
+
+        rendement.prepare_inputs(bien_immo)
+        rendement.calcul_credit(bien_immo)
+        rendement.calcul_cashflow(bien_immo)
+        self.assertAlmostEqual(bien_immo['cashflow_mensuel'], 100.67, 2)
+
+
 class TestCredit(unittest.TestCase):
 
     __DATA_TEST_PATHNAME = "test/res/data_test.json"

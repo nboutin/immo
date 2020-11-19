@@ -52,3 +52,8 @@ def cout_interet(capital_emprunt, duree_annee, mensualite_hors_assurance):
 def cout_assurance(mensualite_assurance, duree_annee):
 
     return mensualite_assurance * duree_annee * 12
+
+
+def cashflow_mensuel(loyer_mensuel_total, credit_mensualite_total, charges_annuel_total):
+
+    return loyer_mensuel_total - credit_mensualite_total - charges_annuel_total / 12

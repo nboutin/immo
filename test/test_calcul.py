@@ -42,9 +42,15 @@ class TestCalcul(unittest.TestCase):
         self.assertEqual(cout_interet, 8000)
 
     def testCoutAssurance(self):
-        
+
         cout_assurance = calcul.cout_assurance(30, 20)
         self.assertEqual(cout_assurance, 7200)
+
+    def testCashflowMensuel(self):
+
+        cashflow_mensuel = calcul.cashflow_mensuel(500, 350, 1500)
+        self.assertEqual(cashflow_mensuel, 25)
+
 
 if __name__ == '__main__':
     unittest.main()

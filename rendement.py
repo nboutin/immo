@@ -17,8 +17,8 @@ def main():
     calcul_rendement_brut(bien_immo)
     calcul_rendement_methode_larcher(bien_immo)
     calcul_rendement_net(bien_immo)
-
     calcul_credit(bien_immo)
+    calcul_cashflow(bien_immo)
 
     print_repport(bien_immo)
 
@@ -114,6 +114,14 @@ def calcul_credit(bien_immo):
     bien_immo['credit']['cout_credit'] = \
         bien_immo['credit']['cout_interet'] + bien_immo['credit']['cout_assurance'] \
         +bien_immo['credit']['frais_dossier'] + bien_immo['credit']['frais_garantie']
+
+
+def calcul_cashflow(bien_immo):
+
+    bien_immo['cashflow_mensuel'] = \
+        calcul.cashflow_mensuel(bien_immo['loyers_mensuel_total'],
+                                bien_immo['credit']['mensualite_total'],
+                                bien_immo['charges_annuel_total'])
 
 
 def print_repport(bien_immo):

@@ -18,3 +18,4 @@ Run Unittest
 - [ ] Prix au m²
 - [ ] Cout copropriete au m²
 - [ ] Indicateur global Go/NoGo
+- [ ] Prendre en compte les impots dans le calcul du cashflow
