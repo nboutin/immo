@@ -14,8 +14,9 @@ Run Unittest
 
 # Todo
 
-- [ ] Evaluer restauration de la tresorerie avec le différré d'amortissement
+- [ ] Calcul de la rentabilité nette de prelevement sociaux (https://www.devenir-rentier.fr/t1918-2)
 - [ ] Calculer rendement net-net (net d'impot)
+- [ ] Evaluer restauration de la tresorerie avec le différré d'amortissement
 - [ ] Capacité d'investissement 70% loyer >= credit
 - [ ] Prix au m²
 - [ ] Cout copropriete au m²

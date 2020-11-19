@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import sys
+import getopt
 import json
 import calcul
 
@@ -9,11 +11,15 @@ __VERSION = '1.0.0-dev'
 __DATA_FILENAME = "data.json"
 
 
-def main():
+def main(argv):
 
     print('{} {}'.format(__NAME, __VERSION))
 
-    with open(__DATA_FILENAME, 'r') as file:
+    inputfile = parse_args(argv)
+    if not inputfile:
+        inputfile = __DATA_FILENAME
+
+    with open(inputfile, 'r') as file:
         bien_immo = json.load(file)
 
     prepare_inputs(bien_immo)
@@ -25,6 +31,30 @@ def main():
     calcul_cashflow(bien_immo)
 
     print_report(bien_immo)
+
+
+def parse_args(argv):
+
+    inputfile = None
+
+    try:
+        opts, args = getopt.getopt(argv, 'i:h', [])
+    except getopt.GetoptError:
+        help()
+        quit()
+
+    for opt, arg in opts:
+        if opt == '-h':
+            help()
+            quit()
+        elif opt in ('-i'):
+            inputfile = arg
+
+    return inputfile
+
+
+def help():
+    print('help')
 
 
 def prepare_inputs(bien_immo):
@@ -138,8 +168,10 @@ def print_report(bien_immo):
         ['Prix achat', bien_immo['prix_achat']],
         ['Travaux', bien_immo['travaux_budget']],
         ['Apport', bien_immo['apport']],
-        ['Notaire honoraire', bien_immo['notaire']['honoraire_montant']],
-        ['Agence honoraire', bien_immo['agence_immo']['honoraire_montant']],
+        ['Notaire honoraire', '{:.0f}({:.2f}%)'.format(bien_immo['notaire']['honoraire_montant'],
+                                               bien_immo['notaire']['honoraire_taux'] * 100)],
+        ['Agence honoraire', '{:.0f}({:.2f}%)'.format(bien_immo['agence_immo']['honoraire_montant'],
+                                               bien_immo['agence_immo']['honoraire_taux'] * 100)],
         ['Invest initial', bien_immo['invest_initial']],
     ]
 
@@ -179,4 +211,4 @@ def print_report(bien_immo):
 
 
 if __name__ == '__main__':
-  main()
+    main(sys.argv[1:])

@@ -8,11 +8,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
-## [1.0.0] - 2020-11-19
-
 ### Added
 - Prise en compte de l'apport personnel pour les calculs de rendements
 - Ajout du budget travaux dans le calcul de l'investissement initial
+- Argument de la ligne de commande -i pour choisir le fichier d'entrée
+
+## [1.0.0] - 2020-11-19
 
 ### Added
 - Calcul du rendement locatif Brut, Net, Larcher
