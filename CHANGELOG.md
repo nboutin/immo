@@ -13,6 +13,10 @@ All notable changes to this project will be documented in this file.
 - Ajout du budget travaux dans le calcul de l'investissement initial
 - Argument de la ligne de commande -i pour choisir le fichier d'entrée
 
+### Changed
+- Rename prix_achat with prix_net_vendeur
+- Output print formatting
+
 ## [1.0.0] - 2020-11-19
 
 ### Added

@@ -165,49 +165,49 @@ def print_report(bien_immo):
     from tabulate import tabulate
 
     input_achat = [
-        ['Prix achat', bien_immo['prix_net_vendeur']],
-        ['Travaux', bien_immo['travaux_budget']],
-        ['Apport', bien_immo['apport']],
-        ['Notaire honoraire', '{:.0f}({:.2f}%)'.format(bien_immo['notaire']['honoraire_montant'],
-                                               bien_immo['notaire']['honoraire_taux'] * 100)],
-        ['Agence honoraire', '{:.0f}({:.2f}%)'.format(bien_immo['agence_immo']['honoraire_montant'],
-                                               bien_immo['agence_immo']['honoraire_taux'] * 100)],
-        ['Invest initial', bien_immo['invest_initial']],
+        ['Prix net\nvendeur', 'Travaux', 'Apport', 'Notaire', 'Agence', 'Invest\ninitial'],
+        [bien_immo['prix_net_vendeur'], bien_immo['travaux_budget'], bien_immo['apport'],
+        '{:.0f}({:.2f}%)'.format(bien_immo['notaire']['honoraire_montant'], bien_immo['notaire']['honoraire_taux'] * 100),
+        '{:.0f}({:.2f}%)'.format(bien_immo['agence_immo']['honoraire_montant'], bien_immo['agence_immo']['honoraire_taux'] * 100),
+        bien_immo['invest_initial']],
     ]
 
     input_location = [
-        ['Loyer mensuel', bien_immo['loyers_mensuel_total']],
-        ['Charges annuel', bien_immo['charges_annuel_total']],
+        ['Loyer\nmensuel', 'Charges\nannuel'],
+        [bien_immo['loyers_mensuel_total'], bien_immo['charges_annuel_total']],
     ]
 
     input_credit = [
-        ['Capital emprunté', bien_immo['credit']['capital_emprunt']],
-        ['Durée', '{} ans'.format(bien_immo['credit']['duree_annee'])],
-        ['Taux interet', '{:.2f}%'.format(bien_immo['credit']['taux_interet'] * 100)],
-        ['Taux assurance', '{:.2f}%'.format(bien_immo['credit']['taux_assurance'] * 100)],
+        ['Capital\nemprunté', 'Durée', 'Taux\ninteret', 'Taux\nassurance'],
+        [bien_immo['credit']['capital_emprunt'], '{} ans'.format(bien_immo['credit']['duree_annee']),
+         '{:.2f}%'.format(bien_immo['credit']['taux_interet'] * 100),
+         '{:.2f}%'.format(bien_immo['credit']['taux_assurance'] * 100)],
     ]
 
     output_credit = [
-        ['Mensualite hors assurance', '{:.2f}'.format(bien_immo['credit']['mensualite_hors_assurance'])],
-        ['Mensualite assurance', '{:.2f}'.format(bien_immo['credit']['mensualite_assurance'])],
-        ['Mensualite total', '{:.2f}'.format(bien_immo['credit']['mensualite_total'])],
-        ['Cout interet', '{:.2f}'.format(bien_immo['credit']['cout_interet'])],
-        ['Cout assurance', '{:.2f}'.format(bien_immo['credit']['cout_assurance'])],
-        ['Cout credit', '{:.2f}'.format(bien_immo['credit']['cout_credit'])],
+        ['Mensualite\nhors assurance', 'Mensualite\nassurance', 'Mensualite\ntotal', 'Cout\ninteret',
+         'Cout\nassurance', 'Cout\ncredit'],
+        ['{:.2f}'.format(bien_immo['credit']['mensualite_hors_assurance']),
+        '{:.2f}'.format(bien_immo['credit']['mensualite_assurance']),
+        '{:.2f}'.format(bien_immo['credit']['mensualite_total']),
+        '{:.2f}'.format(bien_immo['credit']['cout_interet']),
+        '{:.2f}'.format(bien_immo['credit']['cout_assurance']),
+        '{:.2f}'.format(bien_immo['credit']['cout_credit'])],
     ]
 
     output = [
-        ['Rdt Brut', '{:.2f}%'.format(bien_immo['r_brut'] * 100)],
-        ['Rdt Net', '{:.2f}%'.format(bien_immo['r_net'] * 100)],
-        ['Rdt Larcher', '{:.2f}%'.format(bien_immo['r_larcher'] * 100)],
-        ['Cashflow', '{:.2f}'.format(bien_immo['cashflow_mensuel'])]
+        ['Rendement\nBrut', 'Rendement\nNet', 'Rendement\nLarcher', 'Cashflow'],
+        ['{:.2f}%'.format(bien_immo['r_brut'] * 100),
+        '{:.2f}%'.format(bien_immo['r_net'] * 100),
+        '{:.2f}%'.format(bien_immo['r_larcher'] * 100),
+        '{:.2f}'.format(bien_immo['cashflow_mensuel'])]
     ]
 
-    print(tabulate(input_achat))
-    print(tabulate(input_location))
-    print(tabulate(input_credit))
-    print(tabulate(output_credit))
-    print(tabulate(output))
+    print(tabulate(input_achat, headers="firstrow") + '\n')
+    print(tabulate(input_location, headers="firstrow") + '\n')
+    print(tabulate(input_credit, headers="firstrow") + '\n')
+    print(tabulate(output_credit, headers="firstrow") + '\n')
+    print(tabulate(output, headers="firstrow") + '\n')
 
 
 if __name__ == '__main__':
