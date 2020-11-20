@@ -67,27 +67,27 @@ def prepare_inputs(bien_immo):
 
     taux = bien_immo['notaire']['honoraire_taux']
     montant = bien_immo['notaire']['honoraire_montant']
-    if taux * bien_immo['prix_achat'] != montant:
+    if taux * bien_immo['prix_net_vendeur'] != montant:
         if taux == 0:
-            bien_immo['notaire']['honoraire_taux'] = montant / bien_immo['prix_achat']
+            bien_immo['notaire']['honoraire_taux'] = montant / bien_immo['prix_net_vendeur']
         elif montant == 0:
-            bien_immo['notaire']['honoraire_montant'] = bien_immo['prix_achat'] * taux
+            bien_immo['notaire']['honoraire_montant'] = bien_immo['prix_net_vendeur'] * taux
         else:
             print('Error: notaire')
             quit()
 
     taux = bien_immo['agence_immo']['honoraire_taux']
     montant = bien_immo['agence_immo']['honoraire_montant']
-    if taux * bien_immo['prix_achat'] != montant:
+    if taux * bien_immo['prix_net_vendeur'] != montant:
         if taux == 0:
-            bien_immo['agence_immo']['honoraire_taux'] = montant / bien_immo['prix_achat']
+            bien_immo['agence_immo']['honoraire_taux'] = montant / bien_immo['prix_net_vendeur']
         elif montant == 0:
-            bien_immo['agence_immo']['honoraire_montant'] = bien_immo['prix_achat'] * taux
+            bien_immo['agence_immo']['honoraire_montant'] = bien_immo['prix_net_vendeur'] * taux
         else:
             print('Error: agence_immo')
             quit()
 
-    bien_immo['invest_initial'] = bien_immo['prix_achat'] + bien_immo['notaire']['honoraire_montant'] \
+    bien_immo['invest_initial'] = bien_immo['prix_net_vendeur'] + bien_immo['notaire']['honoraire_montant'] \
         +bien_immo['agence_immo']['honoraire_montant'] + bien_immo['travaux_budget'] - bien_immo['apport']
 
     calcul_charges_annuel(bien_immo)
@@ -165,7 +165,7 @@ def print_report(bien_immo):
     from tabulate import tabulate
 
     input_achat = [
-        ['Prix achat', bien_immo['prix_achat']],
+        ['Prix achat', bien_immo['prix_net_vendeur']],
         ['Travaux', bien_immo['travaux_budget']],
         ['Apport', bien_immo['apport']],
         ['Notaire honoraire', '{:.0f}({:.2f}%)'.format(bien_immo['notaire']['honoraire_montant'],

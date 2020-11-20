@@ -17,7 +17,7 @@ class TestCashflow(unittest.TestCase):
         with open(TestCashflow.__DATA_TEST_PATHNAME, 'r') as file:
             bien_immo = json.load(file)
 
-        bien_immo['prix_achat'] = 136000
+        bien_immo['prix_net_vendeur'] = 136000
         bien_immo['taxe_fonciere'] = 1500
         bien_immo['travaux_provision'] = 0.05
         bien_immo['lots'][0]['loyer_mensuel'] = 1000
@@ -139,7 +139,7 @@ class TestPrepareInput(unittest.TestCase):
         with open(TestPrepareInput.__DATA_TEST_PATHNAME, 'r') as file:
             bien_immo = json.load(file)
 
-        bien_immo['prix_achat'] = 100000
+        bien_immo['prix_net_vendeur'] = 100000
         bien_immo['notaire']['honoraire_taux'] = 0.1
         rendement.prepare_inputs(bien_immo)
 
@@ -149,7 +149,7 @@ class TestPrepareInput(unittest.TestCase):
         with open(TestPrepareInput.__DATA_TEST_PATHNAME, 'r') as file:
             bien_immo = json.load(file)
 
-        bien_immo['prix_achat'] = 100000
+        bien_immo['prix_net_vendeur'] = 100000
         bien_immo['notaire']['honoraire_montant'] = 5000
         rendement.prepare_inputs(bien_immo)
 
@@ -159,7 +159,7 @@ class TestPrepareInput(unittest.TestCase):
         with open(TestPrepareInput.__DATA_TEST_PATHNAME, 'r') as file:
             bien_immo = json.load(file)
 
-        bien_immo['prix_achat'] = 100000
+        bien_immo['prix_net_vendeur'] = 100000
         bien_immo['agence_immo']['honoraire_taux'] = 0.08
         rendement.prepare_inputs(bien_immo)
 
@@ -169,7 +169,7 @@ class TestPrepareInput(unittest.TestCase):
         with open(TestPrepareInput.__DATA_TEST_PATHNAME, 'r') as file:
             bien_immo = json.load(file)
 
-        bien_immo['prix_achat'] = 100000
+        bien_immo['prix_net_vendeur'] = 100000
         bien_immo['agence_immo']['honoraire_montant'] = 6500
         rendement.prepare_inputs(bien_immo)
 
@@ -179,7 +179,7 @@ class TestPrepareInput(unittest.TestCase):
         with open(TestPrepareInput.__DATA_TEST_PATHNAME, 'r') as file:
             bien_immo = json.load(file)
 
-        bien_immo['prix_achat'] = 130000
+        bien_immo['prix_net_vendeur'] = 130000
         bien_immo['apport'] = 10000
         bien_immo['travaux_budget'] = 15000
         bien_immo['agence_immo']['honoraire_montant'] = 9000
@@ -197,7 +197,7 @@ class TestRendement(unittest.TestCase):
         with open(TestRendement.__DATA_TEST_PATHNAME, 'r') as file:
             bien_immo = json.load(file)
 
-        bien_immo['prix_achat'] = 100000
+        bien_immo['prix_net_vendeur'] = 100000
         bien_immo['lots'][0]['loyer_mensuel'] = 500
         rendement.prepare_inputs(bien_immo)
         rendement.calcul_rendement_brut(bien_immo)
@@ -208,7 +208,7 @@ class TestRendement(unittest.TestCase):
         with open(TestRendement.__DATA_TEST_PATHNAME, 'r') as file:
             bien_immo = json.load(file)
 
-        bien_immo['prix_achat'] = 100000
+        bien_immo['prix_net_vendeur'] = 100000
         bien_immo['lots'][0]['loyer_mensuel'] = 500
         bien_immo['notaire']['honoraire_taux'] = 0.09
         bien_immo['agence_immo']['honoraire_taux'] = 0.06
@@ -221,7 +221,7 @@ class TestRendement(unittest.TestCase):
         with open(TestRendement.__DATA_TEST_PATHNAME, 'r') as file:
             bien_immo = json.load(file)
 
-        bien_immo['prix_achat'] = 100000
+        bien_immo['prix_net_vendeur'] = 100000
         bien_immo['lots'][0]['loyer_mensuel'] = 500
         rendement.prepare_inputs(bien_immo)
         rendement.calcul_rendement_methode_larcher(bien_immo)
