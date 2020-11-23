@@ -3,7 +3,7 @@
 
 __NAME = 'Analyse marché'
 __VERSION = '0.1.0-dev'
-__DATA_FILENAME = "data/invest_immo-suivi_de_marche.csv"
+__DATA_FILENAME = "data/location.csv"
 
 import csv
 import sys
@@ -36,17 +36,26 @@ def main(argv):
         r['data']['surface_moyen'] = moy
         r['data']['surface_median'] = med
 
-        r['data']['prix_surface'] = r['data']['loyer_moyen'] / r['data']['surface_moyen']
+        r['data']['prix_surface_moyen'] = r['data']['loyer_moyen'] / r['data']['surface_moyen']
+        r['data']['prix_surface_median'] = r['data']['loyer_median'] / r['data']['surface_median']
 
     output = [
-        ['Ville', 'Type', 'Count', 'Loyer\nmoyen', 'Loyer\nmédian', 'Surface\nmoyenne', 'Surface\nmédianne', 'Prix\ne/m²'],
+        ['Ville', 'Type', 'Count', 'Loyer\nmoyen', 'Loyer\nmédian', 'Surface\nmoyenne', 'Surface\nmédianne',
+         'Prix\nmoyen\ne/m²', 'Prix\nmedian\ne/m²'],
     ]
 
     input = list()
     for r in request:
         data = r['data']
-        input = (r['ville'], r['type'], data['count'], '{:.2f}'.format(data['loyer_moyen']), '{:.2f}'.format(data['loyer_median']),
-                    '{:.2f}'.format(data['surface_moyen']), '{:.2f}'.format(data['surface_median']), '{:.2f}'.format(data['prix_surface']))
+        input = (r['ville'],
+                 r['type'], data['count'],
+                 '{:.2f}'.format(data['loyer_moyen']),
+                 '{:.2f}'.format(data['loyer_median']),
+                 '{:.2f}'.format(data['surface_moyen']),
+                 '{:.2f}'.format(data['surface_median']),
+                 '{:.2f}'.format(data['prix_surface_moyen']),
+                 '{:.2f}'.format(data['prix_surface_median']),
+                 )
 
         output.append(input)
 
