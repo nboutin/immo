@@ -1,0 +1,53 @@
+{
+    "annee": "2019",
+    "salaires": [
+        31407,
+        23055],
+    "deduction": 0.1,
+    "n_parts_fiscales": 2,
+    "n_demi_parts_fiscales": 1,
+    "TMI": {
+        "2020": [
+            {
+                "tranche": 10064,
+                "taux": 0
+            },
+            {
+                "tranche": 25659,
+                "taux": 0.11
+            },
+            {
+                "tranche": 73369,
+                "taux": 0.30
+            },
+            {
+                "tranche": 157806,
+                "taux": 0.41
+            },
+            {
+                "tranche": 0,
+                "taux": 0.45
+            }],
+        "2019": [
+            {
+                "tranche": 10064,
+                "taux": 0
+            },
+            {
+                "tranche": 27794,
+                "taux": 0.14
+            },
+            {
+                "tranche": 74517,
+                "taux": 0.30
+            },
+            {
+                "tranche": 157806,
+                "taux": 0.41
+            },
+            {
+                "tranche": 0,
+                "taux": 0.45
+            }]
+    }
+}

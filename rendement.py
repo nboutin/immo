@@ -8,7 +8,7 @@ import calcul
 
 __NAME = 'Rendement Locatif'
 __VERSION = '1.0.0-dev'
-__DATA_FILENAME = "data.json"
+__BIEN_IMMO_FILENAME = "bien_immo.json"
 
 
 def main(argv):
@@ -17,7 +17,7 @@ def main(argv):
 
     inputfile = parse_args(argv)
     if not inputfile:
-        inputfile = __DATA_FILENAME
+        inputfile = __BIEN_IMMO_FILENAME
 
     with open(inputfile, 'r') as file:
         bien_immo = json.load(file)

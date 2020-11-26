@@ -1,0 +1,33 @@
+{
+    "prix_net_vendeur": 50000,
+    "travaux_budget": 0,
+    "apport": 0,
+    "agence_immo": {
+        "honoraire_taux": 0.05,
+        "honoraire_montant": 0
+    },
+    "notaire": {
+        "honoraire_taux": 0.1,
+        "honoraire_montant": 0
+    },
+    "taxe_fonciere": 500,
+    "travaux_provision": 0.01,
+    "lots": [
+        {
+            "type": "T1",
+            "surface": 50,
+            "loyer_mensuel": 400,
+            "charges_locataire": 50,
+            "vacance_locative": 0.083,
+            "copropriete": 40,
+            "assurance_pno": 100,
+            "gestion_agence": 0
+        }],
+    "credit": {
+        "duree_annee": 20,
+        "taux_interet": 0.011,
+        "taux_assurance": 0.0035,
+        "frais_dossier": 0,
+        "frais_garantie": 0
+    }
+}
