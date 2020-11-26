@@ -30,6 +30,8 @@ def main(argv):
     calcul_credit(bien_immo)
     calcul_cashflow(bien_immo)
 
+    calcul_impots_micro_foncier(bien_immo)
+
     print_report(bien_immo)
 
 
@@ -171,11 +173,25 @@ def calcul_cashflow(bien_immo):
                                 bien_immo['credit']['mensualite_total'],
                                 bien_immo['charges_annuel_total'])
 
+    bien_immo['cashflow_annuel'] = bien_immo['cashflow_mensuel'] * 12
+
+
+def calcul_impots_micro_foncier(bien_immo):
+
+    bien_immo['impots']['micro_foncier']['base_impossable'] = bien_immo['loyers_annuel_total'] * (1 - bien_immo['impots']['micro_foncier']['taux'])
+
+    base = bien_immo['impots']['micro_foncier']['base_impossable']
+
+    bien_immo['impots']['micro_foncier']['impots_revenu'] = base * bien_immo['impots']['tmi']
+    bien_immo['impots']['micro_foncier']['prelevement_sociaux'] = base * bien_immo['impots']['micro_foncier']['taux']
+    bien_immo['impots']['micro_foncier']['total'] = \
+        bien_immo['impots']['micro_foncier']['impots_revenu'] + bien_immo['impots']['micro_foncier']['prelevement_sociaux']
+
 
 def print_report(bien_immo):
     from tabulate import tabulate
 
-    input_achat = [
+    achat = [
         ['Prix net\nvendeur', 'Travaux', 'Apport', 'Notaire', 'Agence', 'Invest\ninitial'],
         [bien_immo['prix_net_vendeur'], bien_immo['travaux_budget'], bien_immo['apport'],
         '{:.0f}({:.2f}%)'.format(bien_immo['notaire']['honoraire_montant'], bien_immo['notaire']['honoraire_taux'] * 100),
@@ -183,12 +199,12 @@ def print_report(bien_immo):
         bien_immo['invest_initial']],
     ]
 
-    input_location = [
+    location = [
         ['Loyer\nmensuel', 'Charges\nannuel'],
         [bien_immo['loyers_mensuel_total'], bien_immo['charges_annuel_total']],
     ]
 
-    input_charges = [
+    charges = [
         ['Taxe\nFonciere', 'Travaux\nProvision', 'Vacance\nLocative', 'PNO', 'Gestion\nagence', 'Copropriete'],
         [bien_immo['taxe_fonciere'],
          bien_immo['travaux_provision_annuel_total'],
@@ -199,14 +215,14 @@ def print_report(bien_immo):
          ]
     ]
 
-    input_credit = [
+    credit_in = [
         ['Capital\nemprunté', 'Durée', 'Taux\ninteret', 'Taux\nassurance'],
         [bien_immo['credit']['capital_emprunt'], '{} ans'.format(bien_immo['credit']['duree_annee']),
          '{:.2f}%'.format(bien_immo['credit']['taux_interet'] * 100),
          '{:.2f}%'.format(bien_immo['credit']['taux_assurance'] * 100)],
     ]
 
-    output_credit = [
+    credit_out = [
         ['Mensualite\nhors assurance', 'Mensualite\nassurance', 'Mensualite\ntotal', 'Cout\ninteret',
          'Cout\nassurance', 'Cout\ncredit'],
         ['{:.2f}'.format(bien_immo['credit']['mensualite_hors_assurance']),
@@ -217,20 +233,33 @@ def print_report(bien_immo):
         '{:.2f}'.format(bien_immo['credit']['cout_credit'])],
     ]
 
-    output = [
-        ['Rendement\nBrut', 'Rendement\nNet', 'Rendement\nLarcher', 'Cashflow\nMensuel'],
+    bilan = [
+        ['Rendement\nBrut', 'Rendement\nNet', 'Rendement\nLarcher', 'Cashflow\nMensuel', 'Cashflow\nannuel'],
         ['{:.2f}%'.format(bien_immo['r_brut'] * 100),
         '{:.2f}%'.format(bien_immo['r_net'] * 100),
         '{:.2f}%'.format(bien_immo['r_larcher'] * 100),
-        '{:.2f}'.format(bien_immo['cashflow_mensuel'])]
+        '{:.2f}'.format(bien_immo['cashflow_mensuel']),
+        '{:.2f}'.format(bien_immo['cashflow_annuel'])
+        ]
     ]
 
-    print(tabulate(input_achat, headers="firstrow") + '\n')
-    print(tabulate(input_location, headers="firstrow") + '\n')
-    print(tabulate(input_charges, headers="firstrow") + '\n')
-    print(tabulate(input_credit, headers="firstrow") + '\n')
-    print(tabulate(output_credit, headers="firstrow") + '\n')
-    print(tabulate(output, headers="firstrow") + '\n')
+    micro_foncier = [
+        ['Micro\nFoncier', 'Base\nimpossable', 'IR', 'PS', 'Total'],
+        ['-',
+         bien_immo['impots']['micro_foncier']['base_impossable'],
+         bien_immo['impots']['micro_foncier']['impots_revenu'],
+         bien_immo['impots']['micro_foncier']['prelevement_sociaux'],
+         bien_immo['impots']['micro_foncier']['total'],
+         ]
+    ]
+
+    print(tabulate(achat, headers="firstrow") + '\n')
+    print(tabulate(location, headers="firstrow") + '\n')
+    print(tabulate(charges, headers="firstrow") + '\n')
+    print(tabulate(credit_in, headers="firstrow") + '\n')
+    print(tabulate(credit_out, headers="firstrow") + '\n')
+    print(tabulate(bilan, headers="firstrow") + '\n')
+    print(tabulate(micro_foncier, headers="firstrow") + '\n')
 
 
 if __name__ == '__main__':

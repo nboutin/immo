@@ -29,5 +29,12 @@
         "taux_assurance": 0.0035,
         "frais_dossier": 0,
         "frais_garantie": 0
+    },
+    "impots": {
+        "ps": 0.172,
+        "tmi": 0.11,
+        "micro_foncier": {
+            "taux": 0.30
+        }
     }
 }
