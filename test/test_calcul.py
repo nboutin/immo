@@ -51,6 +51,15 @@ class TestCalcul(unittest.TestCase):
         cashflow_mensuel = calcul.cashflow_mensuel(500, 350, 1500)
         self.assertEqual(cashflow_mensuel, 25)
 
+    def testInteretEmprunt(self):
+
+        interets = calcul.interet_emprunt(15000, 15 * 12, 0.04, 111)
+        self.assertEqual(interets[0], 0)
+        self.assertEqual(interets[1], 50)
+        self.assertAlmostEqual(interets[12], 47.73, 2)
+        self.assertAlmostEqual(interets[24], 45.15, 2)
+        self.assertAlmostEqual(interets[36], 42.46, 2)
+
 
 if __name__ == '__main__':
     unittest.main()

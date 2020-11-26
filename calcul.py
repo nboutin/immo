@@ -57,3 +57,25 @@ def cout_assurance(mensualite_assurance, duree_annee):
 def cashflow_mensuel(loyer_mensuel_total, credit_mensualite_total, charges_annuel_total):
 
     return loyer_mensuel_total - credit_mensualite_total - charges_annuel_total / 12
+
+
+def interet_emprunt(capital, duree_mois, taux_annuel, mensualite_credit):
+    '''
+    Un emprunt de 15 000 €, 48 mois, taux de 6% l'an, avec des mensualités de 352,28 €. 
+    Intérêts du 1er mois = 15 000 € x (6%/12) = 75 € ; 
+    Intérêts du 2e mois = [15 000 € - (352,28 € - 75 €)] x (6%/12) = 73,61 €
+    '''
+
+    capital_restant = capital
+
+    interets = []
+    interets.append(0)
+    interets.append(capital_restant * (taux_annuel / 12))
+
+    capital_restant -= mensualite_credit - interets[1]
+
+    for i in range(2, duree_mois + 1):
+         interets.append(capital_restant * (taux_annuel / 12))
+         capital_restant -= mensualite_credit - interets[i]
+
+    return interets

@@ -31,6 +31,7 @@ def main(argv):
     calcul_cashflow(bien_immo)
 
     calcul_impots_micro_foncier(bien_immo)
+    calcul_impots_regime_reel(bien_immo)
 
     print_report(bien_immo)
 
@@ -188,20 +189,38 @@ def calcul_impots_micro_foncier(bien_immo):
         bien_immo['impots']['micro_foncier']['impots_revenu'] + bien_immo['impots']['micro_foncier']['prelevement_sociaux']
 
 
+def calcul_impots_regime_reel(bien_immo):
+    '''
+    charges deductibles:
+        - interet d'emprunt
+        - assurance PNO
+        - taxe fonciere
+        - assurance emprunteur
+        - frais bancaire, frais de dossier, fond mutuelle de garantie
+        - frais postaux a destination du locataire
+        - travaux
+    '''
+    base = bien_immo['loyers_annuel_total']
+    base -= bien_immo['taxe_fonciere']
+    base -= bien_immo['assurance_pno_annuel_total']
+
+
 def print_report(bien_immo):
     from tabulate import tabulate
 
     achat = [
         ['Prix net\nvendeur', 'Travaux', 'Apport', 'Notaire', 'Agence', 'Invest\ninitial'],
         [bien_immo['prix_net_vendeur'], bien_immo['travaux_budget'], bien_immo['apport'],
-        '{:.0f}({:.2f}%)'.format(bien_immo['notaire']['honoraire_montant'], bien_immo['notaire']['honoraire_taux'] * 100),
-        '{:.0f}({:.2f}%)'.format(bien_immo['agence_immo']['honoraire_montant'], bien_immo['agence_immo']['honoraire_taux'] * 100),
+        '{:.0f}\n({:.2f}%)'.format(bien_immo['notaire']['honoraire_montant'], bien_immo['notaire']['honoraire_taux'] * 100),
+        '{:.0f}\n({:.2f}%)'.format(bien_immo['agence_immo']['honoraire_montant'], bien_immo['agence_immo']['honoraire_taux'] * 100),
         bien_immo['invest_initial']],
     ]
 
     location = [
-        ['Loyer\nmensuel', 'Charges\nannuel'],
-        [bien_immo['loyers_mensuel_total'], bien_immo['charges_annuel_total']],
+        ['Loyer\nannuel', 'Loyer\nmensuel', 'Charges\nannuel'],
+        [bien_immo['loyers_annuel_total'],
+         bien_immo['loyers_mensuel_total'], 
+         bien_immo['charges_annuel_total']],
     ]
 
     charges = [
@@ -223,7 +242,7 @@ def print_report(bien_immo):
     ]
 
     credit_out = [
-        ['Mensualite\nhors assurance', 'Mensualite\nassurance', 'Mensualite\ntotal', 'Cout\ninteret',
+        ['Mensualite\ncredit', 'Mensualite\nassurance', 'Mensualite\ntotal', 'Cout\ninteret',
          'Cout\nassurance', 'Cout\ncredit'],
         ['{:.2f}'.format(bien_immo['credit']['mensualite_hors_assurance']),
         '{:.2f}'.format(bien_immo['credit']['mensualite_assurance']),

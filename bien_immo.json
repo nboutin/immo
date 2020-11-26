@@ -10,13 +10,13 @@
         "honoraire_taux": 0.1,
         "honoraire_montant": 0
     },
-    "taxe_fonciere": 500,
+    "taxe_fonciere": 900,
     "travaux_provision": 0.01,
     "lots": [
         {
             "type": "T1",
             "surface": 50,
-            "loyer_mensuel": 400,
+            "loyer_mensuel": 450,
             "charges_locataire": 50,
             "vacance_locative": 0.083,
             "copropriete": 40,
