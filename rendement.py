@@ -98,14 +98,25 @@ def prepare_inputs(bien_immo):
 def calcul_charges_annuel(bien_immo):
 
     bien_immo['charges_annuel_total'] = bien_immo['taxe_fonciere']
+    bien_immo['travaux_provision_annuel_total'] = 0
+    bien_immo['vacance_locative_annuel_total'] = 0
+    bien_immo['assurance_pno_annuel_total'] = 0
+    bien_immo['gestion_agence_annuel_total'] = 0
+    bien_immo['copropriete_annuel_total'] = 0
 
     for lot in bien_immo['lots']:
         loyer = lot['loyer_mensuel']
-        bien_immo['charges_annuel_total'] += bien_immo['travaux_provision'] * loyer * 12
-        bien_immo['charges_annuel_total'] += lot['vacance_locative'] * loyer * 12
-        bien_immo['charges_annuel_total'] += lot['assurance_pno']
-        bien_immo['charges_annuel_total'] += lot['gestion_agence'] * loyer * 12
-        bien_immo['charges_annuel_total'] += lot['copropriete']
+        bien_immo['travaux_provision_annuel_total'] += bien_immo['travaux_provision'] * loyer * 12
+        bien_immo['vacance_locative_annuel_total'] += lot['vacance_locative'] * loyer * 12
+        bien_immo['assurance_pno_annuel_total'] += lot['assurance_pno']
+        bien_immo['gestion_agence_annuel_total'] += lot['gestion_agence'] * loyer * 12
+        bien_immo['copropriete_annuel_total'] += lot['copropriete']
+
+    bien_immo['charges_annuel_total'] += bien_immo['travaux_provision_annuel_total']
+    bien_immo['charges_annuel_total'] += bien_immo['vacance_locative_annuel_total']
+    bien_immo['charges_annuel_total'] += bien_immo['assurance_pno_annuel_total']
+    bien_immo['charges_annuel_total'] += bien_immo['gestion_agence_annuel_total']
+    bien_immo['charges_annuel_total'] += bien_immo['copropriete_annuel_total']
 
 
 def calcul_rendement_brut(bien_immo):
@@ -177,6 +188,17 @@ def print_report(bien_immo):
         [bien_immo['loyers_mensuel_total'], bien_immo['charges_annuel_total']],
     ]
 
+    input_charges = [
+        ['Taxe\nFonciere', 'Travaux\nProvision', 'Vacance\nLocative', 'PNO', 'Gestion\nagence', 'Copropriete'],
+        [bien_immo['taxe_fonciere'],
+         bien_immo['travaux_provision_annuel_total'],
+         bien_immo['vacance_locative_annuel_total'],
+         bien_immo['assurance_pno_annuel_total'],
+         bien_immo['gestion_agence_annuel_total'],
+         bien_immo['copropriete_annuel_total'],
+         ]
+    ]
+
     input_credit = [
         ['Capital\nemprunté', 'Durée', 'Taux\ninteret', 'Taux\nassurance'],
         [bien_immo['credit']['capital_emprunt'], '{} ans'.format(bien_immo['credit']['duree_annee']),
@@ -196,7 +218,7 @@ def print_report(bien_immo):
     ]
 
     output = [
-        ['Rendement\nBrut', 'Rendement\nNet', 'Rendement\nLarcher', 'Cashflow'],
+        ['Rendement\nBrut', 'Rendement\nNet', 'Rendement\nLarcher', 'Cashflow\nMensuel'],
         ['{:.2f}%'.format(bien_immo['r_brut'] * 100),
         '{:.2f}%'.format(bien_immo['r_net'] * 100),
         '{:.2f}%'.format(bien_immo['r_larcher'] * 100),
@@ -205,6 +227,7 @@ def print_report(bien_immo):
 
     print(tabulate(input_achat, headers="firstrow") + '\n')
     print(tabulate(input_location, headers="firstrow") + '\n')
+    print(tabulate(input_charges, headers="firstrow") + '\n')
     print(tabulate(input_credit, headers="firstrow") + '\n')
     print(tabulate(output_credit, headers="firstrow") + '\n')
     print(tabulate(output, headers="firstrow") + '\n')
