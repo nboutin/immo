@@ -184,7 +184,7 @@ def calcul_impots_micro_foncier(bien_immo):
     base = bien_immo['impots']['micro_foncier']['base_impossable']
 
     bien_immo['impots']['micro_foncier']['impots_revenu'] = base * bien_immo['impots']['tmi']
-    bien_immo['impots']['micro_foncier']['prelevement_sociaux'] = base * bien_immo['impots']['micro_foncier']['taux']
+    bien_immo['impots']['micro_foncier']['prelevement_sociaux'] = base * bien_immo['impots']['ps']
     bien_immo['impots']['micro_foncier']['total'] = \
         bien_immo['impots']['micro_foncier']['impots_revenu'] + bien_immo['impots']['micro_foncier']['prelevement_sociaux']
 
@@ -193,9 +193,9 @@ def calcul_impots_regime_reel(bien_immo):
     '''
     charges deductibles:
         - interet d'emprunt
+        - assurance emprunteur
         - assurance PNO
         - taxe fonciere
-        - assurance emprunteur
         - frais bancaire, frais de dossier, fond mutuelle de garantie
         - frais postaux a destination du locataire
         - travaux
@@ -203,6 +203,25 @@ def calcul_impots_regime_reel(bien_immo):
     base = bien_immo['loyers_annuel_total']
     base -= bien_immo['taxe_fonciere']
     base -= bien_immo['assurance_pno_annuel_total']
+    base -= bien_immo['credit']['cout_interet'] / bien_immo['credit']['duree_annee']
+    base -= bien_immo['credit']['mensualite_assurance'] * 12
+
+    bien_immo['impots']['regime_reel'] = dict()
+    bien_immo['impots']['regime_reel']['base_impossable'] = base
+
+    bien_immo['impots']['regime_reel']['impots_revenu'] = base * bien_immo['impots']['tmi']
+    bien_immo['impots']['regime_reel']['prelevement_sociaux'] = base * bien_immo['impots']['ps']
+    bien_immo['impots']['regime_reel']['total'] = \
+        bien_immo['impots']['regime_reel']['impots_revenu'] + bien_immo['impots']['regime_reel']['prelevement_sociaux']
+
+#     interets = calcul.interet_emprunt(bien_immo['credit']['capital_emprunt'],
+#                                       bien_immo['credit']['duree_annee'] * 12,
+#                                       bien_immo['credit']['taux_interet'],
+#                                       bien_immo['credit']['mensualite_hors_assurance'])
+#     interet_annee_1 = 0
+#     for i in range(1, 12):
+#         interet_annee_1 += interets[i]
+#     print(interet_annee_1)
 
 
 def print_report(bien_immo):
@@ -219,7 +238,7 @@ def print_report(bien_immo):
     location = [
         ['Loyer\nannuel', 'Loyer\nmensuel', 'Charges\nannuel'],
         [bien_immo['loyers_annuel_total'],
-         bien_immo['loyers_mensuel_total'], 
+         bien_immo['loyers_mensuel_total'],
          bien_immo['charges_annuel_total']],
     ]
 
@@ -272,6 +291,16 @@ def print_report(bien_immo):
          ]
     ]
 
+    regime_reel = [
+        ['Regime\nreel', 'Base\nimpossable', 'IR', 'PS', 'Total'],
+        ['-',
+         bien_immo['impots']['regime_reel']['base_impossable'],
+         bien_immo['impots']['regime_reel']['impots_revenu'],
+         bien_immo['impots']['regime_reel']['prelevement_sociaux'],
+         bien_immo['impots']['regime_reel']['total'],
+         ]
+    ]
+
     print(tabulate(achat, headers="firstrow") + '\n')
     print(tabulate(location, headers="firstrow") + '\n')
     print(tabulate(charges, headers="firstrow") + '\n')
@@ -279,6 +308,7 @@ def print_report(bien_immo):
     print(tabulate(credit_out, headers="firstrow") + '\n')
     print(tabulate(bilan, headers="firstrow") + '\n')
     print(tabulate(micro_foncier, headers="firstrow") + '\n')
+    print(tabulate(regime_reel, headers="firstrow") + '\n')
 
 
 if __name__ == '__main__':
