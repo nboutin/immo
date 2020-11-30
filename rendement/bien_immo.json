@@ -28,6 +28,7 @@
         "duree_annee": 20,
         "taux_interet": 0.0115,
         "taux_assurance": 0.0035,
+        "capital_constant": false,
         "frais_dossier": 0,
         "frais_garantie": 0
     },

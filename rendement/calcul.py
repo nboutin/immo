@@ -75,7 +75,68 @@ def interet_emprunt(capital, duree_mois, taux_annuel, mensualite_credit):
     capital_restant -= mensualite_credit - interets[1]
 
     for i in range(2, duree_mois + 1):
-         interets.append(capital_restant * (taux_annuel / 12))
-         capital_restant -= mensualite_credit - interets[i]
+        interets.append(capital_restant * (taux_annuel / 12))
+        capital_restant -= mensualite_credit - interets[i]
 
     return interets
+
+
+def tableau_amortissement(capital, duree_mois, taux_interet, taux_assurance, mode):
+    '''
+    mode calcul possible:
+        - mode_1: mensualite constant, assurance capital initial
+        - mode_2: mensualite constant, assurance capital restant
+        - mode_3: mensualite degressive, assurance capital restant
+        - mode_4: mensualite degressive, assurance capital restant annuel
+    '''
+
+    capital_restant = capital
+    tam = []
+    tam_totaux = {'amortissement':0, 'interets':0, 'assurance':0, 'mensualite_ha':0, 'mensualite_aa':0}
+
+    if mode == 'mode_1' or mode == 'mode_3' or mode == 'mode_4':
+        mensualite_ha = credit_remboursement_constant(capital, duree_mois / 12, taux_interet)
+        assurance = mensualite_assurance(capital, taux_assurance)
+   
+    elif mode == 'mode_2':
+        mensualite_aa = credit_remboursement_constant(capital, duree_mois / 12, taux_interet + taux_assurance)
+        
+    for mois in range(duree_mois):
+        interets = capital_restant * taux_interet / 12
+        
+        if mode == 'mode_1':
+            amortissement = mensualite_ha - interets
+            mensualite_aa = mensualite_ha + assurance
+            
+        elif mode == 'mode_2':
+            assurance = capital_restant * taux_assurance / 12
+            amortissement = mensualite_aa - interets - assurance
+            mensualite_ha = mensualite_aa - assurance
+            
+        elif mode == 'mode_3':
+            assurance = capital_restant * taux_assurance / 12
+            amortissement = mensualite_ha - interets
+            mensualite_aa = mensualite_ha + assurance
+            
+        elif mode == 'mode_4':
+            if mois % 12 == 0:
+                assurance = capital_restant * taux_assurance / 12
+            amortissement = mensualite_ha - interets
+            mensualite_aa = mensualite_ha + assurance
+
+        tam.append({'capital': capital_restant,
+                    'amortissement': amortissement,
+                    'interets': interets,
+                    'assurance': assurance,
+                    'mensualite_ha': mensualite_ha,
+                    'mensualite': mensualite_aa})
+
+        capital_restant -= amortissement
+        
+        tam_totaux['amortissement'] += amortissement
+        tam_totaux['interets'] += interets
+        tam_totaux['assurance'] += assurance
+        tam_totaux['mensualite_ha'] += mensualite_ha
+        tam_totaux['mensualite_aa'] += mensualite_aa
+
+    return tam, tam_totaux
