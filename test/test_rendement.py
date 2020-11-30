@@ -187,6 +187,24 @@ class TestPrepareInput(unittest.TestCase):
         rendement.prepare_inputs(bien_immo)
         self.assertEqual(bien_immo['invest_initial'], 150000)
 
+    def testSurfaceTotal(self):
+        with open(TestPrepareInput.__DATA_TEST_PATHNAME, 'r') as file:
+            bien_immo = json.load(file)
+
+        bien_immo['lots'][0]['surface'] = 65
+        bien_immo['lots'][1]['surface'] = 51
+        rendement.prepare_inputs(bien_immo)
+        self.assertEqual(bien_immo['surface_total'], 116)
+
+    def testSurfacePrix(self):
+        with open(TestPrepareInput.__DATA_TEST_PATHNAME, 'r') as file:
+            bien_immo = json.load(file)
+
+        bien_immo['prix_net_vendeur'] = 130000
+        bien_immo['lots'][0]['surface'] = 65
+        rendement.prepare_inputs(bien_immo)
+        self.assertEqual(bien_immo['surface_prix'], 2000)
+
 
 class TestRendement(unittest.TestCase):
 

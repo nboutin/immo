@@ -63,8 +63,10 @@ def help():
 def prepare_inputs(bien_immo):
 
     bien_immo['loyers_mensuel_total'] = 0
+    bien_immo['surface_total'] = 0
     for lot in bien_immo['lots']:
         bien_immo['loyers_mensuel_total'] += lot['loyer_mensuel']
+        bien_immo['surface_total'] += lot['surface']
 
     bien_immo['loyers_annuel_total'] = bien_immo['loyers_mensuel_total'] * 12
 
@@ -93,9 +95,10 @@ def prepare_inputs(bien_immo):
     bien_immo['invest_initial'] = bien_immo['prix_net_vendeur'] + bien_immo['notaire']['honoraire_montant'] \
         +bien_immo['agence_immo']['honoraire_montant'] + bien_immo['travaux_budget'] - bien_immo['apport']
 
-    calcul_charges_annuel(bien_immo)
-
     bien_immo['credit']['capital_emprunt'] = bien_immo['invest_initial']
+
+    calcul_charges_annuel(bien_immo)
+    calcul_surface_prix(bien_immo)
 
 
 def calcul_charges_annuel(bien_immo):
@@ -120,6 +123,14 @@ def calcul_charges_annuel(bien_immo):
     bien_immo['charges_annuel_total'] += bien_immo['assurance_pno_annuel_total']
     bien_immo['charges_annuel_total'] += bien_immo['gestion_agence_annuel_total']
     bien_immo['charges_annuel_total'] += bien_immo['copropriete_annuel_total']
+
+
+def calcul_surface_prix(bien_immo):
+
+    bien_immo['surface_prix'] = 0
+
+    if bien_immo['surface_total'] > 0:
+        bien_immo['surface_prix'] = bien_immo['prix_net_vendeur'] / bien_immo['surface_total']
 
 
 def calcul_rendement_brut(bien_immo):
@@ -228,11 +239,13 @@ def print_report(bien_immo):
     from tabulate import tabulate
 
     achat = [
-        ['Prix net\nvendeur', 'Travaux', 'Apport', 'Notaire', 'Agence', 'Invest\ninitial'],
+        ['Prix net\nvendeur', 'Travaux', 'Apport', 'Notaire', 'Agence', 'Invest\ninitial', 'Prix\ne/m²'],
         [bien_immo['prix_net_vendeur'], bien_immo['travaux_budget'], bien_immo['apport'],
         '{:.0f}\n({:.2f}%)'.format(bien_immo['notaire']['honoraire_montant'], bien_immo['notaire']['honoraire_taux'] * 100),
         '{:.0f}\n({:.2f}%)'.format(bien_immo['agence_immo']['honoraire_montant'], bien_immo['agence_immo']['honoraire_taux'] * 100),
-        bien_immo['invest_initial']],
+        bien_immo['invest_initial'],
+        bien_immo['surface_prix']
+        ],
     ]
 
     location = [

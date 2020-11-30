@@ -18,10 +18,10 @@ Run Unittest
 - [ ] Calculer rendement net-net (net d'impot)
 - [ ] Evaluer restauration de la tresorerie avec le différré d'amortissement
 - [ ] Capacité d'investissement 70% loyer >= credit
-- [ ] Prix au m²
 - [ ] Cout copropriete au m²
 - [ ] Indicateur global Go/NoGo
 - [ ] Prendre en compte les impots dans le calcul du cashflow
+- [x] Prix au m²
 - [x] Ajouter parametre d'entree apport personnel
 
 # Dependencies
