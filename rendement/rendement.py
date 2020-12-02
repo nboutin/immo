@@ -5,6 +5,7 @@ import sys
 import getopt
 import json
 import calcul
+import credit as cred
 
 __NAME = 'Rendement Locatif'
 __VERSION = '1.0.0-dev'
@@ -27,13 +28,13 @@ def main(argv):
     calcul_rendement_brut(bien_immo)
     calcul_rendement_methode_larcher(bien_immo)
     calcul_rendement_net(bien_immo)
-    calcul_credit(bien_immo)
-    calcul_cashflow(bien_immo)
+    credit = calcul_credit(bien_immo)
+    calcul_cashflow(bien_immo, credit)
 
     calcul_impots_micro_foncier(bien_immo)
-    calcul_impots_regime_reel(bien_immo)
+    calcul_impots_regime_reel(bien_immo, credit)
 
-    print_report(bien_immo)
+    print_report(bien_immo, credit)
 
 
 def parse_args(argv):
@@ -43,12 +44,12 @@ def parse_args(argv):
     try:
         opts, args = getopt.getopt(argv, 'i:h', [])
     except getopt.GetoptError:
-        help()
+        print_help()
         quit()
 
     for opt, arg in opts:
         if opt == '-h':
-            help()
+            print_help()
             quit()
         elif opt in ('-i'):
             inputfile = arg
@@ -56,7 +57,7 @@ def parse_args(argv):
     return inputfile
 
 
-def help():
+def print_help():
     print('help')
 
 
@@ -151,38 +152,49 @@ def calcul_rendement_net(bien_immo):
 
 
 def calcul_credit(bien_immo):
+    
+    credit = cred.Credit(bien_immo['credit']['capital_emprunt'],
+                         bien_immo['credit']['duree_annee'] * 12,
+                         bien_immo['credit']['taux_interet'],
+                         bien_immo['credit']['taux_assurance'],
+                         bien_immo['credit']['mode'],
+                         bien_immo['credit']['frais_dossier'],
+                         bien_immo['credit']['frais_garantie']
+                        )
+    return credit
 
-    bien_immo['credit']['mensualite_hors_assurance'] = \
-        calcul.credit_remboursement_constant(bien_immo['credit']['capital_emprunt'],
-                                             bien_immo['credit']['duree_annee'],
-                                             bien_immo['credit']['taux_interet'])
+#     bien_immo['credit']['mensualite_hors_assurance'] = \
+#         calcul.credit_remboursement_constant(bien_immo['credit']['capital_emprunt'],
+#                                              bien_immo['credit']['duree_annee'],
+#                                              bien_immo['credit']['taux_interet'])
+# 
+#     bien_immo['credit']['mensualite_assurance'] = \
+#         calcul.mensualite_assurance(bien_immo['credit']['capital_emprunt'],
+#                                     bien_immo['credit']['taux_assurance'])
+# 
+#     bien_immo['credit']['mensualite_total'] = \
+#         bien_immo['credit']['mensualite_hors_assurance'] + bien_immo['credit']['mensualite_assurance']
+# 
+#     bien_immo['credit']['cout_interet'] = \
+#         calcul.cout_interet(bien_immo['credit']['capital_emprunt'],
+#                             bien_immo['credit']['duree_annee'],
+#                             bien_immo['credit']['mensualite_hors_assurance'])
+# 
+#     bien_immo['credit']['cout_assurance'] = \
+#         calcul.cout_assurance(bien_immo['credit']['mensualite_assurance'],
+#                               bien_immo['credit']['duree_annee'])
+# 
+#     bien_immo['credit']['cout_credit'] = \
+#         bien_immo['credit']['cout_interet'] + bien_immo['credit']['cout_assurance'] \
+#         +bien_immo['credit']['frais_dossier'] + bien_immo['credit']['frais_garantie']
 
-    bien_immo['credit']['mensualite_assurance'] = \
-        calcul.mensualite_assurance(bien_immo['credit']['capital_emprunt'],
-                                    bien_immo['credit']['taux_assurance'])
 
-    bien_immo['credit']['mensualite_total'] = \
-        bien_immo['credit']['mensualite_hors_assurance'] + bien_immo['credit']['mensualite_assurance']
-
-    bien_immo['credit']['cout_interet'] = \
-        calcul.cout_interet(bien_immo['credit']['capital_emprunt'],
-                            bien_immo['credit']['duree_annee'],
-                            bien_immo['credit']['mensualite_hors_assurance'])
-
-    bien_immo['credit']['cout_assurance'] = \
-        calcul.cout_assurance(bien_immo['credit']['mensualite_assurance'],
-                              bien_immo['credit']['duree_annee'])
-
-    bien_immo['credit']['cout_credit'] = \
-        bien_immo['credit']['cout_interet'] + bien_immo['credit']['cout_assurance'] \
-        +bien_immo['credit']['frais_dossier'] + bien_immo['credit']['frais_garantie']
-
-
-def calcul_cashflow(bien_immo):
+def calcul_cashflow(bien_immo, credit):
 
     bien_immo['cashflow_mensuel'] = \
         calcul.cashflow_mensuel(bien_immo['loyers_mensuel_total'],
-                                bien_immo['credit']['mensualite_total'],
+#                                 bien_immo['credit']['mensualite_total'],
+                                credit.get_mensualite_avec_assurance(),
                                 bien_immo['charges_annuel_total'])
 
     bien_immo['cashflow_annuel'] = bien_immo['cashflow_mensuel'] * 12
@@ -190,7 +202,8 @@ def calcul_cashflow(bien_immo):
 
 def calcul_impots_micro_foncier(bien_immo):
 
-    bien_immo['impots']['micro_foncier']['base_impossable'] = bien_immo['loyers_annuel_total'] * (1 - bien_immo['impots']['micro_foncier']['taux'])
+    bien_immo['impots']['micro_foncier']['base_impossable'] = \
+        bien_immo['loyers_annuel_total'] * (1 - bien_immo['impots']['micro_foncier']['taux'])
 
     base = bien_immo['impots']['micro_foncier']['base_impossable']
 
@@ -200,7 +213,7 @@ def calcul_impots_micro_foncier(bien_immo):
         bien_immo['impots']['micro_foncier']['impots_revenu'] + bien_immo['impots']['micro_foncier']['prelevement_sociaux']
 
 
-def calcul_impots_regime_reel(bien_immo):
+def calcul_impots_regime_reel(bien_immo, credit):
     '''
     charges deductibles:
         - interet d'emprunt
@@ -214,8 +227,10 @@ def calcul_impots_regime_reel(bien_immo):
     base = bien_immo['loyers_annuel_total']
     base -= bien_immo['taxe_fonciere']
     base -= bien_immo['assurance_pno_annuel_total']
-    base -= bien_immo['credit']['cout_interet'] / bien_immo['credit']['duree_annee']
-    base -= bien_immo['credit']['mensualite_assurance'] * 12
+#     base -= bien_immo['credit']['cout_interet'] / bien_immo['credit']['duree_annee']
+    # TODO soustraire cout des interets annuels
+#     base -= bien_immo['credit']['mensualite_assurance'] * 12
+    # TODO soustraire cout d'assurance emprunteur annuel
 
     bien_immo['impots']['regime_reel'] = dict()
     bien_immo['impots']['regime_reel']['base_impossable'] = base
@@ -235,7 +250,7 @@ def calcul_impots_regime_reel(bien_immo):
 #     print(interet_annee_1)
 
 
-def print_report(bien_immo):
+def print_report(bien_immo, credit):
     from tabulate import tabulate
 
     achat = [
@@ -274,14 +289,21 @@ def print_report(bien_immo):
     ]
 
     credit_out = [
-        ['Mensualite\ncredit', 'Mensualite\nassurance', 'Mensualite\ntotal', 'Cout\ninteret',
+#         ['Mensualite\ncredit', 'Mensualite\nassurance', 'Mensualite\ntotal', 'Cout\ninteret',
+#          'Cout\nassurance', 'Cout\ncredit'],
+        ['Mensualite\ncredit', 'Mensualite\ntotal', 'Cout\ninteret',
          'Cout\nassurance', 'Cout\ncredit'],
-        ['{:.2f}'.format(bien_immo['credit']['mensualite_hors_assurance']),
-        '{:.2f}'.format(bien_immo['credit']['mensualite_assurance']),
-        '{:.2f}'.format(bien_immo['credit']['mensualite_total']),
-        '{:.2f}'.format(bien_immo['credit']['cout_interet']),
-        '{:.2f}'.format(bien_immo['credit']['cout_assurance']),
-        '{:.2f}'.format(bien_immo['credit']['cout_credit'])],
+#         ['{:.2f}'.format(bien_immo['credit']['mensualite_hors_assurance']),
+#         '{:.2f}'.format(bien_immo['credit']['mensualite_assurance']),
+#         '{:.2f}'.format(bien_immo['credit']['mensualite_total']),
+#         '{:.2f}'.format(bien_immo['credit']['cout_interet']),
+#         '{:.2f}'.format(bien_immo['credit']['cout_assurance']),
+#         '{:.2f}'.format(bien_immo['credit']['cout_credit'])],
+        ['{:.2f}'.format(credit.get_mensualite_hors_assurance()),
+        '{:.2f}'.format(credit.get_mensualite_avec_assurance()),
+        '{:.2f}'.format(credit.get_montant_interet_total()),
+        '{:.2f}'.format(credit.get_montant_assurance_total()),
+        '{:.2f}'.format(credit.get_cout_total())],
     ]
 
     bilan = [
