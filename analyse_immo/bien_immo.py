@@ -62,7 +62,7 @@ class Bien_Immo:
 
     @property
     def agence_montant(self):
-        return self._notaire_montant
+        return self._agence_montant
     
     @property
     def travaux_budget(self):
@@ -111,7 +111,7 @@ class Bien_Immo:
             self._notaire_taux = value
             self._notaire_montant = self._prix_net_vendeur * self._notaire_taux
         else:
-            self._notaire_montant
+            self._notaire_montant = value
             self._notaire_taux = self._notaire_montant / self._prix_net_vendeur
     
     def __set_agence_taux_montant(self, value):
@@ -119,6 +119,6 @@ class Bien_Immo:
             self._agence_taux = value
             self._agence_montant = self._prix_net_vendeur * self._agence_taux
         else:
-            self._agence_montant
+            self._agence_montant = value
             self._agence_taux = self._agence_montant / self._prix_net_vendeur
     

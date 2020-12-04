@@ -22,17 +22,12 @@ def main(argv):
     user_input = load_file(inputfile)
 
     bien_immo = make_bien_immo(user_input['bien_immo'])
-    user_input['credit']['capital_emprunt'] = bien_immo.investissement_initial
     prepare_inputs(user_input['bien_immo'])
     
     rendement = Rendement(bien_immo)
+    credit = make_credit(user_input, bien_immo)
     
-#     calcul_rendement_brut(user_input)
-#     calcul_rendement_methode_larcher(user_input)
-#     calcul_rendement_net(user_input)
-    credit = make_credit(user_input)
 #     calcul_cashflow(user_input, credit)
-
 #     calcul_impots_micro_foncier(user_input)
 #     calcul_impots_regime_reel(user_input, credit)
 
@@ -176,9 +171,9 @@ def calcul_charges_annuel(user_input):
 #                                               user_input['invest_initial'])
 
 
-def make_credit(user_input):
+def make_credit(user_input, bien_immo):
     
-    credit = cred.Credit(user_input['credit']['capital_emprunt'],
+    credit = cred.Credit(bien_immo.investissement_initial,
                          user_input['credit']['duree_annee'] * 12,
                          user_input['credit']['taux_interet'],
                          user_input['credit']['taux_assurance'],
@@ -291,16 +286,16 @@ def print_report(bien_immo, rendement, credit):
          credit.mode],
     ]
  
-#     credit_out = [
-#         ['Mensualite\nhors assurance', 'Mensualite\nassurance', 'Mensualite\navec assurance', 'Cout\ninteret',
-#          'Cout\nassurance', 'Cout\ncredit'],
-#         ['{:.2f}'.format(credit.get_mensualite_hors_assurance()),
-#         '{:.2f}'.format(credit.get_mensualite_assurance()),
-#         '{:.2f}'.format(credit.get_mensualite_avec_assurance()),
-#         '{:.2f}'.format(credit.get_montant_interet_total()),
-#         '{:.2f}'.format(credit.get_montant_assurance_total()),
-#         '{:.2f}'.format(credit.get_cout_total())],
-#     ]
+    credit_out = [
+        ['Mensualite\nhors assurance', 'Mensualite\nassurance', 'Mensualite\navec assurance', 'Cout\ninteret',
+         'Cout\nassurance', 'Cout\ncredit'],
+        ['{:.2f}'.format(credit.get_mensualite_hors_assurance()),
+        '{:.2f}'.format(credit.get_mensualite_assurance()),
+        '{:.2f}'.format(credit.get_mensualite_avec_assurance()),
+        '{:.2f}'.format(credit.get_montant_interet_total()),
+        '{:.2f}'.format(credit.get_montant_assurance_total()),
+        '{:.2f}'.format(credit.get_cout_total())],
+    ]
  
     bilan = [
         ['Rendement\nBrut', 'Rendement\nNet', 'Rendement\nLarcher', 'Cashflow\nMensuel', 'Cashflow\nannuel'],
@@ -342,7 +337,7 @@ def print_report(bien_immo, rendement, credit):
     print(tabulate(location, headers="firstrow") + '\n')
 #     print(tabulate(charges, headers="firstrow") + '\n')
     print(tabulate(credit_in, headers="firstrow") + '\n')
-#     print(tabulate(credit_out, headers="firstrow") + '\n')
+    print(tabulate(credit_out, headers="firstrow") + '\n')
     print(tabulate(bilan, headers="firstrow") + '\n')
 #     print(tabulate(micro_foncier, headers="firstrow") + '\n')
 #     print(tabulate(regime_reel, headers="firstrow") + '\n')

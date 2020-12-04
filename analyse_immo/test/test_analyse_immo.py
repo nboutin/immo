@@ -3,7 +3,8 @@
 
 import unittest
 import json
-import rendement
+import analyse_immo as anim
+from rendement import Rendement
 
 # TODO
 # - Use setup function to load data_test.json
@@ -26,145 +27,48 @@ class TestCashflow(unittest.TestCase):
         bien_immo['credit']['taux_interet'] = 0.018
         bien_immo['credit']['taux_assurance'] = 0.0036
 
-        rendement.prepare_inputs(bien_immo)
+        anim.prepare_inputs(bien_immo)
         credit = rendement.calcul_credit(bien_immo)
         rendement.calcul_cashflow(bien_immo, credit)
         self.assertAlmostEqual(bien_immo['cashflow_mensuel'], 100.67, 2)
 
 
-class TestPrepareInput(unittest.TestCase):
-
-    __DATA_TEST_PATHNAME = "test/res/data_test.json"
-
-    def testLoyerMensuelTotal_A(self):
-
-        with open(TestPrepareInput.__DATA_TEST_PATHNAME, 'r') as file:
-            bien_immo = json.load(file)
-
-        bien_immo['lots'][0]['loyer_mensuel'] = 500
-        rendement.prepare_inputs(bien_immo)
-
-        self.assertEqual(bien_immo['loyers_mensuel_total'], 500)
-
-    def testLoyerMensuelTotal_B(self):
-
-        with open(TestPrepareInput.__DATA_TEST_PATHNAME, 'r') as file:
-            bien_immo = json.load(file)
-
-        bien_immo['lots'][0]['loyer_mensuel'] = 100
-        bien_immo['lots'][1]['loyer_mensuel'] = 250
-        rendement.prepare_inputs(bien_immo)
-        self.assertEqual(bien_immo['loyers_mensuel_total'], 350)
-
-    def testLoyerAnnuelTotal(self):
-
-        with open(TestPrepareInput.__DATA_TEST_PATHNAME, 'r') as file:
-            bien_immo = json.load(file)
-
-        bien_immo['lots'][0]['loyer_mensuel'] = 100
-        bien_immo['lots'][1]['loyer_mensuel'] = 250
-        rendement.prepare_inputs(bien_immo)
-        self.assertEqual(bien_immo['loyers_annuel_total'], 350 * 12)
-
-    def testNotaireA(self):
-        with open(TestPrepareInput.__DATA_TEST_PATHNAME, 'r') as file:
-            bien_immo = json.load(file)
-
-        bien_immo['prix_net_vendeur'] = 100000
-        bien_immo['notaire']['honoraire_taux'] = 0.1
-        rendement.prepare_inputs(bien_immo)
-
-        self.assertEqual(bien_immo['notaire']['honoraire_montant'], 10000)
-
-    def testNotaireB(self):
-        with open(TestPrepareInput.__DATA_TEST_PATHNAME, 'r') as file:
-            bien_immo = json.load(file)
-
-        bien_immo['prix_net_vendeur'] = 100000
-        bien_immo['notaire']['honoraire_montant'] = 5000
-        rendement.prepare_inputs(bien_immo)
-
-        self.assertEqual(bien_immo['notaire']['honoraire_taux'], 0.05)
-
-    def testAgenceImmoA(self):
-        with open(TestPrepareInput.__DATA_TEST_PATHNAME, 'r') as file:
-            bien_immo = json.load(file)
-
-        bien_immo['prix_net_vendeur'] = 100000
-        bien_immo['agence_immo']['honoraire_taux'] = 0.08
-        rendement.prepare_inputs(bien_immo)
-
-        self.assertEqual(bien_immo['agence_immo']['honoraire_montant'], 8000)
-
-    def testAgenceImmoB(self):
-        with open(TestPrepareInput.__DATA_TEST_PATHNAME, 'r') as file:
-            bien_immo = json.load(file)
-
-        bien_immo['prix_net_vendeur'] = 100000
-        bien_immo['agence_immo']['honoraire_montant'] = 6500
-        rendement.prepare_inputs(bien_immo)
-
-        self.assertEqual(bien_immo['agence_immo']['honoraire_taux'], 0.065)
-
-    def testInvestInitial(self):
-        with open(TestPrepareInput.__DATA_TEST_PATHNAME, 'r') as file:
-            bien_immo = json.load(file)
-
-        bien_immo['prix_net_vendeur'] = 130000
-        bien_immo['apport'] = 10000
-        bien_immo['travaux_budget'] = 15000
-        bien_immo['agence_immo']['honoraire_montant'] = 9000
-        bien_immo['notaire']['honoraire_montant'] = 6000
-        rendement.prepare_inputs(bien_immo)
-        self.assertEqual(bien_immo['invest_initial'], 150000)
-
-    def testSurfaceTotal(self):
-        with open(TestPrepareInput.__DATA_TEST_PATHNAME, 'r') as file:
-            bien_immo = json.load(file)
-
-        bien_immo['lots'][0]['surface'] = 65
-        bien_immo['lots'][1]['surface'] = 51
-        rendement.prepare_inputs(bien_immo)
-        self.assertEqual(bien_immo['surface_total'], 116)
-
-    def testSurfacePrix(self):
-        with open(TestPrepareInput.__DATA_TEST_PATHNAME, 'r') as file:
-            bien_immo = json.load(file)
-
-        bien_immo['prix_net_vendeur'] = 130000
-        bien_immo['lots'][0]['surface'] = 65
-        rendement.prepare_inputs(bien_immo)
-        self.assertEqual(bien_immo['surface_prix'], 2000)
-
-
 class TestRendement(unittest.TestCase):
 
-    __DATA_TEST_PATHNAME = "test/res/data_test.json"
+    def setUp(self):
+        __DATA_TEST_PATHNAME = "test/res/data_test.json"
 
-    def testRendementBrutA(self):
+        with open(__DATA_TEST_PATHNAME, 'r') as file:
+            in_user = json.load(file)
+            
+        self._bien_immo = in_user['bien_immo']
+            
+    def testRendementBrut(self):
+        self._bien_immo['prix_net_vendeur'] = 100000
+        self._bien_immo['lots'][0]['loyer_mensuel'] = 500
+        bi = anim.make_bien_immo(self._bien_immo)
+        rdt = Rendement(bi)
+        self.assertEqual(rdt.rendement_brut, 0.06)
+        
+        self._bien_immo['frais_agence'] = 0.06
+        self._bien_immo['frais_notaire'] = 0.09
+        bi = anim.make_bien_immo(self._bien_immo)
+        rdt = Rendement(bi)
+        self.assertAlmostEqual(rdt.rendement_brut, 0.052, 3)
 
-        with open(TestRendement.__DATA_TEST_PATHNAME, 'r') as file:
-            bien_immo = json.load(file)
-
-        bien_immo['prix_net_vendeur'] = 100000
-        bien_immo['lots'][0]['loyer_mensuel'] = 500
-        rendement.prepare_inputs(bien_immo)
-        rendement.calcul_rendement_brut(bien_immo)
-        self.assertEqual(bien_immo['r_brut'], 0.06)
-
-    def testRendementBrutB(self):
-
-        with open(TestRendement.__DATA_TEST_PATHNAME, 'r') as file:
-            bien_immo = json.load(file)
-
-        bien_immo['prix_net_vendeur'] = 100000
-        bien_immo['lots'][0]['loyer_mensuel'] = 500
-        bien_immo['notaire']['honoraire_taux'] = 0.09
-        bien_immo['agence_immo']['honoraire_taux'] = 0.06
-
-        rendement.prepare_inputs(bien_immo)
-        rendement.calcul_rendement_brut(bien_immo)
-        self.assertAlmostEqual(bien_immo['r_brut'], 0.052, 3)
+#     def testRendementBrutB(self):
+# 
+#         with open(TestRendement.__DATA_TEST_PATHNAME, 'r') as file:
+#             bien_immo = json.load(file)
+# 
+#         bien_immo['prix_net_vendeur'] = 100000
+#         bien_immo['lots'][0]['loyer_mensuel'] = 500
+#         bien_immo['notaire']['honoraire_taux'] = 0.09
+#         bien_immo['agence_immo']['honoraire_taux'] = 0.06
+# 
+#         rendement.prepare_inputs(bien_immo)
+#         rendement.calcul_rendement_brut(bien_immo)
+#         self.assertAlmostEqual(bien_immo['r_brut'], 0.052, 3)
 
     def testRendementMethodeLarcher(self):
         with open(TestRendement.__DATA_TEST_PATHNAME, 'r') as file:
