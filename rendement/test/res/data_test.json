@@ -38,6 +38,7 @@
         "duree_annee": 0,
         "taux_interet": 0,
         "taux_assurance": 0,
+        "mode": "mode_1",
         "frais_dossier": 0,
         "frais_garantie": 0
     }

@@ -13,6 +13,9 @@ class Credit:
         - mode_3: mensualite degressive, assurance capital restant mensuel
         - mode_4: mensualite degressive, assurance capital restant annuel
         '''
+        if duree_mois == 0:
+            raise Exception('Credit: durée égale 0 mois')
+        
         self._capital = capital
         self._duree_mois = duree_mois
         self._taux = taux
@@ -38,15 +41,30 @@ class Credit:
 
         return (self._capital * taux / 12) / (1 - math.pow(1 + taux / 12, -self._duree_mois))
     
-    def get_mensualite_avec_assurance(self, month=None):
+    def get_mensualite_assurance(self, mois=None):
         '''
+        @todo Use parameter mois
+        '''
+        if not mois:
+            mois = 1
+        
+        if self._mode == 'mode_1':
+            return self._capital * self._taux_assurance / 12
+        else:
+            return self._tam[mois - 1]['assurance']
+    
+    def get_mensualite_avec_assurance(self, mois=None):
+        '''
+        @todo Use parameter mois
         mode_1: return mensualite constante
         mode_2/3/4: return mensualite variable 
         '''
         if self._mode == 'mode_1':
-            return self._capital * self._taux_assurance / 12
-        else:
             return self._tam[0]['mensualite_aa']
+        elif self._mode == 'mode2' or self._mode == 'mode_3':
+            return self._tam[0]['mensualite_aa']
+        else:
+            return 0
     
     def get_mensualite_total(self):
         return self._tam_total['mensualite_aa']
@@ -88,7 +106,7 @@ class Credit:
     
         if self._mode == 'mode_1':
             mensualite_ha = self.get_mensualite_hors_assurance()
-            assurance = self.get_mensualite_avec_assurance()
+            assurance = self.get_mensualite_assurance()
        
         elif self._mode == 'mode_2':
             mensualite_aa = self.get_mensualite_hors_assurance(self._taux + self._taux_assurance)

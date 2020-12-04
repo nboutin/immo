@@ -9,7 +9,11 @@ class TestCredit(unittest.TestCase):
     
     def testConstructeur(self):
         
-        credit.Credit(0, 0, 0, 0, '', 0, 0)
+        credit.Credit(0, 1, 0, 0, '', 0, 0)
+        
+        with self.assertRaises(Exception) as context:
+            credit.Credit(0, 0, 0, 0, '', 0, 0)
+            self.assertTrue('Credit: durée égale 0 mois' in context.exception)
 
     def testGetMensualiteHorsAssurance(self):
 
@@ -18,14 +22,23 @@ class TestCredit(unittest.TestCase):
 
         cred = credit.Credit(88000, 15 * 12, 0.0099, 0, '', 0, 0)
         self.assertAlmostEqual(cred.get_mensualite_hors_assurance(), 526.29, 2)
+
+        cred = credit.Credit(136000, 240, 0.018, 0, '', 0, 0)
+        self.assertAlmostEqual(cred.get_mensualite_hors_assurance(), 675.19, 2)
+        
+    @unittest.skip('fixme')
+    def testGetMensualiteAssurance(self):
+                                   
+        cred = credit.Credit(136000, 0, 0, 0.0036, 'mode_1', 0, 0)
+        self.assertAlmostEqual(cred.get_mensualite_assurance(), 40.80, 2)
         
     def testGetMensualiteAvecAssurance(self):
 
-        cred = credit.Credit(100000, 0, 0, 0.0035, '', 0, 0)
-        self.assertAlmostEqual(cred.get_mensualite_avec_assurance(), 0, 2)
-
-        cred = credit.Credit(100000, 0, 0, 0.0035, 'mode_1', 0, 0)
+        cred = credit.Credit(100000, 1, 0, 0.0035, 'mode_1', 0, 0)
         self.assertAlmostEqual(cred.get_mensualite_avec_assurance(), 29.17, 2)
+        
+        cred = credit.Credit(136000, 240, 0.018, 0.0036, 'mode_1', 0, 0)
+        self.assertAlmostEqual(cred.get_mensualite_avec_assurance(), 715.99, 2)
         
     def testMensualiteTotal(self):
         
@@ -39,16 +52,25 @@ class TestCredit(unittest.TestCase):
         
         cred = credit.Credit(100000, 240, 0.02, 0, 'mode_1', 0, 0)
         self.assertAlmostEqual(cred.get_montant_interet_total(), 21412, 2)
+        
+        cred = credit.Credit(136000, 240, 0.018, 0, 'mode_1', 0, 0)
+        self.assertAlmostEqual(cred.get_montant_interet_total(), 26046.52, 2)
 
     def testMontantAssuranceTotal(self):
         
         cred = credit.Credit(10000, 36, 0.02, 0.0030, 'mode_1', 0, 0)
         self.assertAlmostEqual(cred.get_montant_assurance_total(), 90, 2)
+        
+        cred = credit.Credit(136000, 240, 0.02, 0.0036, 'mode_1', 0, 0)
+        self.assertAlmostEqual(cred.get_montant_assurance_total(), 9792, 2)
 
     def testCoutTotal(self):
         
         cred = credit.Credit(10000, 36, 0.02, 0.0030, 'mode_1', 100, 200)
         self.assertAlmostEqual(cred.get_cout_total(), 701.33, 2)
+        
+        cred = credit.Credit(136000, 240, 0.018, 0.0036, 'mode_1', 40, 60)
+        self.assertAlmostEqual(cred.get_cout_total(), 35938.52, 2)
         
     def testAmortissementMode1A(self):
         cred = credit.Credit(10000, 36, 0.02, 0, 'mode_1', 0, 0)

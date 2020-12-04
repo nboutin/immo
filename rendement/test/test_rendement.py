@@ -27,78 +27,9 @@ class TestCashflow(unittest.TestCase):
         bien_immo['credit']['taux_assurance'] = 0.0036
 
         rendement.prepare_inputs(bien_immo)
-        rendement.calcul_credit(bien_immo)
-        rendement.calcul_cashflow(bien_immo)
+        credit = rendement.calcul_credit(bien_immo)
+        rendement.calcul_cashflow(bien_immo, credit)
         self.assertAlmostEqual(bien_immo['cashflow_mensuel'], 100.67, 2)
-
-
-class TestCredit(unittest.TestCase):
-
-    __DATA_TEST_PATHNAME = "test/res/data_test.json"
-
-    def testMensualiteHorsAssurance(self):
-        with open(TestCredit.__DATA_TEST_PATHNAME, 'r') as file:
-            bien_immo = json.load(file)
-
-        bien_immo['credit']['capital_emprunt'] = 136000
-        bien_immo['credit']['duree_annee'] = 20
-        bien_immo['credit']['taux_interet'] = 0.018
-
-        rendement.calcul_credit(bien_immo)
-        self.assertAlmostEqual(bien_immo['credit']['mensualite_hors_assurance'], 675.19, 2)
-
-    def testMensualiteAssurance(self):
-        with open(TestCredit.__DATA_TEST_PATHNAME, 'r') as file:
-            bien_immo = json.load(file)
-
-        bien_immo['credit']['capital_emprunt'] = 136000
-        bien_immo['credit']['taux_assurance'] = 0.0036
-        rendement.calcul_credit(bien_immo)
-        self.assertAlmostEqual(bien_immo['credit']['mensualite_assurance'], 40.80, 2)
-
-    def testMensualiteTotal(self):
-        with open(TestCredit.__DATA_TEST_PATHNAME, 'r') as file:
-            bien_immo = json.load(file)
-
-        bien_immo['credit']['capital_emprunt'] = 136000
-        bien_immo['credit']['duree_annee'] = 20
-        bien_immo['credit']['taux_interet'] = 0.018
-        bien_immo['credit']['taux_assurance'] = 0.0036
-        rendement.calcul_credit(bien_immo)
-        self.assertAlmostEqual(bien_immo['credit']['mensualite_total'], 715.99, 2)
-
-    def testCoutInteret(self):
-        with open(TestCredit.__DATA_TEST_PATHNAME, 'r') as file:
-            bien_immo = json.load(file)
-
-        bien_immo['credit']['capital_emprunt'] = 136000
-        bien_immo['credit']['duree_annee'] = 20
-        bien_immo['credit']['taux_interet'] = 0.018
-        rendement.calcul_credit(bien_immo)
-        self.assertAlmostEqual(bien_immo['credit']['cout_interet'], 26046.52, 2)
-
-    def testCoutAssurance(self):
-        with open(TestCredit.__DATA_TEST_PATHNAME, 'r') as file:
-            bien_immo = json.load(file)
-
-        bien_immo['credit']['capital_emprunt'] = 136000
-        bien_immo['credit']['duree_annee'] = 20
-        bien_immo['credit']['taux_assurance'] = 0.0036
-        rendement.calcul_credit(bien_immo)
-        self.assertAlmostEqual(bien_immo['credit']['cout_assurance'], 9792, 2)
-
-    def testCoutCredit(self):
-        with open(TestCredit.__DATA_TEST_PATHNAME, 'r') as file:
-            bien_immo = json.load(file)
-
-        bien_immo['credit']['capital_emprunt'] = 136000
-        bien_immo['credit']['duree_annee'] = 20
-        bien_immo['credit']['taux_interet'] = 0.018
-        bien_immo['credit']['taux_assurance'] = 0.0036
-        bien_immo['credit']['frais_dossier'] = 40
-        bien_immo['credit']['frais_garantie'] = 60
-        rendement.calcul_credit(bien_immo)
-        self.assertAlmostEqual(bien_immo['credit']['cout_credit'], 35938.52, 2)
 
 
 class TestPrepareInput(unittest.TestCase):
