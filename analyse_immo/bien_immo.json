@@ -1,0 +1,39 @@
+{
+    "bien_immo": {
+        "prix_net_vendeur": 75600,
+        "frais_agence_immo": 0,
+        "frais_notaire": 0,
+        "travaux_budget": 0,
+        "apport": 0,
+        "taxe_fonciere": 500,
+        "travaux_provision": 0.01,
+        "lots": [
+            {
+                "type": "T1",
+                "surface": 65,
+                "loyer_mensuel": 450,
+                "charges_locataire": 50,
+                "__comment": "1/12=0.083, 1/24=0.042",
+                "vacance_locative": 0.042,
+                "copropriete": 40,
+                "assurance_pno": 100,
+                "gestion_agence": 0
+            }
+        ]
+    },
+    "credit": {
+        "duree_annee": 20,
+        "taux_interet": 0.0115,
+        "taux_assurance": 0.0035,
+        "mode": "mode_3",
+        "frais_dossier": 0,
+        "frais_garantie": 0
+    },
+    "impots": {
+        "ps": 0.172,
+        "tmi": 0.11,
+        "micro_foncier": {
+            "taux": 0.30
+        }
+    }
+}
