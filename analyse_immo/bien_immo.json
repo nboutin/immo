@@ -1,12 +1,12 @@
 {
     "bien_immo": {
         "prix_net_vendeur": 75600,
-        "frais_agence_immo": 0,
+        "frais_agence": 0,
         "frais_notaire": 0,
         "travaux_budget": 0,
         "apport": 0,
         "taxe_fonciere": 500,
-        "travaux_provision": 0.01,
+        "travaux_provision_taux": 0.01,
         "lots": [
             {
                 "type": "T1",

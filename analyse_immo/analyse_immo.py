@@ -71,10 +71,13 @@ def load_file(inputfile):
 def make_bien_immo(user_input):
     
     bien_immo = Bien_Immo(user_input['prix_net_vendeur'],
-                          user_input['frais_agence_immo'],
+                          user_input['frais_agence'],
                           user_input['frais_notaire'],
                           user_input['travaux_budget'],
-                          user_input['apport'])
+                          user_input['apport'],
+                          taxe_fonciere = user_input['taxe_fonciere'],
+                          travaux_provision_taux = user_input['travaux_provision_taux']
+                          )
     
     for lot in user_input['lots']:
         bien_immo.add_lot(Lot(lot['type'],

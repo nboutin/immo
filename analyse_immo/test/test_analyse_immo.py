@@ -37,10 +37,8 @@ class TestRendement(unittest.TestCase):
 
     def setUp(self):
         __DATA_TEST_PATHNAME = "test/res/data_test.json"
-
         with open(__DATA_TEST_PATHNAME, 'r') as file:
             in_user = json.load(file)
-            
         self._bien_immo = in_user['bien_immo']
             
     def testRendementBrut(self):
@@ -51,69 +49,61 @@ class TestRendement(unittest.TestCase):
         self.assertEqual(rdt.rendement_brut, 0.06)
         
         self._bien_immo['frais_agence'] = 0.06
+        bi = anim.make_bien_immo(self._bien_immo)
+        rdt = Rendement(bi)
+        self.assertAlmostEqual(rdt.rendement_brut, 0.057, 3)
+        
+        self._bien_immo['frais_agence'] = 0
+        self._bien_immo['frais_notaire'] = 0.09
+        bi = anim.make_bien_immo(self._bien_immo)
+        rdt = Rendement(bi)
+        self.assertAlmostEqual(rdt.rendement_brut, 0.055, 3)
+        
+        self._bien_immo['frais_agence'] = 0.06
         self._bien_immo['frais_notaire'] = 0.09
         bi = anim.make_bien_immo(self._bien_immo)
         rdt = Rendement(bi)
         self.assertAlmostEqual(rdt.rendement_brut, 0.052, 3)
 
-#     def testRendementBrutB(self):
-# 
-#         with open(TestRendement.__DATA_TEST_PATHNAME, 'r') as file:
-#             bien_immo = json.load(file)
-# 
-#         bien_immo['prix_net_vendeur'] = 100000
-#         bien_immo['lots'][0]['loyer_mensuel'] = 500
-#         bien_immo['notaire']['honoraire_taux'] = 0.09
-#         bien_immo['agence_immo']['honoraire_taux'] = 0.06
-# 
-#         rendement.prepare_inputs(bien_immo)
-#         rendement.calcul_rendement_brut(bien_immo)
-#         self.assertAlmostEqual(bien_immo['r_brut'], 0.052, 3)
-
     def testRendementMethodeLarcher(self):
-        with open(TestRendement.__DATA_TEST_PATHNAME, 'r') as file:
-            bien_immo = json.load(file)
+        self._bien_immo['prix_net_vendeur'] = 100000
+        self._bien_immo['lots'][0]['loyer_mensuel'] = 500
+        bi = anim.make_bien_immo(self._bien_immo)
+        rdt = Rendement(bi)
+        self.assertEqual(rdt.rendement_methode_larcher, 0.045)
 
-        bien_immo['prix_net_vendeur'] = 100000
-        bien_immo['lots'][0]['loyer_mensuel'] = 500
-        rendement.prepare_inputs(bien_immo)
-        rendement.calcul_rendement_methode_larcher(bien_immo)
-        self.assertEqual(bien_immo['r_larcher'], 0.045)
+class TestRendementNet(unittest.TestCase):
 
-    def testRendementNetZeroCharges(self):
+    def setUp(self):
+        __DATA_TEST_PATHNAME = "test/res/data_test.json"
+        with open(__DATA_TEST_PATHNAME, 'r') as file:
+            in_user = json.load(file)
+        self._bien_immo = in_user['bien_immo']
+        
+    def testSansCharges(self):
+        self._bien_immo['prix_net_vendeur'] = 115000
+        self._bien_immo['lots'][0]['loyer_mensuel'] = 500
+        bi = anim.make_bien_immo(self._bien_immo)
+        rdt = Rendement(bi)
+        self.assertAlmostEqual(rdt.rendement_net, 0.052, 3)
 
-        with open(TestRendement.__DATA_TEST_PATHNAME, 'r') as file:
-            bien_immo = json.load(file)
+    def testTaxeFonciere(self):
+        self._bien_immo['prix_net_vendeur'] = 115000
+        self._bien_immo['lots'][0]['loyer_mensuel'] = 500
+        self._bien_immo['taxe_fonciere'] = 1000
+        bi = anim.make_bien_immo(self._bien_immo)
+        rdt = Rendement(bi)
+        self.assertAlmostEqual(rdt.rendement_net, 0.0435, 4)
 
-        rendement.prepare_inputs(bien_immo)
-        bien_immo['invest_initial'] = 115000
-        bien_immo['loyers_annuel_total'] = 500 * 12
-        rendement.calcul_rendement_net(bien_immo)
-        self.assertAlmostEqual(bien_immo['r_net'], 0.052, 3)
-
-    def testRendementNetTaxeFonciere(self):
-
-        with open(TestRendement.__DATA_TEST_PATHNAME, 'r') as file:
-            bien_immo = json.load(file)
-
-        bien_immo['taxe_fonciere'] = 1000
-        rendement.prepare_inputs(bien_immo)
-        bien_immo['invest_initial'] = 115000
-        bien_immo['loyers_annuel_total'] = 500 * 12
-        rendement.calcul_rendement_net(bien_immo)
-        self.assertAlmostEqual(bien_immo['r_net'], 0.0435, 4)
-
-    def testRendementNetTravauxProvision(self):
-
-        with open(TestRendement.__DATA_TEST_PATHNAME, 'r') as file:
-            bien_immo = json.load(file)
-
-        bien_immo['lots'][0]['loyer_mensuel'] = 500
-        bien_immo['travaux_provision'] = 0.01
-        rendement.prepare_inputs(bien_immo)
-        bien_immo['invest_initial'] = 115000
-        rendement.calcul_rendement_net(bien_immo)
-        self.assertAlmostEqual(bien_immo['r_net'], 0.0517, 4)
+    def testTravauxProvision(self):
+        self._bien_immo['prix_net_vendeur'] = 115000
+        self._bien_immo['lots'][0]['loyer_mensuel'] = 500
+        self._bien_immo['taxe_fonciere'] = 1000
+        self._bien_immo['travaux_provision_taux'] = 0.01
+        bi = anim.make_bien_immo(self._bien_immo)
+        rdt = Rendement(bi)
+        self.assertAlmostEqual(rdt.rendement_net, 0.0517, 4)
+#         self.assertAlmostEqual(bien_immo['r_net'], 0.0517, 4)
 
     def testRendementNetVacanceLocative(self):
 

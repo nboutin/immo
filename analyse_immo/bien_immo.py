@@ -34,11 +34,18 @@ class Bien_Immo:
     Bien_Immo can contains several lot
     '''
     
-    def __init__(self, prix_net_vendeur, frais_agence_immo, frais_notaire, travaux_budget, apport):
+    def __init__(self, prix_net_vendeur, frais_agence_immo, frais_notaire,
+                 travaux_budget, apport,
+                 taxe_fonciere=0, travaux_provision_taux=0):
+        '''
+        travaux provision: taux appliqué sur le loyer mensuel de chaque lot
+        '''
         
         self._prix_net_vendeur = prix_net_vendeur
         self._travaux_budget = travaux_budget
         self._apport = apport
+        self._taxe_fonciere = taxe_fonciere
+        self._travaux_provision_taux = travaux_provision_taux
         self._lots = []
         
         self.__set_notaire_taux_montant(frais_notaire)
@@ -96,8 +103,12 @@ class Bien_Immo:
         return value
     
     @property
+    def travaux_provision_annuel_total(self):
+        return self.loyer_annuel_total * self._travaux_provision_taux
+    
+    @property
     def charges_annuel_total(self):
-        return 0
+        return self._taxe_fonciere + self.travaux_provision_annuel_total
     
     @property
     def rapport_surface_prix(self):
