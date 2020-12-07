@@ -3,7 +3,7 @@
 
 __NAME = 'Analyse loyer'
 __VERSION = '0.1.0-dev'
-__DATA_FILENAME = "data/location.csv"
+__DATA_FILENAME = "data/location 20201205.csv"
 
 import sys
 from tabulate import tabulate
@@ -17,15 +17,15 @@ def main(argv):
     data_csv = load_csv(__DATA_FILENAME)
 
     request = (
-        {'ville': None, 'type': None, 'data':{}},
-        {'ville':'Châtellerault', 'type':'T1', 'data':{}},
-        {'ville':'Châtellerault', 'type':'T2', 'data':{}},
-        {'ville':'Châtellerault', 'type':'T3', 'data':{}},
-        {'ville':'Châtellerault', 'type':'T4', 'data':{}},
+        {'ville': None, 'type': None, 'exploitation':'Non-meublé', 'data':{}},
+        {'ville':'Châtellerault', 'type':'T1', 'exploitation':'Non-meublé', 'data':{}},
+        {'ville':'Châtellerault', 'type':'T2', 'exploitation':'Non-meublé', 'data':{}},
+        {'ville':'Châtellerault', 'type':'T3', 'exploitation':'Non-meublé', 'data':{}},
+        {'ville':'Châtellerault', 'type':'T4', 'exploitation':'Non-meublé', 'data':{}},
         )
 
     for r in request:
-        filters = {'Ville':r['ville'], 'Type':r['type']}
+        filters = {'Ville':r['ville'], 'Type':r['type'], 'Exploitation':r['exploitation']}
         n, moy, med = calcul_moyenne_median(data_csv, critere='Loyer', filters=filters)
         r['data']['count'] = n
         r['data']['loyer_moyen'] = moy
