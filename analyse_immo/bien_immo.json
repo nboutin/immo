@@ -16,7 +16,7 @@
                 "__comment": "1/12=0.083, 1/24=0.042",
                 "vacance_locative": 0.042,
                 "copropriete": 40,
-                "assurance_pno": 100,
+                "PNO": 100,
                 "gestion_agence": 0
             }
         ]

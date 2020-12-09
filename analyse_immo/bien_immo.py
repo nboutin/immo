@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+from pip._internal import self_outdated_check
 
 
 class Lot:
     
-    def __init__(self, classification, surface, loyer_mensuel):
+    def __init__(self, classification, surface, loyer_mensuel, vacance_locative_taux_annuel=0, PNO=0,
+                 gestion_agence_taux=0, copropriete=0):
         '''    
             "type": "T1",
             "surface": 65,
@@ -19,6 +21,10 @@ class Lot:
         self._type = classification
         self._surface = surface
         self._loyer_mensuel = loyer_mensuel
+        self._vacance_locative_taux_annuel = vacance_locative_taux_annuel
+        self._PNO = PNO
+        self._gestion_agence_taux = gestion_agence_taux
+        self._copropriete = copropriete
         
     @property
     def surface(self):
@@ -27,6 +33,30 @@ class Lot:
     @property
     def loyer_mensuel(self):
         return self._loyer_mensuel
+
+    @property
+    def loyer_annuel(self):
+        return self.loyer_mensuel * 12
+    
+    @property
+    def vacance_locative_taux_annuel(self):
+        return self._vacance_locative_taux_annuel
+    
+    @property
+    def vacance_locative_montant_annuel(self):
+        return self.loyer_annuel * self._vacance_locative_taux_annuel
+    
+    @property
+    def pno_montant_annuel(self):
+        return self._PNO
+
+    @property
+    def gestion_agence_montant_annuel(self):
+        return self.loyer_annuel * self._gestion_agence_taux
+    
+    @property
+    def copropriete(self):
+        return self._copropriete
 
 
 class Bien_Immo:
@@ -107,8 +137,37 @@ class Bien_Immo:
         return self.loyer_annuel_total * self._travaux_provision_taux
     
     @property
+    def vacance_locative_annuel_total(self):
+        value = 0
+        for lot in self._lots:
+            value += lot.vacance_locative_montant_annuel
+        return value
+    
+    @property
+    def pno_annuel_total(self):
+        value = 0
+        for lot in self._lots:
+            value += lot.pno_montant_annuel
+        return value
+    
+    @property
+    def gestion_agence_annuel_total(self):
+        value = 0
+        for lot in self._lots:
+            value += lot.gestion_agence_montant_annuel
+        return value
+    
+    @property
+    def copropriete_annuel_total(self):
+        value = 0
+        for lot in self._lots:
+            value += lot.copropriete
+        return value
+            
+    @property
     def charges_annuel_total(self):
-        return self._taxe_fonciere + self.travaux_provision_annuel_total
+        return self._taxe_fonciere + self.travaux_provision_annuel_total + self.vacance_locative_annuel_total \
+            +self.pno_annuel_total + self.gestion_agence_annuel_total + self.copropriete_annuel_total
     
     @property
     def rapport_surface_prix(self):

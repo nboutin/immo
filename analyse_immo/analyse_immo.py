@@ -22,7 +22,7 @@ def main(argv):
     user_input = load_file(inputfile)
 
     bien_immo = make_bien_immo(user_input['bien_immo'])
-    prepare_inputs(user_input['bien_immo'])
+#     prepare_inputs(user_input['bien_immo'])
     
     rendement = Rendement(bien_immo)
     credit = make_credit(user_input, bien_immo)
@@ -75,20 +75,24 @@ def make_bien_immo(user_input):
                           user_input['frais_notaire'],
                           user_input['travaux_budget'],
                           user_input['apport'],
-                          taxe_fonciere = user_input['taxe_fonciere'],
-                          travaux_provision_taux = user_input['travaux_provision_taux']
+                          taxe_fonciere=user_input['taxe_fonciere'],
+                          travaux_provision_taux=user_input['travaux_provision_taux']
                           )
     
     for lot in user_input['lots']:
         bien_immo.add_lot(Lot(lot['type'],
                               lot['surface'],
-                              lot['loyer_mensuel']))
+                              lot['loyer_mensuel'],
+                              vacance_locative_taux_annuel=lot['vacance_locative'],
+                              PNO=lot['PNO'],
+                              gestion_agence_taux=lot['gestion_agence'],
+                              copropriete=lot['copropriete']))
     
     return bien_immo
 
 
-def prepare_inputs(user_input):
-
+# def prepare_inputs(user_input):
+#
 #     user_input['loyers_mensuel_total'] = 0
 #     user_input['surface_total'] = 0
 #     for lot in user_input['lots']:
@@ -124,32 +128,32 @@ def prepare_inputs(user_input):
 
 #     user_input['credit']['capital_emprunt'] = user_input['invest_initial']
 
-    calcul_charges_annuel(user_input)
+#     calcul_charges_annuel(user_input)
 #     calcul_surface_prix(user_input)
 
 
-def calcul_charges_annuel(user_input):
-
-    user_input['charges_annuel_total'] = user_input['taxe_fonciere']
-    user_input['travaux_provision_annuel_total'] = 0
-    user_input['vacance_locative_annuel_total'] = 0
-    user_input['assurance_pno_annuel_total'] = 0
-    user_input['gestion_agence_annuel_total'] = 0
-    user_input['copropriete_annuel_total'] = 0
-
-    for lot in user_input['lots']:
-        loyer = lot['loyer_mensuel']
-        user_input['travaux_provision_annuel_total'] += user_input['travaux_provision'] * loyer * 12
-        user_input['vacance_locative_annuel_total'] += lot['vacance_locative'] * loyer * 12
-        user_input['assurance_pno_annuel_total'] += lot['assurance_pno']
-        user_input['gestion_agence_annuel_total'] += lot['gestion_agence'] * loyer * 12
-        user_input['copropriete_annuel_total'] += lot['copropriete']
-
-    user_input['charges_annuel_total'] += user_input['travaux_provision_annuel_total']
-    user_input['charges_annuel_total'] += user_input['vacance_locative_annuel_total']
-    user_input['charges_annuel_total'] += user_input['assurance_pno_annuel_total']
-    user_input['charges_annuel_total'] += user_input['gestion_agence_annuel_total']
-    user_input['charges_annuel_total'] += user_input['copropriete_annuel_total']
+# def calcul_charges_annuel(user_input):
+# 
+#     user_input['charges_annuel_total'] = user_input['taxe_fonciere']
+#     user_input['travaux_provision_annuel_total'] = 0
+#     user_input['vacance_locative_annuel_total'] = 0
+#     user_input['assurance_pno_annuel_total'] = 0
+#     user_input['gestion_agence_annuel_total'] = 0
+#     user_input['copropriete_annuel_total'] = 0
+# 
+#     for lot in user_input['lots']:
+#         loyer = lot['loyer_mensuel']
+#         user_input['travaux_provision_annuel_total'] += user_input['travaux_provision'] * loyer * 12
+#         user_input['vacance_locative_annuel_total'] += lot['vacance_locative'] * loyer * 12
+#         user_input['assurance_pno_annuel_total'] += lot['assurance_pno']
+#         user_input['gestion_agence_annuel_total'] += lot['gestion_agence'] * loyer * 12
+#         user_input['copropriete_annuel_total'] += lot['copropriete']
+# 
+#     user_input['charges_annuel_total'] += user_input['travaux_provision_annuel_total']
+#     user_input['charges_annuel_total'] += user_input['vacance_locative_annuel_total']
+#     user_input['charges_annuel_total'] += user_input['assurance_pno_annuel_total']
+#     user_input['charges_annuel_total'] += user_input['gestion_agence_annuel_total']
+#     user_input['charges_annuel_total'] += user_input['copropriete_annuel_total']
 
 # def calcul_surface_prix(user_input):
 # 
