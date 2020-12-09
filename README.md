@@ -9,8 +9,9 @@ Run script:
 # Test
 Run Unittest
 
-    $ cd immmo
+    $ cd analyse_immo
     $ python -m unittest -v
+    $ python -m unittest test.test_rendement
 
 # Todo
 

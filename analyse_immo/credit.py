@@ -28,6 +28,26 @@ class Credit:
         
         self._calcul_tableau_amortissement()
 
+    @property
+    def capital(self):
+        return self._capital
+
+    @property
+    def duree_mois(self):
+        return self._duree_mois
+
+    @property
+    def taux(self):
+        return self._taux
+
+    @property
+    def taux_assurance(self):
+        return self._taux_assurance
+
+    @property
+    def mode(self):
+        return self._mode
+
     def get_mensualite_hors_assurance(self, taux=None):
         '''
         mensualite hors assurance = ( capital_emprunte * taux_interet/12) / 1 - (1 + taux_interet / 12) ^ - duree_mois
