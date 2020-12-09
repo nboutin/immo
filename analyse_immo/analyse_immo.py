@@ -9,7 +9,7 @@ import credit as cred
 from bien_immo import Bien_Immo, Lot
 from rendement import Rendement
 
-__NAME = 'Rendement Locatif'
+__NAME = 'Analyse Immo'
 __VERSION = '1.0.0-dev'
 __BIEN_IMMO_FILENAME = "bien_immo.json"
 
@@ -22,8 +22,6 @@ def main(argv):
     user_input = load_file(inputfile)
 
     bien_immo = make_bien_immo(user_input['bien_immo'])
-#     prepare_inputs(user_input['bien_immo'])
-    
     rendement = Rendement(bien_immo)
     credit = make_credit(user_input, bien_immo)
     
@@ -89,93 +87,6 @@ def make_bien_immo(user_input):
                               copropriete=lot['copropriete']))
     
     return bien_immo
-
-
-# def prepare_inputs(user_input):
-#
-#     user_input['loyers_mensuel_total'] = 0
-#     user_input['surface_total'] = 0
-#     for lot in user_input['lots']:
-#         user_input['loyers_mensuel_total'] += lot['loyer_mensuel']
-#         user_input['surface_total'] += lot['surface']
-# 
-#     user_input['loyers_annuel_total'] = user_input['loyers_mensuel_total'] * 12
-
-#     taux = user_input['notaire']['honoraire_taux']
-#     montant = user_input['notaire']['honoraire_montant']
-#     if taux * user_input['prix_net_vendeur'] != montant:
-#         if taux == 0:
-#             user_input['notaire']['honoraire_taux'] = montant / user_input['prix_net_vendeur']
-#         elif montant == 0:
-#             user_input['notaire']['honoraire_montant'] = user_input['prix_net_vendeur'] * taux
-#         else:
-#             print('Error: notaire')
-#             quit()
-# 
-#     taux = user_input['agence_immo']['honoraire_taux']
-#     montant = user_input['agence_immo']['honoraire_montant']
-#     if taux * user_input['prix_net_vendeur'] != montant:
-#         if taux == 0:
-#             user_input['agence_immo']['honoraire_taux'] = montant / user_input['prix_net_vendeur']
-#         elif montant == 0:
-#             user_input['agence_immo']['honoraire_montant'] = user_input['prix_net_vendeur'] * taux
-#         else:
-#             print('Error: agence_immo')
-#             quit()
-# 
-#     user_input['invest_initial'] = user_input['prix_net_vendeur'] + user_input['notaire']['honoraire_montant'] \
-#         +user_input['agence_immo']['honoraire_montant'] + user_input['travaux_budget'] - user_input['apport']
-
-#     user_input['credit']['capital_emprunt'] = user_input['invest_initial']
-
-#     calcul_charges_annuel(user_input)
-#     calcul_surface_prix(user_input)
-
-
-# def calcul_charges_annuel(user_input):
-# 
-#     user_input['charges_annuel_total'] = user_input['taxe_fonciere']
-#     user_input['travaux_provision_annuel_total'] = 0
-#     user_input['vacance_locative_annuel_total'] = 0
-#     user_input['assurance_pno_annuel_total'] = 0
-#     user_input['gestion_agence_annuel_total'] = 0
-#     user_input['copropriete_annuel_total'] = 0
-# 
-#     for lot in user_input['lots']:
-#         loyer = lot['loyer_mensuel']
-#         user_input['travaux_provision_annuel_total'] += user_input['travaux_provision'] * loyer * 12
-#         user_input['vacance_locative_annuel_total'] += lot['vacance_locative'] * loyer * 12
-#         user_input['assurance_pno_annuel_total'] += lot['assurance_pno']
-#         user_input['gestion_agence_annuel_total'] += lot['gestion_agence'] * loyer * 12
-#         user_input['copropriete_annuel_total'] += lot['copropriete']
-# 
-#     user_input['charges_annuel_total'] += user_input['travaux_provision_annuel_total']
-#     user_input['charges_annuel_total'] += user_input['vacance_locative_annuel_total']
-#     user_input['charges_annuel_total'] += user_input['assurance_pno_annuel_total']
-#     user_input['charges_annuel_total'] += user_input['gestion_agence_annuel_total']
-#     user_input['charges_annuel_total'] += user_input['copropriete_annuel_total']
-
-# def calcul_surface_prix(user_input):
-# 
-#     user_input['surface_prix'] = 0
-# 
-#     if user_input['surface_total'] > 0:
-#         user_input['surface_prix'] = user_input['prix_net_vendeur'] / user_input['surface_total']
-
-# def calcul_rendement_brut(user_input):
-# 
-#     user_input['r_brut'] = calcul.rendement_brut(user_input['loyers_annuel_total'], user_input['invest_initial'])
-
-# def calcul_rendement_methode_larcher(user_input):
-# 
-#     user_input['r_larcher'] = calcul.rendement_methode_larcher(user_input['loyers_mensuel_total'], user_input['invest_initial'])
-# 
-# 
-# def calcul_rendement_net(user_input):
-# 
-#     user_input['r_net'] = calcul.rendement_net(user_input['loyers_annuel_total'],
-#                                               user_input['charges_annuel_total'],
-#                                               user_input['invest_initial'])
 
 
 def make_credit(user_input, bien_immo):
@@ -273,17 +184,6 @@ def print_report(bien_immo, rendement, credit):
          bien_immo.charges_annuel_total, ],
     ]
  
-#     charges = [
-#         ['Taxe\nFonciere', 'Travaux\nProvision', 'Vacance\nLocative', 'PNO', 'Gestion\nagence', 'Copropriete'],
-#         [user_input['taxe_fonciere'],
-#          user_input['travaux_provision_annuel_total'],
-#          user_input['vacance_locative_annuel_total'],
-#          user_input['assurance_pno_annuel_total'],
-#          user_input['gestion_agence_annuel_total'],
-#          user_input['copropriete_annuel_total'],
-#          ]
-#     ]
-
     charges = [
         ['Taxe\nFonciere', 'Travaux\nProvision', 'Vacance\nLocative', 'PNO', 'Gestion\nagence', 'Copropriete'],
         [bien_immo.taxe_fonciere,
@@ -317,12 +217,6 @@ def print_report(bien_immo, rendement, credit):
  
     bilan = [
         ['Rendement\nBrut', 'Rendement\nNet', 'Rendement\nLarcher', 'Cashflow\nMensuel', 'Cashflow\nannuel'],
-#         ['{:.2f}%'.format(user_input['r_brut'] * 100),
-#         '{:.2f}%'.format(user_input['r_net'] * 100),
-#         '{:.2f}%'.format(user_input['r_larcher'] * 100),
-#         '{:.2f}'.format(user_input['cashflow_mensuel']),
-#         '{:.2f}'.format(user_input['cashflow_annuel'])
-#         ]
         ['{:.2f}%'.format(rendement.rendement_brut * 100),
         '{:.2f}%'.format(rendement.rendement_net * 100),
         '{:.2f}%'.format(rendement.rendement_methode_larcher * 100),
