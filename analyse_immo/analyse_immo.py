@@ -283,6 +283,17 @@ def print_report(bien_immo, rendement, credit):
 #          user_input['copropriete_annuel_total'],
 #          ]
 #     ]
+
+    charges = [
+        ['Taxe\nFonciere', 'Travaux\nProvision', 'Vacance\nLocative', 'PNO', 'Gestion\nagence', 'Copropriete'],
+        [bien_immo.taxe_fonciere,
+         bien_immo.travaux_provision_annuel_total,
+         bien_immo.vacance_locative_annuel_total,
+         bien_immo.pno_annuel_total,
+         bien_immo.gestion_agence_annuel_total,
+         bien_immo.copropriete_annuel_total,
+         ]
+    ]
  
     credit_in = [
         ['Capital\nemprunté', 'Durée', 'Taux\ninteret', 'Taux\nassurance', 'Mode'],
@@ -342,7 +353,7 @@ def print_report(bien_immo, rendement, credit):
 
     print(tabulate(achat, headers="firstrow") + '\n')
     print(tabulate(location, headers="firstrow") + '\n')
-#     print(tabulate(charges, headers="firstrow") + '\n')
+    print(tabulate(charges, headers="firstrow") + '\n')
     print(tabulate(credit_in, headers="firstrow") + '\n')
     print(tabulate(credit_out, headers="firstrow") + '\n')
     print(tabulate(bilan, headers="firstrow") + '\n')

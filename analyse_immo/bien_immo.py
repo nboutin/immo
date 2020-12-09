@@ -133,6 +133,10 @@ class Bien_Immo:
         return value
     
     @property
+    def taxe_fonciere(self):
+        return self._taxe_fonciere
+    
+    @property
     def travaux_provision_annuel_total(self):
         return self.loyer_annuel_total * self._travaux_provision_taux
     
