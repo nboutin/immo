@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-from pip._internal import self_outdated_check
 
 
 class Lot:

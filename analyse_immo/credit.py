@@ -13,9 +13,6 @@ class Credit:
         - mode_3: mensualite degressive, assurance capital restant mensuel
         - mode_4: mensualite degressive, assurance capital restant annuel
         '''
-        if duree_mois == 0:
-            raise Exception('Credit: durée égale 0 mois')
-        
         self._capital = capital
         self._duree_mois = duree_mois
         self._taux = taux

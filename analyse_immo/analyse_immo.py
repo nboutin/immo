@@ -101,16 +101,6 @@ def make_credit(user_input, bien_immo):
     return credit
 
 
-# def calcul_cashflow(user_input, credit):
-# 
-#     user_input['cashflow_mensuel'] = \
-#         calcul.cashflow_mensuel(user_input['loyers_mensuel_total'],
-#                                 credit.get_mensualite_avec_assurance(),
-#                                 user_input['charges_annuel_total'])
-# 
-#     user_input['cashflow_annuel'] = user_input['cashflow_mensuel'] * 12
-
-
 def calcul_impots_micro_foncier(user_input):
 
     user_input['impots']['micro_foncier']['base_impossable'] = \

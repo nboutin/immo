@@ -8,12 +8,8 @@ import credit
 class TestCredit(unittest.TestCase):
     
     def testConstructeur(self):
-        
+        credit.Credit(0, 0, 0, 0, '', 0, 0)
         credit.Credit(0, 1, 0, 0, '', 0, 0)
-        
-        with self.assertRaises(Exception) as context:
-            credit.Credit(0, 0, 0, 0, '', 0, 0)
-            self.assertTrue('Credit: durée égale 0 mois' in context.exception)
 
     def testGetMensualiteHorsAssurance(self):
 
