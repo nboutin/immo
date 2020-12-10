@@ -10,7 +10,7 @@ from rendement import Rendement
 
 __NAME = 'Analyse Immo'
 __VERSION = '1.0.0-dev'
-__BIEN_IMMO_FILENAME = "bien_immo.json"
+__BIEN_IMMO_FILENAME = 'res/bien_immo.json'
 
 
 def main(argv):
