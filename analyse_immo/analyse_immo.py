@@ -4,7 +4,6 @@
 import sys
 import getopt
 import json
-import calcul
 import credit as cred
 from bien_immo import Bien_Immo, Lot
 from rendement import Rendement
@@ -22,8 +21,8 @@ def main(argv):
     user_input = load_file(inputfile)
 
     bien_immo = make_bien_immo(user_input['bien_immo'])
-    rendement = Rendement(bien_immo)
     credit = make_credit(user_input, bien_immo)
+    rendement = Rendement(bien_immo)
     
 #     calcul_cashflow(user_input, credit)
 #     calcul_impots_micro_foncier(user_input)
@@ -102,14 +101,14 @@ def make_credit(user_input, bien_immo):
     return credit
 
 
-def calcul_cashflow(user_input, credit):
-
-    user_input['cashflow_mensuel'] = \
-        calcul.cashflow_mensuel(user_input['loyers_mensuel_total'],
-                                credit.get_mensualite_avec_assurance(),
-                                user_input['charges_annuel_total'])
-
-    user_input['cashflow_annuel'] = user_input['cashflow_mensuel'] * 12
+# def calcul_cashflow(user_input, credit):
+# 
+#     user_input['cashflow_mensuel'] = \
+#         calcul.cashflow_mensuel(user_input['loyers_mensuel_total'],
+#                                 credit.get_mensualite_avec_assurance(),
+#                                 user_input['charges_annuel_total'])
+# 
+#     user_input['cashflow_annuel'] = user_input['cashflow_mensuel'] * 12
 
 
 def calcul_impots_micro_foncier(user_input):
@@ -220,8 +219,8 @@ def print_report(bien_immo, rendement, credit):
         ['{:.2f}%'.format(rendement.rendement_brut * 100),
         '{:.2f}%'.format(rendement.rendement_net * 100),
         '{:.2f}%'.format(rendement.rendement_methode_larcher * 100),
-        '{:.2f}'.format(rendement.cashflow_mensuel),
-        '{:.2f}'.format(rendement.cashflow_annuel)
+        '{:.2f}'.format(rendement.cashflow_mensuel(credit)),
+        '{:.2f}'.format(rendement.cashflow_annuel(credit))
         ]
     ]
  
