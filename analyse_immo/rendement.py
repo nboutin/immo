@@ -27,8 +27,8 @@ class Rendement:
             self._bien_immo.investissement_initial
 
     def cashflow_mensuel(self, credit):
-        return self._bien_immo.loyer_mensuel_total - credit.get_mensualite_avec_assurance() \
-            -self._bien_immo.charges_annuel_total / 12
+        return self.cashflow_annuel(credit) / 12
 
     def cashflow_annuel(self, credit):
-        return self.cashflow_mensuel(credit) * 12
+        return self._bien_immo.loyer_annuel_total - credit.get_mensualite_avec_assurance() * 12 \
+            -self._bien_immo.charges_annuel_total

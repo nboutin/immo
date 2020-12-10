@@ -105,7 +105,7 @@ class TestRendementNet(unittest.TestCase):
     def testCopropriete(self):
         self._bien_immo['prix_net_vendeur'] = 115000
         self._bien_immo['lots'][0]['loyer_mensuel'] = 500
-        self._bien_immo['lots'][0]['copropriete'] = 1000
+        self._bien_immo['lots'][0]['copropriete'] = 1000/12
         bi = anim.make_bien_immo(self._bien_immo)
         rdt = Rendement(bi)
         self.assertAlmostEqual(rdt.rendement_net, 0.0435, 4)

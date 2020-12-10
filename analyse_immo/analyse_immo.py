@@ -83,7 +83,7 @@ def make_bien_immo(user_input):
                               vacance_locative_taux_annuel=lot['vacance_locative'],
                               PNO=lot['PNO'],
                               gestion_agence_taux=lot['gestion_agence'],
-                              copropriete=lot['copropriete']))
+                              copropriete_mensuel=lot['copropriete']))
     
     return bien_immo
 

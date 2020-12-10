@@ -5,7 +5,7 @@
 class Lot:
     
     def __init__(self, classification, surface, loyer_mensuel, vacance_locative_taux_annuel=0, PNO=0,
-                 gestion_agence_taux=0, copropriete=0):
+                 gestion_agence_taux=0, copropriete_mensuel=0):
         '''    
             "type": "T1",
             "surface": 65,
@@ -23,7 +23,7 @@ class Lot:
         self._vacance_locative_taux_annuel = vacance_locative_taux_annuel
         self._PNO = PNO
         self._gestion_agence_taux = gestion_agence_taux
-        self._copropriete = copropriete
+        self._copropriete_mensuel = copropriete_mensuel
         
     @property
     def surface(self):
@@ -54,8 +54,12 @@ class Lot:
         return self.loyer_annuel * self._gestion_agence_taux
     
     @property
-    def copropriete(self):
-        return self._copropriete
+    def copropriete_mensuel(self):
+        return self._copropriete_mensuel
+    
+    @property
+    def copropriete_annuel(self):
+        return self.copropriete_mensuel * 12
 
 
 class Bien_Immo:
@@ -164,7 +168,7 @@ class Bien_Immo:
     def copropriete_annuel_total(self):
         value = 0
         for lot in self._lots:
-            value += lot.copropriete
+            value += lot.copropriete_annuel
         return value
             
     @property
