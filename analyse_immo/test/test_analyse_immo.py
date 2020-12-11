@@ -6,7 +6,6 @@ import json
 import analyse_immo as anim
 from rendement import Rendement
 
-
 class TestRendement(unittest.TestCase):
 
     def setUp(self):
@@ -105,34 +104,41 @@ class TestRendementNet(unittest.TestCase):
     def testCopropriete(self):
         self._bien_immo['prix_net_vendeur'] = 115000
         self._bien_immo['lots'][0]['loyer_mensuel'] = 500
-        self._bien_immo['lots'][0]['copropriete'] = 1000/12
+        self._bien_immo['lots'][0]['copropriete'] = 1000 / 12
         bi = anim.make_bien_immo(self._bien_immo)
         rdt = Rendement(bi)
         self.assertAlmostEqual(rdt.rendement_net, 0.0435, 4)
 
 
-@unittest.skip('todo')
+@unittest.skip('fixme')
 class TestCashflow(unittest.TestCase):
-
-    __DATA_TEST_PATHNAME = "test/res/data_test.json"
+    
+    def setUp(self):
+        __DATA_TEST_PATHNAME = "test/res/data_test.json"
+        with open(__DATA_TEST_PATHNAME, 'r') as file:
+            in_user = json.load(file)
+        self._bien_immo = in_user['bien_immo']
+        self._credit_data = in_user['credit']
 
     def testCashflowMensuel(self):
-        with open(TestCashflow.__DATA_TEST_PATHNAME, 'r') as file:
-            bien_immo = json.load(file)
+        self._bien_immo['prix_net_vendeur'] = 136000
+        self._bien_immo['taxe_fonciere'] = 1500
+        self._bien_immo['travaux_provision'] = 0.05
+        self._bien_immo['lots'][0]['loyer_mensuel'] = 1000
+        self._bien_immo['lots'][0]['assurance_pno'] = 100
+        self._credit_data['duree_annee'] = 20
+        self._credit_data['taux_interet'] = 0.018
+        self._credit_data['taux_assurance'] = 0.0036
 
-        bien_immo['prix_net_vendeur'] = 136000
-        bien_immo['taxe_fonciere'] = 1500
-        bien_immo['travaux_provision'] = 0.05
-        bien_immo['lots'][0]['loyer_mensuel'] = 1000
-        bien_immo['lots'][0]['assurance_pno'] = 100
-        bien_immo['credit']['duree_annee'] = 20
-        bien_immo['credit']['taux_interet'] = 0.018
-        bien_immo['credit']['taux_assurance'] = 0.0036
+        bi = anim.make_bien_immo(self._bien_immo)
+        rdt = Rendement(bi)
+        cred = anim.make_credit(self._credit_data, bi)
 
-        anim.prepare_inputs(bien_immo)
-        credit = rendement.calcul_credit(bien_immo)
-        rendement.calcul_cashflow(bien_immo, credit)
-        self.assertAlmostEqual(bien_immo['cashflow_mensuel'], 100.67, 2)
+        self.assertAlmostEqual(rdt.cashflow_mensuel(cred), 100.67, 2)
+#         anim.prepare_inputs(bien_immo)
+#         credit = rendement.calcul_credit(bien_immo)
+#         rendement.calcul_cashflow(bien_immo, credit)
+#         self.assertAlmostEqual(bien_immo['cashflow_mensuel'], 100.67, 2)
 
 
 if __name__ == '__main__':
