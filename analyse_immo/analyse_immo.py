@@ -26,7 +26,6 @@ def main(argv):
     rendement = Rendement(bien_immo)
     imf = Impot_Micro_Foncier(bien_immo.loyer_annuel_total, user_input['impot']['2019']['tmi'])
     
-#     calcul_impots_micro_foncier(user_input)
 #     calcul_impots_regime_reel(user_input, credit)
 
     print_report(bien_immo, rendement, credit, imf)
