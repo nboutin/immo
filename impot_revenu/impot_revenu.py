@@ -8,7 +8,7 @@ import calcul_impots
 
 __NAME = 'Impots'
 __VERSION = '0.1.0-dev'
-__IMPOTS_FILENAME = "impots.json"
+__IMPOTS_FILENAME = 'res/impots_data.json'
 
 
 def main(argv):

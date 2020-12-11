@@ -7,6 +7,7 @@ import json
 import credit as cred
 from bien_immo import Bien_Immo, Lot
 from rendement import Rendement
+from impot_micro_foncier import Impot_Micro_Foncier
 
 __NAME = 'Analyse Immo'
 __VERSION = '1.0.0-dev'
@@ -21,14 +22,14 @@ def main(argv):
     user_input = load_file(inputfile)
 
     bien_immo = make_bien_immo(user_input['bien_immo'])
-    credit = make_credit(user_input, bien_immo)
+    credit = make_credit(user_input['credit'], bien_immo)
     rendement = Rendement(bien_immo)
+    imf = Impot_Micro_Foncier(bien_immo.loyer_annuel_total, user_input['impot']['2019']['tmi'])
     
-#     calcul_cashflow(user_input, credit)
 #     calcul_impots_micro_foncier(user_input)
 #     calcul_impots_regime_reel(user_input, credit)
 
-    print_report(bien_immo, rendement, credit)
+    print_report(bien_immo, rendement, credit, imf)
 
 
 def parse_args(argv):
@@ -88,30 +89,17 @@ def make_bien_immo(user_input):
     return bien_immo
 
 
-def make_credit(user_input, bien_immo):
+def make_credit(credit_data, bien_immo):
     
     credit = cred.Credit(bien_immo.investissement_initial,
-                         user_input['credit']['duree_annee'] * 12,
-                         user_input['credit']['taux_interet'],
-                         user_input['credit']['taux_assurance'],
-                         user_input['credit']['mode'],
-                         user_input['credit']['frais_dossier'],
-                         user_input['credit']['frais_garantie']
+                         credit_data['duree_annee'] * 12,
+                         credit_data['taux_interet'],
+                         credit_data['taux_assurance'],
+                         credit_data['mode'],
+                         credit_data['frais_dossier'],
+                         credit_data['frais_garantie']
                         )
     return credit
-
-
-def calcul_impots_micro_foncier(user_input):
-
-    user_input['impots']['micro_foncier']['base_impossable'] = \
-        user_input['loyers_annuel_total'] * (1 - user_input['impots']['micro_foncier']['taux'])
-
-    base = user_input['impots']['micro_foncier']['base_impossable']
-
-    user_input['impots']['micro_foncier']['impots_revenu'] = base * user_input['impots']['tmi']
-    user_input['impots']['micro_foncier']['prelevement_sociaux'] = base * user_input['impots']['ps']
-    user_input['impots']['micro_foncier']['total'] = \
-        user_input['impots']['micro_foncier']['impots_revenu'] + user_input['impots']['micro_foncier']['prelevement_sociaux']
 
 
 def calcul_impots_regime_reel(user_input, credit):
@@ -151,7 +139,7 @@ def calcul_impots_regime_reel(user_input, credit):
 #     print(interet_annee_1)
 
 
-def print_report(bien_immo, rendement, credit):
+def print_report(bien_immo, rendement, credit, imf):
     from tabulate import tabulate
 
     achat = [
@@ -214,16 +202,16 @@ def print_report(bien_immo, rendement, credit):
         ]
     ]
  
-#     micro_foncier = [
-#         ['Micro\nFoncier', 'Base\nimpossable', 'IR', 'PS', 'Total'],
-#         ['-',
-#          user_input['impots']['micro_foncier']['base_impossable'],
-#          user_input['impots']['micro_foncier']['impots_revenu'],
-#          user_input['impots']['micro_foncier']['prelevement_sociaux'],
-#          user_input['impots']['micro_foncier']['total'],
-#          ]
-#     ]
-# 
+    micro_foncier = [
+        ['Micro\nFoncier', 'Base\nimpossable', 'IR', 'PS', 'Total'],
+        ['-',
+            imf.base_impossable,
+            imf.revenu_foncier_impossable,
+            imf.prelevement_sociaux_montant,
+            imf.impot_total
+         ]
+    ]
+ 
 #     regime_reel = [
 #         ['Regime\nreel', 'Base\nimpossable', 'IR', 'PS', 'Total'],
 #         ['-',
@@ -240,7 +228,7 @@ def print_report(bien_immo, rendement, credit):
     print(tabulate(credit_in, headers="firstrow") + '\n')
     print(tabulate(credit_out, headers="firstrow") + '\n')
     print(tabulate(bilan, headers="firstrow") + '\n')
-#     print(tabulate(micro_foncier, headers="firstrow") + '\n')
+    print(tabulate(micro_foncier, headers="firstrow") + '\n')
 #     print(tabulate(regime_reel, headers="firstrow") + '\n')
 
 
