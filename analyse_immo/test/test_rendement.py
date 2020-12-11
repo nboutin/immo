@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import unittest
-from bien_immo import Bien_Immo, Lot
+from bien_immo import Bien_Immo
+from lot import Lot
 from credit import Credit
 from rendement import Rendement
 

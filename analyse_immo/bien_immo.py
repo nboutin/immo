@@ -2,87 +2,19 @@
 # -*- coding: utf-8 -*-
 
 
-class Lot:
-    
-    def __init__(self, classification, surface, loyer_mensuel, vacance_locative_taux_annuel=0, PNO=0,
-                 gestion_agence_taux=0, copropriete_mensuel=0):
-        '''    
-            "type": "T1",
-            "surface": 65,
-            "loyer_mensuel": 450,
-            "charges_locataire": 50,
-            "__comment": "1/12=0.083, 1/24=0.042",
-            "vacance_locative": 0.042,
-            "copropriete": 40,
-            "assurance_pno": 100,
-            "gestion_agence": 0
-        '''
-        self._type = classification
-        self._surface = surface
-        self._loyer_mensuel = loyer_mensuel
-        self._vacance_locative_taux_annuel = vacance_locative_taux_annuel
-        self._PNO = PNO
-        self._gestion_agence_taux = gestion_agence_taux
-        self._copropriete_mensuel = copropriete_mensuel
-        
-    @property
-    def surface(self):
-        return self._surface
-
-    @property
-    def loyer_mensuel(self):
-        return self._loyer_mensuel
-
-    @property
-    def loyer_annuel(self):
-        return self.loyer_mensuel * 12
-    
-    @property
-    def vacance_locative_taux_annuel(self):
-        return self._vacance_locative_taux_annuel
-    
-    @property
-    def vacance_locative_montant_annuel(self):
-        return self.loyer_annuel * self._vacance_locative_taux_annuel
-    
-    @property
-    def pno_montant_annuel(self):
-        return self._PNO
-
-    @property
-    def gestion_agence_montant_annuel(self):
-        return self.loyer_annuel * self._gestion_agence_taux
-    
-    @property
-    def copropriete_mensuel(self):
-        return self._copropriete_mensuel
-    
-    @property
-    def copropriete_annuel(self):
-        return self.copropriete_mensuel * 12
-
-
 class Bien_Immo:
     '''
     Bien_Immo can contains several lot
     '''
     
-    def __init__(self, prix_net_vendeur, frais_agence_immo, frais_notaire,
-                 travaux_budget, apport,
-                 taxe_fonciere=0, travaux_provision_taux=0):
-        '''
-        travaux provision: taux appliqué sur le loyer mensuel de chaque lot
-        '''
+    def __init__(self, prix_net_vendeur, frais_agence, frais_notaire, budget_travaux, apport):
         
         self._prix_net_vendeur = prix_net_vendeur
-        self._travaux_budget = travaux_budget
+        self._budget_travaux = budget_travaux
         self._apport = apport
-        self._taxe_fonciere = taxe_fonciere
-        self._travaux_provision_taux = travaux_provision_taux
         self._lots = []
-        
         self.__set_notaire_taux_montant(frais_notaire)
-        self.__set_agence_taux_montant(frais_agence_immo)
+        self.__set_agence_taux_montant(frais_agence)
         
     @property
     def prix_net_vendeur(self):
@@ -105,8 +37,8 @@ class Bien_Immo:
         return self._agence_montant
     
     @property
-    def travaux_budget(self):
-        return self._travaux_budget
+    def budget_travaux(self):
+        return self._budget_travaux
     
     @property
     def apport(self):
@@ -115,13 +47,13 @@ class Bien_Immo:
     @property
     def investissement_initial(self):
         return self._prix_net_vendeur + self._notaire_montant + self._agence_montant + \
-            self._travaux_budget - self._apport
+            self._budget_travaux - self._apport
 
     @property
     def loyer_mensuel_total(self):
         value = 0
         for lot in self._lots:
-            value += lot.loyer_mensuel
+            value += lot.loyer_nu_mensuel
         return value
     
     @property

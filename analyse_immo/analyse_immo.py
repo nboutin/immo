@@ -4,14 +4,16 @@
 import sys
 import getopt
 import json
+from bien_immo import Bien_Immo
+from lot import Lot
+from provisions import Provisions
 import credit as cred
-from bien_immo import Bien_Immo, Lot
 from rendement import Rendement
 from impot_micro_foncier import Impot_Micro_Foncier
 
 __NAME = 'Analyse Immo'
 __VERSION = '1.0.0-dev'
-__BIEN_IMMO_FILENAME = 'res/bien_immo.json'
+__BIEN_IMMO_FILENAME = 'res/input.json'
 
 
 def main(argv):
@@ -19,16 +21,23 @@ def main(argv):
     print('{} {}'.format(__NAME, __VERSION))
 
     inputfile = parse_args(argv)
-    user_input = load_file(inputfile)
-
-    bien_immo = make_bien_immo(user_input['bien_immo'])
-    credit = make_credit(user_input['credit'], bien_immo)
-    rendement = Rendement(bien_immo)
-    imf = Impot_Micro_Foncier(bien_immo.loyer_annuel_total, user_input['impot']['2019']['tmi'])
+    input_data = load_file(inputfile)
     
-#     calcul_impots_regime_reel(user_input, credit)
+    achat_data = input_data['achat']
+    defaut_data = input_data['defaut']
+    lots_data = input_data['lots']
+    credit_data = input_data['credit']
+    impot_data = input_data['impot']
 
-    print_report(bien_immo, rendement, credit, imf)
+    bien_immo = make_bien_immo(achat_data, lots_data)
+    
+#     credit = make_credit(user_input['credit'], bien_immo)
+#     rendement = Rendement(bien_immo)
+#     imf = Impot_Micro_Foncier(bien_immo.loyer_annuel_total, user_input['impot']['2019']['tmi'])
+#     
+# #     calcul_impots_regime_reel(user_input, credit)
+# 
+#     print_report(bien_immo, rendement, credit, imf)
 
 
 def parse_args(argv):
@@ -65,25 +74,36 @@ def load_file(inputfile):
     return user_input
 
 
-def make_bien_immo(user_input):
+def make_bien_immo(achat_data, lots_data):
     
-    bien_immo = Bien_Immo(user_input['prix_net_vendeur'],
-                          user_input['frais_agence'],
-                          user_input['frais_notaire'],
-                          user_input['travaux_budget'],
-                          user_input['apport'],
-                          taxe_fonciere=user_input['taxe_fonciere'],
-                          travaux_provision_taux=user_input['travaux_provision_taux']
-                          )
+    bien_immo = Bien_Immo(achat_data['prix_net_vendeur'],
+                          achat_data['frais_agence'],
+                          achat_data['frais_notaire'],
+                          achat_data['budget_travaux'],
+                          achat_data['apport'])
     
-    for lot in user_input['lots']:
-        bien_immo.add_lot(Lot(lot['type'],
-                              lot['surface'],
-                              lot['loyer_mensuel'],
-                              vacance_locative_taux_annuel=lot['vacance_locative'],
-                              PNO=lot['PNO'],
-                              gestion_agence_taux=lot['gestion_agence'],
-                              copropriete_mensuel=lot['copropriete']))
+    for lot_data in lots_data:
+        
+        lot = Lot(lot_data['type'],
+                  lot_data['surface'],
+                  lot_data['loyer_nu_mensuel'],
+                  lot_data['provision_charge_mensuel'])
+#                               vacance_locative_taux_annuel=lot['vacance_locative'],
+#                               PNO=lot['PNO'],
+#                               gestion_agence_taux=lot['gestion_agence'],
+#                               copropriete_mensuel=lot['copropriete']
+        
+        provision_data = lot_data['provision']
+        
+        provisions = Provisions(lot, None)
+        provisions.add(Provisions.provision_e.travaux, provision_data['travaux_provision_taux'])
+        provisions.add(Provisions.provision_e.vacance_locative, provision_data['vacance_locative_taux'])
+        lot.set_provisions(provisions)
+#         lot.add_provision(provision)
+#         lot.add_provision(Provisions.provision_e.travaux, provision_data['travaux_provision_taux'])
+#         lot.add_provision(Provisions.provision_e.vacance_locative, provision_data['vacance_locative_taux'])
+        
+        bien_immo.add_lot(lot)
     
     return bien_immo
 
@@ -146,7 +166,7 @@ def print_report(bien_immo, rendement, credit, imf):
         [bien_immo.prix_net_vendeur,
          '{:.0f}\n({:.2f}%)'.format(bien_immo.notaire_montant, bien_immo.notaire_taux * 100),
          '{:.0f}\n({:.2f}%)'.format(bien_immo.agence_montant, bien_immo.agence_taux * 100),
-         bien_immo.travaux_budget,
+         bien_immo.budget_travaux,
          bien_immo.apport,
          bien_immo.investissement_initial,
          bien_immo.rapport_surface_prix

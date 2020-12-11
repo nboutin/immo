@@ -1,0 +1,54 @@
+{
+    "achat": {
+        "prix_net_vendeur": 0,
+        "__commnent": "montant ou taux",
+        "frais_agence": 0,
+        "frais_notaire": 0,
+        "budget_travaux": 0,
+        "apport": 0
+    },
+    "defaut": {
+        "provision_travaux_taux": 0.01,
+        "vacance_locative_taux": {
+            "__comment": "1/12=0.083, 1/24=0.042",
+            "T1": 0.083,
+            "T2": 0.042
+        },
+        "gestion_agence_taux": 0.08
+    },
+    "lots": [{
+            "type": "",
+            "surface": 0,
+            "loyer_nu_mensuel": 0,
+            "provision_charge_mensuel": 0,
+            "charge": {
+                "taxe_fonciere": 0,
+                "copropriete": 0,
+                "PNO": 0,
+                "gestion_agence": 0
+            },
+            "provision": {
+                "__comment": "0: off, 1: default, autre: utilisé",
+                "travaux_provision_taux": 0,
+                "vacance_locative_taux": 0
+            }
+        }],
+    "credit": {
+        "duree_annee": 0,
+        "taux_interet": 0,
+        "taux_assurance": 0,
+        "mode": "",
+        "frais_dossier": 0,
+        "frais_garantie": 0
+    },
+    "impot": {
+        "2019": {
+            "n_parts_fiscales": 0,
+            "n_demi_parts_fiscales": 0,
+            "dons": 0,
+            "syndicat": 0,
+            "salaires": [0],
+            "tmi": 0
+        }
+    }
+}

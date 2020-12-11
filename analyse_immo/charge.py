@@ -3,6 +3,9 @@
 
 '''
 Charge recuperable/locative
+    https://www.service-public.fr/particuliers/vosdroits/F947
+    Les charges locatives (ou charges récupérables) sont des dépenses payées initialement par le propriétaire. 
+    Le propriétaire se fait rembourser par le locataire.
     - entretien de l'immeuble et des equipements
     - consommations communes
     - consommations personnelles
@@ -32,3 +35,7 @@ Syndic de copropriete:
     - gros travaux deductibles
 '''
 
+class Charge:
+    
+    def __init__(self):
+        pass
