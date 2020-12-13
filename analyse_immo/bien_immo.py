@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from charge import Charge
+
 
 class Bien_Immo:
     '''
@@ -68,49 +70,69 @@ class Bien_Immo:
         return value
     
     @property
-    def taxe_fonciere(self):
-        return self._taxe_fonciere
-    
-    @property
-    def travaux_provision_annuel_total(self):
-        return self.loyer_annuel_total * self._travaux_provision_taux
-    
-    @property
-    def vacance_locative_annuel_total(self):
-        value = 0
-        for lot in self._lots:
-            value += lot.vacance_locative_montant_annuel
-        return value
-    
-    @property
-    def pno_annuel_total(self):
-        value = 0
-        for lot in self._lots:
-            value += lot.pno_montant_annuel
-        return value
-    
-    @property
-    def gestion_agence_annuel_total(self):
-        value = 0
-        for lot in self._lots:
-            value += lot.gestion_agence_montant_annuel
-        return value
-    
-    @property
-    def copropriete_annuel_total(self):
-        value = 0
-        for lot in self._lots:
-            value += lot.copropriete_annuel
-        return value
-            
-    @property
-    def charges_annuel_total(self):
-        return self._taxe_fonciere + self.travaux_provision_annuel_total + self.vacance_locative_annuel_total \
-            +self.pno_annuel_total + self.gestion_agence_annuel_total + self.copropriete_annuel_total
-    
-    @property
     def rapport_surface_prix(self):
         return self._prix_net_vendeur / self.surface_total
+    
+    @property
+    def charge_gestion(self):
+        value = 0
+        for lot in self._lots:
+            value += lot.charge.get_montant(
+                [Charge.gestion_e.provision_travaux,
+                 Charge.gestion_e.vacance_locative,
+                 Charge.gestion_e.agence_immo])
+        return value
+    
+    @property
+    def charge_fonciere(self):
+        value = 0
+        for lot in self._lots:
+            value = +lot.charge.get_montant(
+                [Charge.deductible_e.copropriete,
+                 Charge.deductible_e.taxe_fonciere,
+                 Charge.deductible_e.prime_assurance, ])
+        return value
+    
+#     @property
+#     def taxe_fonciere(self):
+#         return self._taxe_fonciere
+#     
+#     @property
+#     def travaux_provision_annuel_total(self):
+#         return self.loyer_annuel_total * self._travaux_provision_taux
+#     
+#     @property
+#     def vacance_locative_annuel_total(self):
+#         value = 0
+#         for lot in self._lots:
+#             value += lot.vacance_locative_montant_annuel
+#         return value
+#     
+#     @property
+#     def pno_annuel_total(self):
+#         value = 0
+#         for lot in self._lots:
+#             value += lot.pno_montant_annuel
+#         return value
+#     
+#     @property
+#     def gestion_agence_annuel_total(self):
+#         value = 0
+#         for lot in self._lots:
+#             value += lot.gestion_agence_montant_annuel
+#         return value
+#     
+#     @property
+#     def copropriete_annuel_total(self):
+#         value = 0
+#         for lot in self._lots:
+#             value += lot.copropriete_annuel
+#         return value
+#             
+#     @property
+#     def charges_annuel_total(self):
+#         return self._taxe_fonciere + self.travaux_provision_annuel_total + self.vacance_locative_annuel_total \
+#             +self.pno_annuel_total + self.gestion_agence_annuel_total + self.copropriete_annuel_total
         
     def add_lot(self, lot):
         self._lots.append(lot)

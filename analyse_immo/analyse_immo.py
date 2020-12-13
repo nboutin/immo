@@ -4,9 +4,11 @@
 import sys
 import getopt
 import json
+
+from defaut import Defaut
 from bien_immo import Bien_Immo
 from lot import Lot
-from provisions import Provisions
+from charge import Charge
 import credit as cred
 from rendement import Rendement
 from impot_micro_foncier import Impot_Micro_Foncier
@@ -29,7 +31,8 @@ def main(argv):
     credit_data = input_data['credit']
     impot_data = input_data['impot']
 
-    bien_immo = make_bien_immo(achat_data, lots_data)
+    defaut = make_default(defaut_data)
+    bien_immo = make_bien_immo(achat_data, lots_data, defaut)
     
 #     credit = make_credit(user_input['credit'], bien_immo)
 #     rendement = Rendement(bien_immo)
@@ -74,7 +77,17 @@ def load_file(inputfile):
     return user_input
 
 
-def make_bien_immo(achat_data, lots_data):
+def make_defaut(defaut_data):
+    
+    defaut = Defaut(defaut_data['provision_travaux_taux'],
+                    defaut_data['vacance_locative_taux_T1'],
+                    defaut_data['vacance_locative_taux_T2'],
+                    defaut_data['gestion_agence_taux'],)
+    
+    return defaut
+
+
+def make_bien_immo(achat_data, lots_data, defaut=Defaut(0, 0, 0, 0)):
     
     bien_immo = Bien_Immo(achat_data['prix_net_vendeur'],
                           achat_data['frais_agence'],
@@ -86,22 +99,21 @@ def make_bien_immo(achat_data, lots_data):
         
         lot = Lot(lot_data['type'],
                   lot_data['surface'],
-                  lot_data['loyer_nu_mensuel'],
-                  lot_data['provision_charge_mensuel'])
-#                               vacance_locative_taux_annuel=lot['vacance_locative'],
-#                               PNO=lot['PNO'],
-#                               gestion_agence_taux=lot['gestion_agence'],
-#                               copropriete_mensuel=lot['copropriete']
+                  lot_data['loyer_nu_mensuel'])
+
+        charge = Charge(lot, defaut)
+
+        charge_data = lot_data['charge']
+        charge.add(charge.gestion_e.charge_locative, charge_data['provision_charge_mensuel'])
+        charge.add(charge.deductible_e.copropriete, charge_data['copropriete'])
+        charge.add(charge.deductible_e.taxe_fonciere, charge_data['taxe_fonciere'])
+        charge.add(charge.deductible_e.prime_assurance, charge_data['PNO'])
         
-        provision_data = lot_data['provision']
-        
-        provisions = Provisions(lot, None)
-        provisions.add(Provisions.provision_e.travaux, provision_data['travaux_provision_taux'])
-        provisions.add(Provisions.provision_e.vacance_locative, provision_data['vacance_locative_taux'])
-        lot.set_provisions(provisions)
-#         lot.add_provision(provision)
-#         lot.add_provision(Provisions.provision_e.travaux, provision_data['travaux_provision_taux'])
-#         lot.add_provision(Provisions.provision_e.vacance_locative, provision_data['vacance_locative_taux'])
+        gestion_data = lot_data['gestion']
+        charge.add(Charge.gestion_e.provision_travaux, gestion_data['travaux_provision_taux'])
+        charge.add(Charge.gestion_e.vacance_locative, gestion_data['vacance_locative_taux'])
+        charge.add(Charge.gestion_e.agence_immo, gestion_data['agence_immo'])
+        lot.charge = charge
         
         bien_immo.add_lot(lot)
     

@@ -23,7 +23,8 @@ class Rendement:
 
     @property
     def rendement_net(self):
-        return (self._bien_immo.loyer_annuel_total - self._bien_immo.charges_annuel_total) / \
+        return (self._bien_immo.loyer_annuel_total - self._bien_immo.charge_gestion \
+                -self._bien_immo.charge_fonciere) / \
             self._bien_immo.investissement_initial
 
     def cashflow_mensuel(self, credit):
@@ -31,4 +32,4 @@ class Rendement:
 
     def cashflow_annuel(self, credit):
         return self._bien_immo.loyer_annuel_total - credit.get_mensualite_avec_assurance() * 12 \
-            -self._bien_immo.charges_annuel_total
+            -self._bien_immo.charge_gestion - self._bien_immo.charge_fonciere
