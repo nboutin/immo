@@ -6,11 +6,15 @@ from charge import Charge
 
 class Lot:
     
-    def __init__(self, classification, surface, loyer_nu_mensuel):
-        self._type = classification
+    def __init__(self, type_, surface, loyer_nu_mensuel):
+        self._type = type_
         self._surface = surface
         self._loyer_nu_mensuel = loyer_nu_mensuel
         self.charge = Charge(self, None)
+        
+    @property
+    def type(self):
+        return self._type
         
     @property
     def surface(self):

@@ -90,8 +90,8 @@ class Charge:
         self._charges.append((type_, taux, montant))
         
     def __get_default(self, type_):
-        if type_ == Charge.provision_e.travaux:
+        if type_ == Charge.gestion_e.provision_travaux:
             return  self._default_data.provision_travaux_taux
-        elif type_ == Charge.provision_e.vacance_locative:
-            return self._default_data.vacance_locative_taux
+        elif type_ == Charge.gestion_e.vacance_locative:
+            return self._default_data.vacance_locative_taux(self._lot.type)
     

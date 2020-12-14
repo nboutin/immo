@@ -31,16 +31,16 @@ def main(argv):
     credit_data = input_data['credit']
     impot_data = input_data['impot']
 
-    defaut = make_default(defaut_data)
+    defaut = make_defaut(defaut_data)
     bien_immo = make_bien_immo(achat_data, lots_data, defaut)
     
-#     credit = make_credit(user_input['credit'], bien_immo)
-#     rendement = Rendement(bien_immo)
-#     imf = Impot_Micro_Foncier(bien_immo.loyer_annuel_total, user_input['impot']['2019']['tmi'])
-#     
-# #     calcul_impots_regime_reel(user_input, credit)
-# 
-#     print_report(bien_immo, rendement, credit, imf)
+    credit = make_credit(credit_data, bien_immo)
+    rendement = Rendement(bien_immo)
+    imf = Impot_Micro_Foncier(bien_immo.loyer_annuel_total, impot_data['2019']['tmi'])
+     
+#     calcul_impots_regime_reel(user_input, credit)
+ 
+    print_report(bien_immo, rendement, credit, imf)
 
 
 def parse_args(argv):
@@ -186,22 +186,23 @@ def print_report(bien_immo, rendement, credit, imf):
     ]
 
     location = [
-        ['Loyer\nannuel', 'Loyer\nmensuel', 'Charges\nannuel'],
+        ['Loyer\nannuel', 'Loyer\nmensuel', 'Charges\nfonciere', 'Charges\ngestion'],
         [bien_immo.loyer_annuel_total,
          bien_immo.loyer_mensuel_total,
-         bien_immo.charges_annuel_total, ],
+         bien_immo.charge_fonciere,
+         bien_immo.charge_gestion],
     ]
  
-    charges = [
-        ['Taxe\nFonciere', 'Travaux\nProvision', 'Vacance\nLocative', 'PNO', 'Gestion\nagence', 'Copropriete'],
-        [bien_immo.taxe_fonciere,
-         bien_immo.travaux_provision_annuel_total,
-         bien_immo.vacance_locative_annuel_total,
-         bien_immo.pno_annuel_total,
-         bien_immo.gestion_agence_annuel_total,
-         bien_immo.copropriete_annuel_total,
-         ]
-    ]
+#     charges = [
+#         ['Taxe\nFonciere', 'Travaux\nProvision', 'Vacance\nLocative', 'PNO', 'Gestion\nagence', 'Copropriete'],
+#         [bien_immo.taxe_fonciere,
+#          bien_immo.travaux_provision_annuel_total,
+#          bien_immo.vacance_locative_annuel_total,
+#          bien_immo.pno_annuel_total,
+#          bien_immo.gestion_agence_annuel_total,
+#          bien_immo.copropriete_annuel_total,
+#          ]
+#     ]
  
     credit_in = [
         ['Capital\nemprunté', 'Durée', 'Taux\ninteret', 'Taux\nassurance', 'Mode'],
@@ -255,7 +256,7 @@ def print_report(bien_immo, rendement, credit, imf):
 
     print(tabulate(achat, headers="firstrow") + '\n')
     print(tabulate(location, headers="firstrow") + '\n')
-    print(tabulate(charges, headers="firstrow") + '\n')
+#     print(tabulate(charges, headers="firstrow") + '\n')
     print(tabulate(credit_in, headers="firstrow") + '\n')
     print(tabulate(credit_out, headers="firstrow") + '\n')
     print(tabulate(bilan, headers="firstrow") + '\n')

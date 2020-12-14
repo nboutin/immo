@@ -4,6 +4,7 @@
 import unittest
 from bien_immo import Bien_Immo
 from lot import Lot
+from charge import Charge
 from credit import Credit
 from rendement import Rendement
 
@@ -44,11 +45,15 @@ class TestRendement(unittest.TestCase):
         rdt = Rendement(bi)
         self.assertAlmostEqual(rdt.cashflow_mensuel(cr), 247.06, 2)
         
-        bi.add_lot(Lot("T2", 50, 500,
-                       vacance_locative_taux_annuel=1 / 12,
-                       PNO=90,
-                       gestion_agence_taux=0.05,
-                       copropriete_mensuel=51))
+        lot= Lot("T2", 50, 500) 
+        charge = Charge(lot, None)
+        lot.charge = charge
+        bi.add_lot(lot)
+                   
+#                        vacance_locative_taux_annuel=1 / 12,
+#                        PNO=90,
+#                        gestion_agence_taux=0.05,
+#                        copropriete_mensuel=51))
         
         self.assertAlmostEqual(bi.loyer_annuel_total, 12000, 2)
         self.assertAlmostEqual(bi.charges_annuel_total, 1502, 2)
