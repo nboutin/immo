@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import unittest
+import unittest, sys, os
+sys.path.insert(0, os.path.join('..'))
+
 import credit
 
 
