@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import unittest
+import unittest, sys, os
+sys.path.insert(0, os.path.join('..'))
+
 from bien_immo import Bien_Immo
 from lot import Lot
 from charge import Charge
@@ -13,16 +15,16 @@ class TestBienImmo(unittest.TestCase):
         
         bi = Bien_Immo(0, 0, 0, 0, 0)
         bi.add_lot(Lot("T2", 50, 500))
-        self.assertEqual(bi.loyer_mensuel_total, 500)
+        self.assertEqual(bi.loyer_nu_mensuel, 500)
         bi.add_lot(Lot("T2", 50, 450))
-        self.assertEqual(bi.loyer_mensuel_total, 950)
+        self.assertEqual(bi.loyer_nu_mensuel, 950)
     
     def testLoyerAnnuelTotal(self):
         
         bi = Bien_Immo(0, 0, 0, 0, 0)
         bi.add_lot(Lot("T2", 50, 200))
         bi.add_lot(Lot("T2", 50, 300))
-        self.assertEqual(bi.loyer_annuel_total, 500 * 12)
+        self.assertEqual(bi.loyer_nu_annuel, 500 * 12)
     
     def testNotaire(self):
         
@@ -81,8 +83,9 @@ class TestBienImmo(unittest.TestCase):
         bi.add_lot(lot)
         
         self.assertEqual(bi.investissement_initial, 50000)
-        self.assertEqual(bi.loyer_mensuel_total, 1000)
-        self.assertEqual(bi.loyer_annuel_total, 12000)
+        self.assertEqual(bi.loyer_nu_mensuel, 1000)
+        self.assertEqual(bi.loyer_nu_annuel, 12000)
+        self.assertEqual(bi.charge_gestion + bi.charge_fonciere, 1502)
 
 #         self.assertEqual(bi.taxe_fonciere, 0)
 #         self.assertEqual(bi.travaux_provision_annuel_total, 0)
@@ -90,5 +93,4 @@ class TestBienImmo(unittest.TestCase):
 #         self.assertEqual(bi.pno_annuel_total, 90)
 #         self.assertEqual(bi.gestion_agence_annuel_total, 25 * 12)
 #         self.assertEqual(bi.copropriete_annuel_total, 51 * 12)
-        self.assertEqual(bi.charge_gestion + bi.charge_fonciere, 1502)
         

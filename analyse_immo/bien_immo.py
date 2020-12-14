@@ -52,15 +52,15 @@ class Bien_Immo:
             self._budget_travaux - self._apport
 
     @property
-    def loyer_mensuel_total(self):
+    def loyer_nu_mensuel(self):
         value = 0
         for lot in self._lots:
             value += lot.loyer_nu_mensuel
         return value
     
     @property
-    def loyer_annuel_total(self):
-        return self.loyer_mensuel_total * 12
+    def loyer_nu_annuel(self):
+        return self.loyer_nu_mensuel * 12
     
     @property
     def surface_total(self):
@@ -99,7 +99,7 @@ class Bien_Immo:
 #     
 #     @property
 #     def travaux_provision_annuel_total(self):
-#         return self.loyer_annuel_total * self._travaux_provision_taux
+#         return self.loyer_nu_annuel * self._travaux_provision_taux
 #     
 #     @property
 #     def vacance_locative_annuel_total(self):

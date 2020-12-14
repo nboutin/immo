@@ -36,7 +36,7 @@ def main(argv):
     
     credit = make_credit(credit_data, bien_immo)
     rendement = Rendement(bien_immo)
-    imf = Impot_Micro_Foncier(bien_immo.loyer_annuel_total, impot_data['2019']['tmi'])
+    imf = Impot_Micro_Foncier(bien_immo.loyer_nu_annuel, impot_data['2019']['tmi'])
      
 #     calcul_impots_regime_reel(user_input, credit)
  
@@ -187,8 +187,8 @@ def print_report(bien_immo, rendement, credit, imf):
 
     location = [
         ['Loyer\nannuel', 'Loyer\nmensuel', 'Charges\nfonciere', 'Charges\ngestion'],
-        [bien_immo.loyer_annuel_total,
-         bien_immo.loyer_mensuel_total,
+        [bien_immo.loyer_nu_annuel,
+         bien_immo.loyer_nu_mensuel,
          bien_immo.charge_fonciere,
          bien_immo.charge_gestion],
     ]
