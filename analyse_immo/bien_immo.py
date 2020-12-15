@@ -73,6 +73,12 @@ class Bien_Immo:
     def rapport_surface_prix(self):
         return self._prix_net_vendeur / self.surface_total
     
+    def get_charge(self, charges_list):
+        value = 0
+        for lot in self._lots:
+            value += lot.charge.get_montant(charges_list)
+        return value
+    
     @property
     def charge_gestion(self):
         value = 0
@@ -90,7 +96,7 @@ class Bien_Immo:
             value = +lot.charge.get_montant(
                 [Charge.deductible_e.copropriete,
                  Charge.deductible_e.taxe_fonciere,
-                 Charge.deductible_e.prime_assurance, ])
+                 Charge.deductible_e.prime_assurance])
         return value
     
 #     @property

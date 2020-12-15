@@ -94,4 +94,33 @@ class Charge:
             return  self._default_data.provision_travaux_taux
         elif type_ == Charge.gestion_e.vacance_locative:
             return self._default_data.vacance_locative_taux(self._lot.type)
+        
+'''
+/* emptying table `typologie` */
+truncate table `typologie` ;
+/* dumping data for table `typologie` */
+insert into `typologie` (`id`,`type`,`foncier`,`comptable`,`tresorerie`) values ('11','Charge récupérable/locative : Entretien de l’immeuble et des équipements','0','1','1');
+insert into `typologie` (`id`,`type`,`foncier`,`comptable`,`tresorerie`) values ('12','Charge récupérable/locative : Consommations communes','0','1','1');
+insert into `typologie` (`id`,`type`,`foncier`,`comptable`,`tresorerie`) values ('13','Charge récupérable/locative : Consommations personnelles','0','1','1');
+insert into `typologie` (`id`,`type`,`foncier`,`comptable`,`tresorerie`) values ('14','Charge récupérable/locative : Taxe d’enlèvement des ordures ménagères','0','1','1');
+insert into `typologie` (`id`,`type`,`foncier`,`comptable`,`tresorerie`) values ('19','Charge récupérable/locative : Autres','0','1','1');
+insert into `typologie` (`id`,`type`,`foncier`,`comptable`,`tresorerie`) values ('21','Charge déductible : Frais d’administration et de gestion','1','1','1');
+insert into `typologie` (`id`,`type`,`foncier`,`comptable`,`tresorerie`) values ('22','Charge déductible : Primes d’assurance','1','1','1');
+insert into `typologie` (`id`,`type`,`foncier`,`comptable`,`tresorerie`) values ('23','Charge déductible : Dépenses de réparation, d’entretien et d’amélioration','1','1','1');
+insert into `typologie` (`id`,`type`,`foncier`,`comptable`,`tresorerie`) values ('24','Charge déductible : Charges récupérables non récupérées au départ du locataire','1','0','0');
+insert into `typologie` (`id`,`type`,`foncier`,`comptable`,`tresorerie`) values ('25','Charge déductible : Indemnités d’éviction, frais de relogement','1','1','1');
+insert into `typologie` (`id`,`type`,`foncier`,`comptable`,`tresorerie`) values ('26','Charge déductible : Taxes foncières (hors TEOM), taxes annexes','1','1','1');
+insert into `typologie` (`id`,`type`,`foncier`,`comptable`,`tresorerie`) values ('29','Charge déductible : Régimes particuliers, déductions spécifiques','1','0','0');
+insert into `typologie` (`id`,`type`,`foncier`,`comptable`,`tresorerie`) values ('30','Charge non déductible : Capital d\'emprunt (amortissement)','0','0','1');
+insert into `typologie` (`id`,`type`,`foncier`,`comptable`,`tresorerie`) values ('31','Charge non déductible : Autres','0','1','1');
+insert into `typologie` (`id`,`type`,`foncier`,`comptable`,`tresorerie`) values ('41','Intérêts d’emprunt (inc. assurances et frais)','1','1','1');
+insert into `typologie` (`id`,`type`,`foncier`,`comptable`,`tresorerie`) values ('91','Syndic de copropriété : Provisions pour charges','1','1','1');
+insert into `typologie` (`id`,`type`,`foncier`,`comptable`,`tresorerie`) values ('92','Syndic de copropriété : Arrêté des comptes : Charges récupérables/locatives','0','0','0');
+insert into `typologie` (`id`,`type`,`foncier`,`comptable`,`tresorerie`) values ('93','Syndic de copropriété : Arrêté des comptes : Charges déductibles','0','0','0');
+insert into `typologie` (`id`,`type`,`foncier`,`comptable`,`tresorerie`) values ('94','Syndic de copropriété : Arrêté des comptes : Charges non déductibles','0','0','0');
+insert into `typologie` (`id`,`type`,`foncier`,`comptable`,`tresorerie`) values ('95','Syndic de copropriété : Arrêté des comptes : Remboursement reçu du syndic','-1','1','1');
+insert into `typologie` (`id`,`type`,`foncier`,`comptable`,`tresorerie`) values ('96','Syndic de copropriété : Arrêté des comptes : Versement complémentaire au syndic','1','1','1');
+insert into `typologie` (`id`,`type`,`foncier`,`comptable`,`tresorerie`) values ('97','Syndic de copropriété : Avances, provisions et cotisations travaux (non déductible)','0','1','1');
+insert into `typologie` (`id`,`type`,`foncier`,`comptable`,`tresorerie`) values ('98','Syndic de copropriété : Gros travaux déductibles','1','0','0');
+'''
     
