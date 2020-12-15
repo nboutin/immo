@@ -93,4 +93,8 @@ class TestBienImmo(unittest.TestCase):
 #         self.assertEqual(bi.pno_annuel_total, 90)
 #         self.assertEqual(bi.gestion_agence_annuel_total, 25 * 12)
 #         self.assertEqual(bi.copropriete_annuel_total, 51 * 12)
+
+
+if __name__ == '__main__':
+    unittest.main()
         

@@ -12,7 +12,8 @@ from rendement import Rendement
 class TestAnalyseImmoBase(unittest.TestCase):
     
     def setUp(self):
-        __DATA_TEST_PATHNAME = "test/res/input_test.json"
+        __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
+        __DATA_TEST_PATHNAME = os.path.join(__location__, 'data', 'input_test.json')
         with open(__DATA_TEST_PATHNAME, 'r') as file:
             input_data = json.load(file)
 
