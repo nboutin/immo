@@ -45,16 +45,15 @@ class Factory:
         return bien_immo
 
     @staticmethod
-    def make_credit(credit_data, bien_immo):
+    def make_credit(credit_data, montant_emprunte):
         
-        credit = Credit(bien_immo.investissement_initial,
-                             credit_data['duree_annee'] * 12,
-                             credit_data['taux_interet'],
-                             credit_data['taux_assurance'],
-                             credit_data['mode'],
-                             credit_data['frais_dossier'],
-                             credit_data['frais_garantie']
-                            )
+        credit = Credit(montant_emprunte,
+                        credit_data['duree_annee'] * 12,
+                        credit_data['taux_interet'],
+                        credit_data['taux_assurance'],
+                        credit_data['mode'],
+                        credit_data['frais_dossier'],
+                        credit_data['frais_garantie'])
         return credit
 
     @staticmethod

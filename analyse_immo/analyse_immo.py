@@ -35,8 +35,8 @@ def main(argv):
     defaut = Factory.make_defaut(defaut_data)
     bien_immo = Factory.make_bien_immo(achat_data, lots_data, defaut)
     
-    credit = Factory.make_credit(credit_data, bien_immo)
-    rendement = Rendement(bien_immo)
+    credit = Factory.make_credit(credit_data, bien_immo.financement_total)
+    rendement = Rendement(bien_immo, credit)
     imf = Impot_Micro_Foncier(database, bien_immo.loyer_nu_annuel, impot_data['2019']['tmi'])
     irr = Impot_Regime_Reel(database, bien_immo, impot_data['2019']['tmi'])
  
@@ -81,13 +81,13 @@ def print_report(bien_immo, rendement, credit, imf, irr):
     from tabulate import tabulate
 
     achat = [
-        ['Prix net\nvendeur', 'Notaire', 'Agence', 'Travaux', 'Apport', 'Invest\ninitial', 'Prix\ne/m²'],
+        ['Prix net\nvendeur', 'Notaire', 'Agence', 'Travaux', 'Apport', 'Financement\ntotal', 'Prix\ne/m²'],
         [bien_immo.prix_net_vendeur,
          '{:.0f}\n({:.2f}%)'.format(bien_immo.notaire_montant, bien_immo.notaire_taux * 100),
          '{:.0f}\n({:.2f}%)'.format(bien_immo.agence_montant, bien_immo.agence_taux * 100),
          bien_immo.budget_travaux,
          bien_immo.apport,
-         bien_immo.investissement_initial,
+         bien_immo.financement_total,
          bien_immo.rapport_surface_prix
         ],
     ]
@@ -156,8 +156,8 @@ def print_report(bien_immo, rendement, credit, imf, irr):
         ['{:.2f}%'.format(rendement.rendement_brut * 100),
         '{:.2f}%'.format(rendement.rendement_net * 100),
         '{:.2f}%'.format(rendement.rendement_methode_larcher * 100),
-        '{:.2f}'.format(rendement.cashflow_mensuel(credit)),
-        '{:.2f}'.format(rendement.cashflow_annuel(credit))
+        '{:.2f}'.format(rendement.cashflow_mensuel),
+        '{:.2f}'.format(rendement.cashflow_annuel)
         ]
     ]
 

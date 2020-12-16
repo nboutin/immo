@@ -21,14 +21,14 @@ class Impot_Regime_Reel:
     def __init__(self, database, bien_immo, tmi):
 
         self._database = database        
-        self._bien_immo = bien_immo
+        self._bi = bien_immo
         self._tmi = tmi
         
     @property
     def base_impossable(self):
-        base = self._bien_immo.loyer_nu_annuel
+        base = self._bi.loyer_nu_annuel
 
-        base -= self._bien_immo.get_charge(
+        base -= self._bi.get_charge(
             [Charge.deductible_e.copropriete,
              Charge.deductible_e.taxe_fonciere,
              Charge.deductible_e.prime_assurance,

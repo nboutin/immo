@@ -49,10 +49,10 @@ class TestBienImmo(unittest.TestCase):
     def testInvestissementInitial(self):
         
         bi = Bien_Immo(130000, 9000, 6000, 15000, 10000)
-        self.assertEqual(bi.investissement_initial, 150000)
+        self.assertEqual(bi.financement_total, 150000)
 
         bi = Bien_Immo(100000, 0.09 , 0.06, 0, 0)
-        self.assertEqual(bi.investissement_initial, 115000)
+        self.assertEqual(bi.financement_total, 115000)
 
     def testSurfaceTotal(self):
         
@@ -82,7 +82,7 @@ class TestBienImmo(unittest.TestCase):
         lot.charge = charge
         bi.add_lot(lot)
         
-        self.assertEqual(bi.investissement_initial, 50000)
+        self.assertEqual(bi.financement_total, 50000)
         self.assertEqual(bi.loyer_nu_mensuel, 1000)
         self.assertEqual(bi.loyer_nu_annuel, 12000)
         self.assertEqual(bi.charge_gestion + bi.charge_fonciere, 1502)

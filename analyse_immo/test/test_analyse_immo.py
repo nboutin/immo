@@ -129,10 +129,10 @@ class TestCashflow(TestAnalyseImmoBase):
         self.credit_data['mode'] = 'mode_1'
 
         bi = Factory.make_bien_immo(self.achat_data, self.lots_data)
-        rdt = Rendement(bi)
-        cred = Factory.make_credit(self.credit_data, bi)
+        cred = Factory.make_credit(self.credit_data, bi.financement_total)
+        rdt = Rendement(bi, cred)
 
-        self.assertAlmostEqual(rdt.cashflow_mensuel(cred), 100.67, 2)
+        self.assertAlmostEqual(rdt.cashflow_mensuel, 100.67, 2)
 
 
 if __name__ == '__main__':

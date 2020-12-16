@@ -44,6 +44,14 @@ class Credit:
     @property
     def mode(self):
         return self._mode
+    
+    @property
+    def frais_dossier(self): 
+        return self._frais_dossier
+    
+    @property
+    def frais_garantie(self):
+        return self._frais_garantie 
 
     def get_mensualite_hors_assurance(self, taux=None):
         '''

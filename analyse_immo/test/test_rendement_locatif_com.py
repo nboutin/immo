@@ -62,19 +62,20 @@ class TestSimulationA(unittest.TestCase):
         self.achat_data = input_data['achat']
         self.lots_data = input_data['lots']
         self.credit_data = input_data['credit']
+        
         self.bi = Factory.make_bien_immo(self.achat_data, self.lots_data)
-        self.rdt = Rendement(self.bi)
+        self.credit = Factory.make_credit(self.credit_data, self.bi.financement_total)
+        self.rdt = Rendement(self.bi, self.credit)
     
     def testInvestissementInitial(self):
-        
         self.assertAlmostEqual(self.bi.agence_montant, 4074.08, 2)
         self.assertAlmostEqual(self.bi.agence_taux, 0.08, 2)
         self.assertAlmostEqual(self.bi.notaire_montant, 4936, 2)
         self.assertAlmostEqual(self.bi.notaire_taux, 0.097, 3)
-        self.assertAlmostEqual(self.bi.investissement_initial, 61486, 0)
+        self.assertAlmostEqual(self.bi.financement_total, 61486 - 1550, 0)
 
     def testRendement(self):
-        pass
+        self.assertAlmostEqual(self.rdt.investissement_initial, 61486, 0)
 
 '''
 Rang    Date échéance    Echéance globale    Dont assurance    Intérêts    Capital amorti    Capital restant dû

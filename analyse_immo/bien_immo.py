@@ -47,7 +47,7 @@ class Bien_Immo:
         return self._apport
     
     @property
-    def investissement_initial(self):
+    def financement_total(self):
         return self._prix_net_vendeur + self._notaire_montant + self._agence_montant + \
             self._budget_travaux - self._apport
 
