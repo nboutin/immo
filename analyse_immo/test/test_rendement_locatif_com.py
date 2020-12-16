@@ -79,6 +79,17 @@ class TestSimulationA(unittest.TestCase):
         self.assertAlmostEqual(self.rdt.rendement_brut, 0.0859, 4)
 #         self.assertAlmostEqual(self.rdt.rendement_net, 0.056, 3)
 
+    def testCredit(self):
+        
+        self.assertAlmostEqual(self.credit.get_mensualite_avec_assurance(), 297.65, 2)
+        self.assertAlmostEqual(self.credit.get_mensualite_assurance(), 17.98, 2)
+        self.assertAlmostEqual(self.credit.get_montant_interet_total(), 7185.22, 2)
+        self.assertAlmostEqual(self.credit.get_montant_assurance_total(), 4315.40, 2)
+#         self.assertAlmostEqual(self.credit.get_cout_total(), 11501, 2)
+
+    def testImpot(self):
+        pass
+
 '''
 Rang    Date échéance    Echéance globale    Dont assurance    Intérêts    Capital amorti    Capital restant dû
 1    05.01.2021    297.65€    17.98€    57.44€    222.23€    59 713.77€
@@ -321,7 +332,7 @@ Rang    Date échéance    Echéance globale    Dont assurance    Intérêts    
 238    05.10.2040    297.65€    17.98€    0.8€    278.87€    558.58€
 239    05.11.2040    297.65€    17.98€    0.54€    279.13€    279.45€
 240    05.12.2040    297.65€    17.98€    0.27€    279.4€    0.05€
-                   71 436.61€    4 315.39€    7 185.22€    59 935.95€    -
+                71 436.61€    4 315.39€    7 185.22€    59 935.95€    -
 '''
 
 if __name__ == '__main__':
