@@ -5,6 +5,8 @@ from bien_immo import Bien_Immo
 from defaut import Defaut
 from charge import Charge
 from lot import Lot
+from credit import Credit
+from defaut import Defaut
 
 
 class Factory:
@@ -41,3 +43,27 @@ class Factory:
             bien_immo.add_lot(lot)
         
         return bien_immo
+
+    @staticmethod
+    def make_credit(credit_data, bien_immo):
+        
+        credit = Credit(bien_immo.investissement_initial,
+                             credit_data['duree_annee'] * 12,
+                             credit_data['taux_interet'],
+                             credit_data['taux_assurance'],
+                             credit_data['mode'],
+                             credit_data['frais_dossier'],
+                             credit_data['frais_garantie']
+                            )
+        return credit
+
+    @staticmethod
+    def make_defaut(defaut_data):
+        
+        defaut = Defaut(defaut_data['provision_travaux_taux'],
+                        defaut_data['vacance_locative_taux_T1'],
+                        defaut_data['vacance_locative_taux_T2'],
+                        defaut_data['gestion_agence_taux'],)
+        
+        return defaut
+

@@ -71,7 +71,7 @@ class TestSimulationA(unittest.TestCase):
         self.assertAlmostEqual(self.bi.agence_taux, 0.08, 2)
         self.assertAlmostEqual(self.bi.notaire_montant, 4936, 2)
         self.assertAlmostEqual(self.bi.notaire_taux, 0.097, 3)
-        self.assertAlmostEqual(self.bi.investissement_initial, 61486 - 1550, 0)
+        self.assertAlmostEqual(self.bi.investissement_initial, 61486, 0)
 
     def testRendement(self):
         pass
