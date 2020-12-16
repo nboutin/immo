@@ -9,6 +9,8 @@ import json
 
 from factory import Factory
 from rendement import Rendement
+from impot_regime_reel import Impot_Regime_Reel
+from database import Database
 
 
 class TestSimulationA(unittest.TestCase):
@@ -66,6 +68,8 @@ class TestSimulationA(unittest.TestCase):
         self.bi = Factory.make_bien_immo(self.achat_data, self.lots_data)
         self.credit = Factory.make_credit(self.credit_data, self.bi.financement_total)
         self.rdt = Rendement(self.bi, self.credit)
+        database = Database()
+        self.irr = Impot_Regime_Reel(database, self.bi, 0.11)
     
     def testInvestissementInitial(self):
         self.assertAlmostEqual(self.bi.agence_montant, 4074.08, 2)
@@ -88,7 +92,8 @@ class TestSimulationA(unittest.TestCase):
 #         self.assertAlmostEqual(self.credit.get_cout_total(), 11501, 2)
 
     def testImpot(self):
-        pass
+        self.assertAlmostEqual(self.irr.base_impossable, 1219, 2)
+        
 
 '''
 Rang    Date échéance    Echéance globale    Dont assurance    Intérêts    Capital amorti    Capital restant dû
