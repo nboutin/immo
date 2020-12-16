@@ -37,8 +37,10 @@ def main(argv):
     
     credit = Factory.make_credit(credit_data, bien_immo)
     rendement = Rendement(bien_immo)
-    imf = Impot_Micro_Foncier(database, bien_immo.loyer_nu_annuel, impot_data['2019']['tmi'])
-    irr = Impot_Regime_Reel(database, bien_immo, impot_data['2019']['tmi'])
+    
+    tmi = impot_data['2019']['tmi']
+    imf = Impot_Micro_Foncier(database, bien_immo.loyer_nu_annuel, tmi)
+    irr = Impot_Regime_Reel(database, bien_immo, tmi)
  
     print_report(bien_immo, rendement, credit, imf, irr)
 
