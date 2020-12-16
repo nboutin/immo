@@ -54,7 +54,7 @@ class TestImpotRegimeReel(unittest.TestCase):
         charge.add(Charge.gestion_e.agence_immo, 0.05)
         self.assertAlmostEqual(irr.base_impossable, 3800)
 
-    def testRevenuFoncierImpossable(self):
+    def testRevenuFoncierImpossableA(self):
         bien_immo = Bien_Immo(0, 0, 0, 0, 0)
         lot = Lot("", 0, 500)
         bien_immo.add_lot(lot)
@@ -69,6 +69,15 @@ class TestImpotRegimeReel(unittest.TestCase):
         
         charge.add(charge.deductible_e.copropriete, 1000)
         self.assertAlmostEqual(irr.revenu_foncier_impossable, 550)
+        
+    @unittest.skip('todo')
+    def testRevenuFoncierImpossableB(self):
+        '''
+        Take into account credit
+        '''
+        pass
+        
+        
 
     def testPrelevementSociaux(self):
         bien_immo = Bien_Immo(0, 0, 0, 0, 0)
