@@ -36,7 +36,7 @@ class TestSimulationA(unittest.TestCase):
     garantie: 1000
     ---
     rendement brut: 8.59%
-    rendement net: 3.61%
+    rendement net avec impot annee 2: 3.61%
     rendement net charges: annee1:5.6, annee2:4.85%
     revenu salaire, revenu foncier impossable, deficit imputee, revenu net impossable, tmi, impot sur le revenu, part impot foncier, prelet sociaux, impot total a paye 
     annee1: 54400, 1219, 0, 50179, 11%, 2711, 195, 210, 2921
@@ -76,6 +76,8 @@ class TestSimulationA(unittest.TestCase):
 
     def testRendement(self):
         self.assertAlmostEqual(self.rdt.investissement_initial, 61486, 0)
+        self.assertAlmostEqual(self.rdt.rendement_brut, 0.0859, 4)
+#         self.assertAlmostEqual(self.rdt.rendement_net, 0.056, 3)
 
 '''
 Rang    Date échéance    Echéance globale    Dont assurance    Intérêts    Capital amorti    Capital restant dû

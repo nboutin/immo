@@ -20,14 +20,14 @@
             "loyer_nu_mensuel": 440,
             "charge": {
                 "provision_charge_mensuel": 25,
-                "copropriete": 1100,
+                "copropriete": 1075,
                 "taxe_fonciere": 800,
                 "PNO": 0
             },
             "gestion": {
                 "__comment": "0: off, 1: default, autre: utilise",
                 "travaux_provision_taux": 0,
-                "vacance_locative_taux": 0,
+                "vacance_locative_taux": 0.042,
                 "agence_immo": 0
             }
         }],
