@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import unittest, sys, os
+import unittest
+import sys
+import os
 sys.path.insert(0, os.path.join('..'))
 
 from bien_immo import Bien_Immo
@@ -31,7 +33,7 @@ class TestRendement(unittest.TestCase):
         rdt = Rendement(bi)
         self.assertEqual(rdt.rendement_net, 0.12)
 
-        lot = Lot("T2", 50, 500) 
+        lot = Lot("T2", 50, 500)
         charge = Charge(lot, None)
         charge.add(charge.deductible_e.copropriete, 51 * 12)
         charge.add(charge.deductible_e.prime_assurance, 90)
@@ -46,11 +48,11 @@ class TestRendement(unittest.TestCase):
     def testCashflow(self):
         bi = Bien_Immo(50000, 0, 0, 0, 0)
         bi.add_lot(Lot("T2", 50, 500))
-        cr = Credit(50000, 240, 0.02, 0, 'mode_1', 0, 0)
+        cr = Credit(50000, 240, 0.02, 0, Credit.mode_e.m1, 0, 0)
         rdt = Rendement(bi)
         self.assertAlmostEqual(rdt.cashflow_mensuel(cr), 247.06, 2)
-        
-        lot = Lot("T2", 50, 500) 
+
+        lot = Lot("T2", 50, 500)
         charge = Charge(lot, None)
         charge.add(charge.deductible_e.copropriete, 51 * 12)
         charge.add(charge.deductible_e.prime_assurance, 90)
@@ -58,7 +60,7 @@ class TestRendement(unittest.TestCase):
         charge.add(Charge.gestion_e.agence_immo, 0.05)
         lot.charge = charge
         bi.add_lot(lot)
-        
+
         self.assertAlmostEqual(bi.loyer_nu_annuel, 12000, 2)
         self.assertAlmostEqual(bi.charge_gestion + bi.charge_fonciere, 1502, 2)
         self.assertAlmostEqual(cr.get_mensualite_avec_assurance(), 252.94, 2)
