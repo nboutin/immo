@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import sys, os
+import sys
+import os
 import getopt
 import json
 
@@ -24,7 +25,7 @@ def main(argv):
 
     inputfile = parse_args(argv)
     input_data = load_file(inputfile)
-    
+
     achat_data = input_data['achat']
     defaut_data = input_data['defaut']
     lots_data = input_data['lots']
@@ -34,14 +35,14 @@ def main(argv):
     database = Database()
     defaut = Factory.make_defaut(defaut_data)
     bien_immo = Factory.make_bien_immo(achat_data, lots_data, defaut)
-    
+
     credit = Factory.make_credit(credit_data, bien_immo)
     rendement = Rendement(bien_immo, credit)
-    
+
     tmi = impot_data['2019']['tmi']
     imf = Impot_Micro_Foncier(database, bien_immo.loyer_nu_annuel, tmi)
-    irr = Impot_Regime_Reel(database, bien_immo, tmi)
- 
+    irr = Impot_Regime_Reel(database, bien_immo, credit, tmi)
+
     print_report(bien_immo, rendement, credit, imf, irr)
 
 
@@ -77,6 +78,8 @@ def load_file(inputfile):
         user_input = json.load(file)
 
     return user_input
+
+
 def print_report(bien_immo, rendement, credit, imf, irr):
     from tabulate import tabulate
 
@@ -89,7 +92,7 @@ def print_report(bien_immo, rendement, credit, imf, irr):
          bien_immo.apport,
          bien_immo.financement_total,
          bien_immo.rapport_surface_prix
-        ],
+         ],
     ]
 
     location = [
@@ -99,7 +102,7 @@ def print_report(bien_immo, rendement, credit, imf, irr):
          bien_immo.charge_fonciere,
          bien_immo.charge_gestion],
     ]
- 
+
 #     charges = [
 #         ['Taxe\nFonciere', 'Travaux\nProvision', 'Vacance\nLocative', 'PNO', 'Gestion\nagence', 'Copropriete'],
 #         [bien_immo.taxe_fonciere,
@@ -110,7 +113,7 @@ def print_report(bien_immo, rendement, credit, imf, irr):
 #          bien_immo.copropriete_annuel_total,
 #          ]
 #     ]
- 
+
     credit_in = [
         ['Capital\nemprunté', 'Durée', 'Taux\ninteret', 'Taux\nassurance', 'Mode'],
         [credit.capital,
@@ -119,18 +122,18 @@ def print_report(bien_immo, rendement, credit, imf, irr):
          '{:.2f}%'.format(credit.taux_assurance * 100),
          credit.mode],
     ]
- 
+
     credit_out = [
         ['Mensualite\nhors assurance', 'Mensualite\nassurance', 'Mensualite\navec assurance', 'Cout\ninteret',
          'Cout\nassurance', 'Cout\ncredit'],
         ['{:.2f}'.format(credit.get_mensualite_hors_assurance()),
-        '{:.2f}'.format(credit.get_mensualite_assurance()),
-        '{:.2f}'.format(credit.get_mensualite_avec_assurance()),
-        '{:.2f}'.format(credit.get_montant_interet_total()),
-        '{:.2f}'.format(credit.get_montant_assurance_total()),
-        '{:.2f}'.format(credit.get_cout_total())],
+         '{:.2f}'.format(credit.get_mensualite_assurance()),
+         '{:.2f}'.format(credit.get_mensualite_avec_assurance()),
+         '{:.2f}'.format(credit.get_montant_interet_total()),
+         '{:.2f}'.format(credit.get_montant_assurance_total()),
+         '{:.2f}'.format(credit.get_cout_total())],
     ]
- 
+
     micro_foncier = [
         ['Micro\nFoncier', 'Base\nimpossable', 'IR', 'PS', 'Total'],
         ['-',
@@ -140,7 +143,7 @@ def print_report(bien_immo, rendement, credit, imf, irr):
             imf.impot_total
          ]
     ]
- 
+
     regime_reel = [
         ['Regime\nreel', 'Base\nimpossable', 'IR', 'PS', 'Total'],
         ['-',
@@ -150,15 +153,15 @@ def print_report(bien_immo, rendement, credit, imf, irr):
          irr.impot_total
          ]
     ]
- 
+
     bilan = [
         ['Rendement\nBrut', 'Rendement\nNet', 'Rendement\nLarcher', 'Cashflow\nMensuel', 'Cashflow\nannuel'],
         ['{:.2f}%'.format(rendement.rendement_brut * 100),
-        '{:.2f}%'.format(rendement.rendement_net * 100),
-        '{:.2f}%'.format(rendement.rendement_methode_larcher * 100),
-        '{:.2f}'.format(rendement.cashflow_mensuel),
-        '{:.2f}'.format(rendement.cashflow_annuel)
-        ]
+         '{:.2f}%'.format(rendement.rendement_net * 100),
+         '{:.2f}%'.format(rendement.rendement_methode_larcher * 100),
+         '{:.2f}'.format(rendement.cashflow_mensuel),
+         '{:.2f}'.format(rendement.cashflow_annuel)
+         ]
     ]
 
     print(tabulate(achat, headers="firstrow") + '\n')

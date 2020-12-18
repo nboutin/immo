@@ -54,7 +54,7 @@ class TestSimulationB(unittest.TestCase):
         self.credit = Factory.make_credit(self.credit_data, self.bi)
         self.rdt = Rendement(self.bi, self.credit)
         database = Database()
-        self.irr = Impot_Regime_Reel(database, self.bi, 0.11)
+        self.irr = Impot_Regime_Reel(database, self.bi, self.credit, 0.11)
 
     def testOffre(self):
 
