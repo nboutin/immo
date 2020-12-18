@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import sys, os
+import sys
+import os
 sys.path.insert(0, os.path.join('..'))
 
 import unittest
@@ -40,7 +41,7 @@ class TestSimulationA(unittest.TestCase):
     rendement brut: 8.59%
     rendement net avec impot annee 2: 3.61%
     rendement net charges: annee1:5.6, annee2:4.85%
-    revenu salaire, revenu foncier impossable, deficit imputee, revenu net impossable, tmi, impot sur le revenu, part impot foncier, prelet sociaux, impot total a paye 
+    revenu salaire, revenu foncier impossable, deficit imputee, revenu net impossable, tmi, impot sur le revenu, part impot foncier, prelet sociaux, impot total a paye
     annee1: 54400, 1219, 0, 50179, 11%, 2711, 195, 210, 2921
     annee2: 54400, 2335, 0, 51295, 11, 2875, 358, 402, 3276
     Investissement initial: 61486
@@ -54,7 +55,7 @@ class TestSimulationA(unittest.TestCase):
     mensualite: 297.65 dont assurance 17.98€
     cout pret: 11501(19%) dont interet 7185(12%)
     '''
-    
+
     def setUp(self):
         __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
         __DATA_TEST_PATHNAME = os.path.join(__location__, 'data', 'input_test_simulationA.json')
@@ -64,13 +65,13 @@ class TestSimulationA(unittest.TestCase):
         self.achat_data = input_data['achat']
         self.lots_data = input_data['lots']
         self.credit_data = input_data['credit']
-        
+
         self.bi = Factory.make_bien_immo(self.achat_data, self.lots_data)
-        self.credit = Factory.make_credit(self.credit_data, self.bi.financement_total)
+        self.credit = Factory.make_credit(self.credit_data, self.bi)
         self.rdt = Rendement(self.bi, self.credit)
         database = Database()
         self.irr = Impot_Regime_Reel(database, self.bi, 0.11)
-    
+
     def testInvestissementInitial(self):
         self.assertAlmostEqual(self.bi.agence_montant, 4074.08, 2)
         self.assertAlmostEqual(self.bi.agence_taux, 0.08, 2)
@@ -84,16 +85,17 @@ class TestSimulationA(unittest.TestCase):
 #         self.assertAlmostEqual(self.rdt.rendement_net, 0.056, 3)
 
     def testCredit(self):
-        
+
         self.assertAlmostEqual(self.credit.get_mensualite_avec_assurance(), 297.65, 2)
         self.assertAlmostEqual(self.credit.get_mensualite_assurance(), 17.98, 2)
         self.assertAlmostEqual(self.credit.get_montant_interet_total(), 7185.22, 2)
         self.assertAlmostEqual(self.credit.get_montant_assurance_total(), 4315.40, 2)
 #         self.assertAlmostEqual(self.credit.get_cout_total(), 11501, 2)
 
+    @unittest.skip('todo')
     def testImpot(self):
         self.assertAlmostEqual(self.irr.base_impossable, 1219, 2)
-        
+
 
 '''
 Rang    Date échéance    Echéance globale    Dont assurance    Intérêts    Capital amorti    Capital restant dû

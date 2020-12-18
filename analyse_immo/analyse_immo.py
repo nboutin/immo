@@ -35,10 +35,12 @@ def main(argv):
     defaut = Factory.make_defaut(defaut_data)
     bien_immo = Factory.make_bien_immo(achat_data, lots_data, defaut)
     
-    credit = Factory.make_credit(credit_data, bien_immo.financement_total)
+    credit = Factory.make_credit(credit_data, bien_immo)
     rendement = Rendement(bien_immo, credit)
-    imf = Impot_Micro_Foncier(database, bien_immo.loyer_nu_annuel, impot_data['2019']['tmi'])
-    irr = Impot_Regime_Reel(database, bien_immo, impot_data['2019']['tmi'])
+    
+    tmi = impot_data['2019']['tmi']
+    imf = Impot_Micro_Foncier(database, bien_immo.loyer_nu_annuel, tmi)
+    irr = Impot_Regime_Reel(database, bien_immo, tmi)
  
     print_report(bien_immo, rendement, credit, imf, irr)
 
@@ -75,8 +77,6 @@ def load_file(inputfile):
         user_input = json.load(file)
 
     return user_input
-
-
 def print_report(bien_immo, rendement, credit, imf, irr):
     from tabulate import tabulate
 

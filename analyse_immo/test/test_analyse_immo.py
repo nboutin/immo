@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import unittest, sys, os
+import unittest
+import sys
+import os
 sys.path.insert(0, os.path.join('..'))
 
 import json
@@ -11,7 +13,7 @@ from rendement import Rendement
 
 
 class TestAnalyseImmoBase(unittest.TestCase):
-    
+
     def setUp(self):
         __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
         __DATA_TEST_PATHNAME = os.path.join(__location__, 'data', 'input_test.json')
@@ -24,25 +26,25 @@ class TestAnalyseImmoBase(unittest.TestCase):
 
 
 class TestRendement(TestAnalyseImmoBase):
-            
+
     def testRendementBrut(self):
         self.achat_data['prix_net_vendeur'] = 100000
         self.lots_data[0]['loyer_nu_mensuel'] = 500
         bi = Factory.make_bien_immo(self.achat_data, self.lots_data)
         rdt = Rendement(bi)
         self.assertEqual(rdt.rendement_brut, 0.06)
-        
+
         self.achat_data['frais_agence'] = 0.06
         bi = Factory.make_bien_immo(self.achat_data, self.lots_data)
         rdt = Rendement(bi)
         self.assertAlmostEqual(rdt.rendement_brut, 0.057, 3)
-        
+
         self.achat_data['frais_agence'] = 0
         self.achat_data['frais_notaire'] = 0.09
         bi = Factory.make_bien_immo(self.achat_data, self.lots_data)
         rdt = Rendement(bi)
         self.assertAlmostEqual(rdt.rendement_brut, 0.055, 3)
-        
+
         self.achat_data['frais_agence'] = 0.06
         self.achat_data['frais_notaire'] = 0.09
         bi = Factory.make_bien_immo(self.achat_data, self.lots_data)
@@ -58,7 +60,7 @@ class TestRendement(TestAnalyseImmoBase):
 
 
 class TestRendementNet(TestAnalyseImmoBase):
-        
+
     def testSansCharges(self):
         self.achat_data['prix_net_vendeur'] = 115000
         self.lots_data[0]['loyer_nu_mensuel'] = 500
@@ -129,7 +131,7 @@ class TestCashflow(TestAnalyseImmoBase):
         self.credit_data['mode'] = 'mode_1'
 
         bi = Factory.make_bien_immo(self.achat_data, self.lots_data)
-        cred = Factory.make_credit(self.credit_data, bi.financement_total)
+        cred = Factory.make_credit(self.credit_data, bi)
         rdt = Rendement(bi, cred)
 
         self.assertAlmostEqual(rdt.cashflow_mensuel, 100.67, 2)
