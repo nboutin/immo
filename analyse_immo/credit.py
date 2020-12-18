@@ -29,6 +29,7 @@ class Credit:
 
         self._calcul_tableau_amortissement()
 
+    # Attibut
     @property
     def capital(self):
         return self._capital
@@ -49,13 +50,14 @@ class Credit:
     def mode(self):
         return self._mode
 
+    # Static
     @staticmethod
     def _calcul_mensualite_constante(capital, taux, duree_mois):
         '''
         Calcul de base pour connaitre la mensualite constante de remboursement
         Assurance non-comprise
         mensualite = ( capital_emprunte * taux_interet/12) / 1 - (1 + taux_interet / 12) ^ - duree_mois
-        @return: mensualite
+        :return: mensualite
         '''
         if capital == 0 or taux == 0 or duree_mois == 0:
             return 0
@@ -66,41 +68,49 @@ class Credit:
         '''Calcul mensualite d'assurance sur capital constant'''
         return capital * (taux_assurance / 12)
 
-    def get_mensualite_hors_assurance(self):
-        if self._capital == 0 or self._taux == 0:
-            return 0
-
-        return Credit._calcul_mensualite_constante(self._capital, self._taux, self._duree_mois)
-
-    def get_mensualite_assurance(self, mois=None):
+    # Mensualite
+    def get_amortissement(self, start=1, stop=None):
         '''
-        @todo Use parameter mois
+        :param start: first month
+        :param stop: last month (included)
         '''
-        if not mois:
-            mois = 1
+        if not stop:
+            stop = start
+        return sum(item['amortissement'] for item in self._tam[start - 1:stop])
 
-        if self._mode == Credit.mode_e.m1:
-            return Credit._calcul_mensualite_assurance_capital_constant(
-                self._capital, self._taux_assurance)
+    def get_interet(self, start=1, stop=None):
+        if not stop:
+            stop = start
+        return sum(item['interet'] for item in self._tam[start - 1:stop])
+
+    def get_mensualite_hors_assurance(self, start=1, stop=None):
+        if not stop:
+            stop = start
+        return sum(item['mensualite_ha'] for item in self._tam[start - 1:stop])
+
+    def get_mensualite_assurance(self, start=1, stop=None):
+        '''
+        :return montant mensuel de l'assurance
+        '''
+        if not stop:
+            stop = start
+        return sum(item['assurance'] for item in self._tam[start - 1:stop])
+
+    def get_mensualite_avec_assurance(self, start=1, stop=None):
+        '''
+        :return montant mensualite assurance incluse
+        '''
+        if not stop:
+            stop = start
+        return sum(item['mensualite_aa'] for item in self._tam[start - 1:stop])
+
+    def get_tableau_amortissement(self, start=1, stop=None):
+        if not stop:
+            return self._tam[start - 1]
         else:
-            return self._tam[mois - 1]['assurance']
+            return self._tam[start - 1:stop]
 
-    def get_mensualite_avec_assurance(self, mois=None):
-        '''
-        @todo Use parameter mois
-        mode_1: return mensualite constante
-        mode_2/3/4: return mensualite variable
-        '''
-        if self._mode == Credit.mode_e.m1:
-            return self._tam[0]['mensualite_aa']
-        elif self._mode == Credit.mode_e.m2 or self._mode == Credit.mode_e.m3:
-            return self._tam[0]['mensualite_aa']
-        else:
-            return 0
-
-    def get_mensualite_total(self):
-        return self._tam_total['mensualite_aa']
-
+    # Total
     def get_montant_interet_total(self):
         return self._tam_total['interet']
 
@@ -120,12 +130,7 @@ class Credit:
     def get_mensualite_avec_assurance_total(self):
         return self._tam_total['mensualite_aa']
 
-    def get_amortissement(self, mois):
-        '''
-        1er mois = 1
-        '''
-        return self._tam[mois - 1]
-
+    # Private
     def _calcul_tableau_amortissement(self):
         '''
         mode calcul possible:
