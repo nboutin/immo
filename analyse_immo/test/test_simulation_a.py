@@ -70,7 +70,7 @@ class TestSimulationA(unittest.TestCase):
         self.credit = Factory.make_credit(self.credit_data, self.bi)
         self.rdt = Rendement(self.bi, self.credit)
         database = Database()
-        self.irr = Impot_Regime_Reel(database, self.bi, 0.11)
+        self.irr = Impot_Regime_Reel(database, self.bi, self.credit, 0.11)
 
     def testInvestissementInitial(self):
         self.assertAlmostEqual(self.bi.agence_montant, 4074.08, 2)
@@ -85,14 +85,30 @@ class TestSimulationA(unittest.TestCase):
 #         self.assertAlmostEqual(self.rdt.rendement_net, 0.056, 3)
 
     def testCredit(self):
-
-        self.assertAlmostEqual(self.credit.get_mensualite_avec_assurance(), 297.65, 2)
-        self.assertAlmostEqual(self.credit.get_mensualite_assurance(), 17.98, 2)
         self.assertAlmostEqual(self.credit.get_montant_interet_total(), 7185.22, 2)
         self.assertAlmostEqual(self.credit.get_montant_assurance_total(), 4315.40, 2)
-#         self.assertAlmostEqual(self.credit.get_cout_total(), 11501, 2)
+        self.assertAlmostEqual(self.credit.get_montant_interet_total(), 7185, 0)
+        self.assertAlmostEqual(self.credit.get_cout_total(), 11501 + 1550, 0)
 
-    @unittest.skip('todo')
+        start = 1
+        self.assertAlmostEqual(self.credit.get_mensualite_avec_assurance(start), 297.65, 2)
+        self.assertAlmostEqual(self.credit.get_mensualite_assurance(start), 17.98, 2)
+        self.assertAlmostEqual(self.credit.get_interet(start), 57.44, 2)
+        self.assertAlmostEqual(self.credit.get_amortissement(start), 222.23, 2)
+
+        start = 12
+        self.assertAlmostEqual(self.credit.get_mensualite_avec_assurance(start), 297.65, 2)
+        self.assertAlmostEqual(self.credit.get_mensualite_assurance(start), 17.98, 2)
+        self.assertAlmostEqual(self.credit.get_interet(start), 55.08, 2)
+        self.assertAlmostEqual(self.credit.get_amortissement(start), 224.59, 2)
+
+        start = 230
+        self.assertAlmostEqual(self.credit.get_mensualite_avec_assurance(start), 297.65, 2)
+        self.assertAlmostEqual(self.credit.get_mensualite_assurance(start), 17.98, 2)
+        self.assertAlmostEqual(self.credit.get_interet(start), 2.93, 2)
+        self.assertAlmostEqual(self.credit.get_amortissement(start), 276.74, 2)
+
+    @unittest.skip('fixme')
     def testImpot(self):
         self.assertAlmostEqual(self.irr.base_impossable, 1219, 2)
 
