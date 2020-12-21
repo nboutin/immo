@@ -9,8 +9,8 @@ import json
 from factory import Factory
 from database import Database
 from rendement import Rendement
-from impot_micro_foncier import Impot_Micro_Foncier
-from impot_regime_reel import Impot_Regime_Reel
+from impot_micro_foncier import Micro_Foncier
+from impot_regime_reel import Annexe_2044
 
 __NAME = 'Analyse Immo'
 __VERSION = '1.0.0-dev'
@@ -40,8 +40,8 @@ def main(argv):
     rendement = Rendement(bien_immo, credit)
 
     tmi = impot_data['2019']['tmi']
-    imf = Impot_Micro_Foncier(database, bien_immo.loyer_nu_annuel, tmi)
-    irr = Impot_Regime_Reel(database, bien_immo, credit, tmi)
+    imf = Micro_Foncier(database, bien_immo.loyer_nu_annuel, tmi)
+    irr = Annexe_2044(database, bien_immo, credit, tmi)
 
     print_report(bien_immo, rendement, credit, imf, irr)
 

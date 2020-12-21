@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-class Impot_Micro_Foncier:
+class Micro_Foncier:
     '''
     https://www.corrigetonimpot.fr/impot-location-vide-appartement-proprietaire-calcul/
     '''
