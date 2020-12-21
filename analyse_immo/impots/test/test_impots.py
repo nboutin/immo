@@ -8,7 +8,7 @@ sys.path.insert(0, os.path.join('..'))
 sys.path.insert(1, os.path.join('..', '..'))
 
 from database import Database
-from impots import Impots
+from irpp import IRPP
 
 
 class TestImpots(unittest.TestCase):
@@ -17,17 +17,17 @@ class TestImpots(unittest.TestCase):
         self.database = Database()
 
     def testInit(self):
-        _ = Impots(None, 0, 0, 0)
+        _ = IRPP(None, 0, 0, 0)
 
     def testRevenuFiscaleReference(self):
 
-        impot = Impots(self.database, 0, 0, 0)
-        impot.add_revenu(Impots.revenu_e.salaires, 31407)
-        impot.add_revenu(Impots.revenu_e.salaires, 23055)
+        impot = IRPP(self.database, 0, 0, 0)
+        impot.add_revenu(IRPP.revenu_e.salaires, 31407)
+        impot.add_revenu(IRPP.revenu_e.salaires, 23055)
         self.assertEqual(impot.revenu_fiscale_reference, 49015.80, 2)
 
     def test(self):
-        impot = Impots(self.database, 0, 0, 0)
+        impot = IRPP(self.database, 0, 0, 0)
         tmi = [[10084, 0], [25710, 0.11], [73516, 0.30], [158122, 0.41]]
 
         ibrut = impot._impots_brut(tmi, 5000)
@@ -55,18 +55,18 @@ class TestImpots(unittest.TestCase):
         self.assertAlmostEqual(ibrut, 18719.10, 2)
 
     def testImpotBrut(self):
-        impot = Impots(self.database, 2019, 2.5, 1)
-        impot.add_revenu(Impots.revenu_e.salaires, 31407)
-        impot.add_revenu(Impots.revenu_e.salaires, 23055)
+        impot = IRPP(self.database, 2019, 2.5, 1)
+        impot.add_revenu(IRPP.revenu_e.salaires, 31407)
+        impot.add_revenu(IRPP.revenu_e.salaires, 23055)
         self.assertAlmostEqual(impot.impots_brut, 3340, 0)
         self.assertAlmostEqual(impot.impots_brut, 3339.81, 2)
 
     def testImpotNet(self):
-        impot = Impots(self.database, 2019, 2.5, 1)
-        impot.add_revenu(Impots.revenu_e.salaires, 31407)
-        impot.add_revenu(Impots.revenu_e.salaires, 23055)
-        impot.add_reduction(Impots.reduction_e.dons, 200)
-        impot.add_reduction(Impots.reduction_e.cotisations_syndicales, 143)
+        impot = IRPP(self.database, 2019, 2.5, 1)
+        impot.add_revenu(IRPP.revenu_e.salaires, 31407)
+        impot.add_revenu(IRPP.revenu_e.salaires, 23055)
+        impot.add_reduction(IRPP.reduction_e.dons, 200)
+        impot.add_reduction(IRPP.reduction_e.cotisations_syndicales, 143)
 
         self.assertAlmostEqual(impot.impots_net, 3113, 0)
         self.assertAlmostEqual(impot.impots_net, 3113.43, 2)

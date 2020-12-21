@@ -4,11 +4,11 @@
 from enum import unique, Enum, auto
 
 
-class Impots:
+class IRPP:
     '''
-    https://www.tacotax.fr/guides/impot-sur-le-revenu
     L’impôt sur le revenu des personnes physiques (IRPP)
     IR = IRPP + CSG(secu) + CRDS (dettes)
+    https://www.tacotax.fr/guides/impot-sur-le-revenu
 
     Revenu
         Salaire & deduction
@@ -68,9 +68,9 @@ class Impots:
 
     @property
     def revenu_fiscale_reference(self):
-        rfr = self.get_revenu(Impots.revenu_e.salaires) * \
+        rfr = self.get_revenu(IRPP.revenu_e.salaires) * \
             (1 - self._database.salaire_abattement)
-        rfr += self.get_revenu(Impots.revenu_e.revenu_foncier)
+        rfr += self.get_revenu(IRPP.revenu_e.revenu_foncier)
 
         return rfr
 
@@ -87,9 +87,9 @@ class Impots:
     @property
     def impots_net(self):
         net = self.impots_brut
-        net -= self._database.reduction_dons * self.get_reduction(Impots.reduction_e.dons)
+        net -= self._database.reduction_dons * self.get_reduction(IRPP.reduction_e.dons)
         net -= self._database.reduction_syndicat * \
-            self.get_reduction(Impots.reduction_e.cotisations_syndicales)
+            self.get_reduction(IRPP.reduction_e.cotisations_syndicales)
         return net
 
     def _impots_brut(self, tmi, quotient_familial):
