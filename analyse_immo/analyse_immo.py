@@ -10,6 +10,7 @@ from factory import Factory
 from database import Database
 from rendement import Rendement
 from impots.irpp import IRPP
+from rapports.rapport_fiscale import print_rapport_fiscale
 
 __NAME = 'Analyse Immo'
 __VERSION = '1.0.0-dev'
@@ -41,6 +42,7 @@ def main(argv):
     irpp.add_annexe(annexe_2044)
 
     print_report(bien_immo, rendement, credit, None, None)
+    print_rapport_fiscale(achat_data['annee'], annexe_2044)
 
 
 def parse_args(argv):
