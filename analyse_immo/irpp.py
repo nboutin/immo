@@ -3,7 +3,7 @@
 
 from enum import unique, Enum, auto
 from ligne import Ligne
-from analyse_immo.impots.annexe_2044 import Annexe_2044
+from annexe_2044 import Annexe_2044
 
 L1AJ_salaire = Ligne('1AJ', 'Salaires - Déclarant 1')
 L1BJ_salaire = Ligne('1BJ', 'Salaires - Déclarant 2')

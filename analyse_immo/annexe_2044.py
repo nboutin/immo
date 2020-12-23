@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from enum import Enum, unique, auto
 from ligne import Ligne
-from charge import Charge
 
 
 L211_loyer_brut = Ligne(211, "loyer brut")

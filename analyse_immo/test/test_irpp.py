@@ -4,13 +4,12 @@
 import unittest
 import sys
 import os
-
 sys.path.insert(0, os.path.join('..'))
 sys.path.insert(1, os.path.join('..', '..'))
-from analyse_immo.impots.irpp import L1AJ_salaire, L1BJ_salaire, L7UF_dons, L7AE_syndicat
-from analyse_immo.database import Database
-from analyse_immo.impots.irpp import IRPP
-from analyse_immo.impots.annexe_2044 import Annexe_2044, L211_loyer_brut
+
+from database import Database
+from irpp import IRPP, L1AJ_salaire, L1BJ_salaire, L7UF_dons, L7AE_syndicat
+from annexe_2044 import Annexe_2044, L211_loyer_brut
 
 
 class TestIRPP(unittest.TestCase):

@@ -6,7 +6,9 @@ from defaut import Defaut
 from charge import Charge
 from lot import Lot
 from credit import Credit
-from defaut import Defaut
+from annexe_2044 import Annexe_2044, L211_loyer_brut, L221_frais_administration, L222_autre_frais_gestion, \
+    L223_prime_assurance, L224_travaux, L227_taxe_fonciere, L229_copropriete_provision, L250_interet_emprunt, L250_assurance_emprunteur,\
+    L250_frais_dossier, L250_frais_garantie
 
 
 class Factory:
@@ -74,3 +76,25 @@ class Factory:
                         defaut_data['gestion_agence_taux'],)
 
         return defaut
+
+    @staticmethod
+    def make_annexe_2044(bien_immo, credit, annee_index):
+        '''
+        :todo put 20 into database
+        '''
+        an = Annexe_2044()
+        an.add_ligne(L211_loyer_brut, bien_immo.loyer_nu_annuel)
+        an.add_ligne(L221_frais_administration, bien_immo.get_charge(Charge.gestion_e.agence_immo))
+        an.add_ligne(L222_autre_frais_gestion, 20 * bien_immo.lot_count)
+        an.add_ligne(L223_prime_assurance, bien_immo.get_charge(Charge.deductible_e.prime_assurance))
+        an.add_ligne(L224_travaux, bien_immo.get_charge(Charge.gestion_e.provision_travaux))
+        an.add_ligne(L227_taxe_fonciere, bien_immo.get_charge(Charge.deductible_e.taxe_fonciere))
+        an.add_ligne(L229_copropriete_provision, bien_immo.get_charge(Charge.deductible_e.copropriete))
+
+        stop = annee_index * 12
+        start = stop - 11
+        an.add_ligne(L250_interet_emprunt, credit.get_interet(start, stop))
+        an.add_ligne(L250_assurance_emprunteur, credit.get_mensualite_assurance(start, stop))
+        if annee_index == 1:
+            an.add_ligne(L250_frais_dossier, credit.frais_dossier)
+            an.add_ligne(L250_frais_garantie, credit.frais_garantie)

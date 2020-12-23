@@ -9,8 +9,8 @@ import json
 from factory import Factory
 from database import Database
 from rendement import Rendement
-from impot_micro_foncier import Micro_Foncier
-from impot_regime_reel import Annexe_2044
+# from impots.micro_foncier import Micro_Foncier
+# from impot_regime_reel import Annexe_2044
 
 __NAME = 'Analyse Immo'
 __VERSION = '1.0.0-dev'
@@ -40,10 +40,11 @@ def main(argv):
     rendement = Rendement(bien_immo, credit)
 
     tmi = impot_data['2019']['tmi']
-    imf = Micro_Foncier(database, bien_immo.loyer_nu_annuel, tmi)
-    irr = Annexe_2044(database, bien_immo, credit, tmi)
+#     imf = Micro_Foncier(database, bien_immo.loyer_nu_annuel, tmi)
+#     irr = Annexe_2044(database, bien_immo, credit, tmi)
 
-    print_report(bien_immo, rendement, credit, imf, irr)
+#     print_report(bien_immo, rendement, credit, imf, irr)
+    print_report(bien_immo, rendement, credit, None, None)
 
 
 def parse_args(argv):
@@ -134,25 +135,25 @@ def print_report(bien_immo, rendement, credit, imf, irr):
          '{:.2f}'.format(credit.get_cout_total())],
     ]
 
-    micro_foncier = [
-        ['Micro\nFoncier', 'Base\nimpossable', 'IR', 'PS', 'Total'],
-        ['-',
-            imf.base_impossable,
-            imf.revenu_foncier_impossable,
-            imf.prelevement_sociaux_montant,
-            imf.impot_total
-         ]
-    ]
-
-    regime_reel = [
-        ['Regime\nreel', 'Base\nimpossable', 'IR', 'PS', 'Total'],
-        ['-',
-         irr.base_impossable,
-         irr.revenu_foncier_impossable,
-         irr.prelevement_sociaux_montant,
-         irr.impot_total
-         ]
-    ]
+#     micro_foncier = [
+#         ['Micro\nFoncier', 'Base\nimpossable', 'IR', 'PS', 'Total'],
+#         ['-',
+#             imf.base_impossable,
+#             imf.revenu_foncier_impossable,
+#             imf.prelevement_sociaux_montant,
+#             imf.impot_total
+#          ]
+#     ]
+#
+#     regime_reel = [
+#         ['Regime\nreel', 'Base\nimpossable', 'IR', 'PS', 'Total'],
+#         ['-',
+#          irr.base_impossable,
+#          irr.revenu_foncier_impossable,
+#          irr.prelevement_sociaux_montant,
+#          irr.impot_total
+#          ]
+#     ]
 
     bilan = [
         ['Rendement\nBrut', 'Rendement\nNet', 'Rendement\nLarcher', 'Cashflow\nMensuel', 'Cashflow\nannuel'],
@@ -169,8 +170,8 @@ def print_report(bien_immo, rendement, credit, imf, irr):
 #     print(tabulate(charges, headers="firstrow") + '\n')
     print(tabulate(credit_in, headers="firstrow") + '\n')
     print(tabulate(credit_out, headers="firstrow") + '\n')
-    print(tabulate(micro_foncier, headers="firstrow") + '\n')
-    print(tabulate(regime_reel, headers="firstrow") + '\n')
+#     print(tabulate(micro_foncier, headers="firstrow") + '\n')
+#     print(tabulate(regime_reel, headers="firstrow") + '\n')
     print(tabulate(bilan, headers="firstrow") + '\n')
 
 

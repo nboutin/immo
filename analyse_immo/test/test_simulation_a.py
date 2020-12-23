@@ -10,8 +10,8 @@ import json
 
 from factory import Factory
 from rendement import Rendement
-from impot_regime_reel import Annexe_2044
 from database import Database
+from annexe_2044 import Annexe_2044
 
 
 class TestSimulationA(unittest.TestCase):
@@ -70,7 +70,7 @@ class TestSimulationA(unittest.TestCase):
         self.credit = Factory.make_credit(self.credit_data, self.bi)
         self.rdt = Rendement(self.bi, self.credit)
         database = Database()
-        self.irr = Annexe_2044(database, self.bi, self.credit, 0.11)
+#         self.irr = Annexe_2044(database, self.bi, self.credit, 0.11)
 
     def testInvestissementInitial(self):
         self.assertAlmostEqual(self.bi.agence_montant, 4074.08, 2)
