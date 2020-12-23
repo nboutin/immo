@@ -4,6 +4,7 @@
 import unittest
 import sys
 import os
+sys.path.insert(0, os.path.join('..'))
 sys.path.insert(1, os.path.join('..', '..'))
 
 from analyse_immo.impots.annexe_2044 import L211_loyer_brut, L221_frais_administration, L222_autre_frais_gestion, \

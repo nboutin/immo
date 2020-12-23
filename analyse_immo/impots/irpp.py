@@ -2,6 +2,16 @@
 # -*- coding: utf-8 -*-
 
 from enum import unique, Enum, auto
+from ligne import Ligne
+from analyse_immo.impots.annexe_2044 import Annexe_2044
+
+L1AJ_salaire = Ligne('1AJ', 'Salaires - Déclarant 1')
+L1BJ_salaire = Ligne('1BJ', 'Salaires - Déclarant 2')
+L7UF_dons = Ligne('7UF', 'Dons aux oeuvres')
+L7AE_syndicat = Ligne('7AE', 'Cotisations syndicales - Déclarant 2')
+
+# 4BE Micro foncier - recettes brutes
+# 4BA Revenu foncier impossable
 
 
 class IRPP:
@@ -13,27 +23,18 @@ class IRPP:
     Revenu
         Salaire & deduction
         revenu foncier
-
         Total = Revenu fiscale de reference
 
-    '''
-
-    @unique
-    class revenu_e(Enum):
         salaires = auto()
         investissement = auto()  # Action, assurance vie, PEA, PER, ...
         revenu_foncier = auto()
         plus_value_immobiliere = auto()
-#         bic = auto() # benefice commerciaux et industrielle
-#         ba = auto() # benefice commerciaux agricoles
-#         retraite = auto()
-#         indemnite = auto()
-#         primes = auto()
-
-    @unique
-    class reduction_e(Enum):
-        dons = auto()
-        cotisations_syndicales = auto()
+        bic = auto() # benefice commerciaux et industrielle
+        ba = auto() # benefice commerciaux agricoles
+        retraite = auto()
+        indemnite = auto()
+        primes = auto()
+    '''
 
     def __init__(self, database, annee, part_fiscale, n_enfant):
         '''
@@ -43,36 +44,38 @@ class IRPP:
         self._annee = annee
         self._part_fiscale = part_fiscale
         self._n_enfant = n_enfant
-        self._revenus = list()
-        self._reductions = list()
 
-    def add_revenu(self, type_, value):
-        self._revenus.append((type_, value))
+        self._lignes = list()
+        self._annexes = list()
 
-    def get_revenu(self, type_):
-        value = 0
-        for revenu in self._revenus:
-            if type_ == revenu[0]:
-                value += revenu[1]
-        return value
+    def add_ligne(self, type_, value):
+        self._lignes.append((type_, value))
 
-    def add_reduction(self, type_, value):
-        self._reductions.append((type_, value))
+    def add_annexe(self, annexe):
+        self._annexes.append(annexe)
 
-    def get_reduction(self, type_):
-        value = 0
-        for reduction in self._reductions:
-            if type_ == reduction[0]:
-                value += reduction[1]
-        return value
+    @property
+    def salaires(self):
+        return self.__get_ligne(('1AJ', '1BJ'))
 
     @property
     def revenu_fiscale_reference(self):
-        rfr = self.get_revenu(IRPP.revenu_e.salaires) * \
-            (1 - self._database.salaire_abattement)
-        rfr += self.get_revenu(IRPP.revenu_e.revenu_foncier)
-
+        '''
+        :todo Ajouter revenu foncier
+        '''
+        rfr = self.salaires * (1 - self._database.salaire_abattement)
+        for annexe in self._annexes:
+            if isinstance(annexe, Annexe_2044):
+                rfr += annexe.revenu_foncier_taxable
         return rfr
+
+    @property
+    def total_reduction_impot(self):
+        return self.__get_ligne(('7UF'))
+
+    @property
+    def total_credit_impot(self):
+        return self.__get_ligne(('7AE'))
 
     @property
     def impots_brut(self):
@@ -87,10 +90,12 @@ class IRPP:
     @property
     def impots_net(self):
         net = self.impots_brut
-        net -= self._database.reduction_dons * self.get_reduction(IRPP.reduction_e.dons)
-        net -= self._database.reduction_syndicat * \
-            self.get_reduction(IRPP.reduction_e.cotisations_syndicales)
+        net -= self._database.reduction_dons * self.total_reduction_impot
+        net -= self._database.reduction_syndicat * self.total_credit_impot
         return net
+
+    def __get_ligne(self, numero):
+        return sum(ligne[1] for ligne in self._lignes if ligne[0].numero in numero)
 
     def _impots_brut(self, tmi, quotient_familial):
 
