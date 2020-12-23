@@ -66,6 +66,8 @@ class Charge:
         '''
         charges, list of charges
         '''
+        if not isinstance(charges_list, list):
+            charges_list = [charges_list]
         return sum(charge[2] for charge in self._charges if charge[0] in charges_list)
 
     def add(self, type_, value):

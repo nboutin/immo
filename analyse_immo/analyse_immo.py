@@ -9,6 +9,7 @@ import json
 from factory import Factory
 from database import Database
 from rendement import Rendement
+from irpp import IRPP
 # from impots.micro_foncier import Micro_Foncier
 # from impot_regime_reel import Annexe_2044
 
@@ -20,7 +21,6 @@ __INPUT_FILEPATH = os.path.join(__location__, 'data', 'input.json')
 
 
 def main(argv):
-
     print('{} {}'.format(__NAME, __VERSION))
 
     inputfile = parse_args(argv)
@@ -38,12 +38,10 @@ def main(argv):
 
     credit = Factory.make_credit(credit_data, bien_immo)
     rendement = Rendement(bien_immo, credit)
+    irpp = Factory.make_irpp(database, achat_data, impot_data)
+    annexe_2044 = Factory.make_annexe_2044(bien_immo, credit, 1)
+    irpp.add_annexe(annexe_2044)
 
-    tmi = impot_data['2019']['tmi']
-#     imf = Micro_Foncier(database, bien_immo.loyer_nu_annuel, tmi)
-#     irr = Annexe_2044(database, bien_immo, credit, tmi)
-
-#     print_report(bien_immo, rendement, credit, imf, irr)
     print_report(bien_immo, rendement, credit, None, None)
 
 

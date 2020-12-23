@@ -6,6 +6,7 @@ from defaut import Defaut
 from charge import Charge
 from lot import Lot
 from credit import Credit
+from irpp import IRPP, L1AJ_salaire, L1BJ_salaire, L7UF_dons, L7AE_syndicat
 from annexe_2044 import Annexe_2044, L211_loyer_brut, L221_frais_administration, L222_autre_frais_gestion, \
     L223_prime_assurance, L224_travaux, L227_taxe_fonciere, L229_copropriete_provision, L250_interet_emprunt, L250_assurance_emprunteur,\
     L250_frais_dossier, L250_frais_garantie
@@ -78,8 +79,20 @@ class Factory:
         return defaut
 
     @staticmethod
+    def make_irpp(database, achat_data, impot_data):
+        annee = achat_data['annee']
+        impot = impot_data[str(annee)]
+        irpp = IRPP(database, annee, impot['parts_fiscales'], impot['enfants'])
+        irpp.add_ligne(L1AJ_salaire, impot['salaires'][0])
+        irpp.add_ligne(L1BJ_salaire, impot['salaires'][1])
+        irpp.add_ligne(L7UF_dons, impot['dons'])
+        irpp.add_ligne(L7AE_syndicat, impot['syndicat'])
+        return irpp
+
+    @staticmethod
     def make_annexe_2044(bien_immo, credit, annee_index):
         '''
+        :param annee_index: start at 1, annee n depuis l'achat du bien
         :todo put 20 into database
         '''
         an = Annexe_2044()
@@ -98,3 +111,5 @@ class Factory:
         if annee_index == 1:
             an.add_ligne(L250_frais_dossier, credit.frais_dossier)
             an.add_ligne(L250_frais_garantie, credit.frais_garantie)
+
+        return an
