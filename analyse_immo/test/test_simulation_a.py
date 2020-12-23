@@ -11,7 +11,7 @@ import json
 from factory import Factory
 from rendement import Rendement
 from database import Database
-from annexe_2044 import Annexe_2044
+from impots.annexe_2044 import Annexe_2044
 
 
 class TestSimulationA(unittest.TestCase):

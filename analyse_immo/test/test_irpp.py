@@ -8,8 +8,8 @@ sys.path.insert(0, os.path.join('..'))
 sys.path.insert(1, os.path.join('..', '..'))
 
 from database import Database
-from irpp import IRPP, L1AJ_salaire, L1BJ_salaire, L7UF_dons, L7AE_syndicat
-from annexe_2044 import Annexe_2044, L211_loyer_brut
+from impots.irpp import IRPP, L1AJ_salaire, L1BJ_salaire, L7UF_dons, L7AE_syndicat
+from impots.annexe_2044 import Annexe_2044, L211_loyer_brut
 
 
 class TestIRPP(unittest.TestCase):

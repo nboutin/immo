@@ -9,9 +9,7 @@ import json
 from factory import Factory
 from database import Database
 from rendement import Rendement
-from irpp import IRPP
-# from impots.micro_foncier import Micro_Foncier
-# from impot_regime_reel import Annexe_2044
+from impots.irpp import IRPP
 
 __NAME = 'Analyse Immo'
 __VERSION = '1.0.0-dev'
