@@ -3,12 +3,12 @@
 
 
 class Defaut:
-    
+
     def __init__(self, provision_travaux_taux,
                  vacance_locative_taux_T1,
                  vacance_locative_taux_T2,
                  gestion_agence_taux):
-        
+
         self._provision_travaux_taux = provision_travaux_taux
         self._vacance_locative_taux = {}
         self._vacance_locative_taux['T1'] = vacance_locative_taux_T1
@@ -20,7 +20,10 @@ class Defaut:
         return self._provision_travaux_taux
 
     def vacance_locative_taux(self, type_):
-        return self._vacance_locative_taux[type_]
+        if type_:
+            return self._vacance_locative_taux[type_]
+        else:
+            return 0
 
     @property
     def gestion_agence_taux(self):

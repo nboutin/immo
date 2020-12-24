@@ -64,7 +64,7 @@ class Charge:
 
     def get_montant(self, charges_list):
         '''
-        charges, list of charges
+        :param charges_list: list of charges
         '''
         if not isinstance(charges_list, list):
             charges_list = [charges_list]

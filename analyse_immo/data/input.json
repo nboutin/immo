@@ -19,7 +19,7 @@
 		{
 			"type": "T2",
 			"surface": 45,
-			"loyer_nu_mensuel": 400,
+			"loyer_nu_mensuel": 450,
 			"charge": {
 				"provision_charge_mensuel": 40,
 				"copropriete": 1000,
@@ -29,7 +29,7 @@
 			"gestion": {
 				"__comment": "0: off, 1: default, autre: utilise",
 				"travaux_provision_taux": 1,
-				"vacance_locative_taux": 1,
+				"vacance_locative_taux": 0,
 				"agence_immo": 0
 			}
 		}
@@ -39,7 +39,7 @@
 		"taux_interet": 0.0115,
 		"taux_assurance": 0.0035,
 		"mode": "mode_3",
-		"frais_dossier": 0,
+		"frais_dossier": 300,
 		"frais_garantie": 0
 	},
 	"impot": {

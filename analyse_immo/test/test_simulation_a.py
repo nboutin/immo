@@ -80,8 +80,8 @@ class TestSimulationA(unittest.TestCase):
         self.assertAlmostEqual(self.bi.financement_total, 61486 - 1550, 0)
 
     def testRendement(self):
-        self.assertAlmostEqual(self.rdt.investissement_initial, 61486, 0)
-        self.assertAlmostEqual(self.rdt.rendement_brut, 0.0859, 4)
+        self.assertAlmostEqual(self.rdt.investissement_initial, 61486 - 1550, 0)
+        self.assertAlmostEqual(self.rdt.rendement_brut, 0.0881, 4)
 #         self.assertAlmostEqual(self.rdt.rendement_net, 0.056, 3)
 
     def testCredit(self):

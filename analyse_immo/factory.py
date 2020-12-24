@@ -25,9 +25,17 @@ class Factory:
 
         for lot_data in lots_data:
 
-            lot = Lot(lot_data['type'],
+            # Appliquer vacance locative
+            gestion_data = lot_data['gestion']
+            type_ = lot_data['type']
+            loyer_nu_mensuel = lot_data['loyer_nu_mensuel']
+
+            if gestion_data['vacance_locative_taux'] == 1:
+                loyer_nu_mensuel *= (1 - defaut.vacance_locative_taux(type_))
+
+            lot = Lot(type_,
                       lot_data['surface'],
-                      lot_data['loyer_nu_mensuel'])
+                      loyer_nu_mensuel)
 
             charge = Charge(lot, defaut)
 
@@ -37,7 +45,6 @@ class Factory:
             charge.add(charge.deductible_e.taxe_fonciere, charge_data['taxe_fonciere'])
             charge.add(charge.deductible_e.prime_assurance, charge_data['PNO'])
 
-            gestion_data = lot_data['gestion']
             charge.add(Charge.gestion_e.provision_travaux, gestion_data['travaux_provision_taux'])
             charge.add(Charge.gestion_e.vacance_locative, gestion_data['vacance_locative_taux'])
             charge.add(Charge.gestion_e.agence_immo, gestion_data['agence_immo'])

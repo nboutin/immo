@@ -52,32 +52,31 @@ class Annexe_2044:
 
     @property
     def total_recettes(self):
-        '''Ligne 215'''
-        return self.__get_ligne(211, 214)
+        '''Ligne 215 = 211 à 214'''
+        return self.get_ligne(L211_loyer_brut)
 
     @property
     def total_frais_et_charges(self):
         '''Ligne 240'''
-        return self.__get_ligne(221, 229) - self.__get_ligne(230)
+        return self.get_ligne([L221_frais_administration,
+                               L222_autre_frais_gestion,
+                               L223_prime_assurance,
+                               L224_travaux,
+                               L227_taxe_fonciere,
+                               L229_copropriete_provision]) - self.get_ligne(L230_copropriete_regularisation)
 
     @property
     def total_charges_emprunt(self):
         '''Ligne 250'''
-        return self.__get_ligne(250)
+        return self.get_ligne([L250_interet_emprunt, L250_assurance_emprunteur,
+                               L250_frais_dossier, L250_frais_garantie])
 
     @property
     def revenu_foncier_taxable(self):
         '''Ligne 260'''
         return self.total_recettes - self.total_frais_et_charges - self.total_charges_emprunt
 
-    def __get_ligne(self, start, stop=None):
-        if not stop:
-            stop = start + 1
-        else:
-            stop += 1
-
-        value = 0
-        for ligne in self._lignes:
-            if ligne[0].numero in range(start, stop):
-                value += ligne[1]
-        return value
+    def get_ligne(self, lignes):
+        if not isinstance(lignes, list):
+            lignes = [lignes]
+        return sum(ligne[1] for ligne in self._lignes if ligne[0] in lignes)
