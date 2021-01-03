@@ -42,19 +42,22 @@ from enum import unique, Enum, auto
 
 
 class Charge:
+    '''
+    Store and handle charges and provisions
+    '''
 
     @unique
-    class gestion_e(Enum):
+    class charge_e(Enum):
+        # Provisions
         provision_travaux = auto()
         vacance_locative = auto()
-        agence_immo = auto()
-        charge_locative = auto()
-
-    @unique
-    class deductible_e(Enum):
+    # Charges proprietaire
         copropriete = auto()
         taxe_fonciere = auto()
         prime_assurance = auto()
+        agence_immo = auto()
+    # Charges locataire
+        charge_locative = auto()
 
     def __init__(self, lot, defaut=None):
 
@@ -62,13 +65,16 @@ class Charge:
         self._default_data = defaut
         self._charges = []
 
-    def get_montant(self, charges_list):
+    def get_montant_annuel(self, charges_list):
         '''
         :param charges_list: list of charges
         '''
         if not isinstance(charges_list, list):
             charges_list = [charges_list]
-        return sum(charge[2] for charge in self._charges if charge[0] in charges_list)
+        return sum(charge['value'] for charge in self._charges if charge['type'] in charges_list)
+
+    def get_taux(self, type_):
+        return sum(charge['taux'] for charge in self._charges if charge['type'] == type_)
 
     def add(self, type_, value):
         taux = 0
@@ -79,17 +85,17 @@ class Charge:
 
         if value < 1:
             taux = value
-            montant = self._lot.loyer_nu_annuel * taux
+            montant = self._lot.loyer_nu_brut_annuel * taux
         elif value > 1:
             montant = value
-            taux = montant / self._lot.loyer_nu_annuel
+            taux = montant / self._lot.loyer_nu_brut_annuel
 
-        self._charges.append((type_, taux, montant))
+        self._charges.append({'type': type_, 'taux': taux, 'value': montant})
 
     def __get_default(self, type_):
-        if type_ == Charge.gestion_e.provision_travaux:
+        if type_ == Charge.charge_e.provision_travaux:
             return self._default_data.provision_travaux_taux
-        elif type_ == Charge.gestion_e.vacance_locative:
+        elif type_ == Charge.charge_e.vacance_locative:
             return self._default_data.vacance_locative_taux(self._lot.type)
 
 

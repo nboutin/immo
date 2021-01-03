@@ -52,12 +52,12 @@ class TestImpotRegimeReel(unittest.TestCase):
         self.assertAlmostEqual(irr.base_impossable, 4100)
 
         # Autres
-        charge.add(Charge.gestion_e.provision_travaux, 0.01)
-        charge.add(Charge.gestion_e.vacance_locative, 1 / 12)
+        charge.add(Charge.charge_e.provision_travaux, 0.01)
+        charge.add(Charge.charge_e.vacance_locative, 1 / 12)
         self.assertAlmostEqual(irr.base_impossable, 4100)
 
         # Gestion agence locative
-        charge.add(Charge.gestion_e.agence_immo, 0.05)
+        charge.add(Charge.charge_e.agence_immo, 0.05)
         self.assertAlmostEqual(irr.base_impossable, 3800)
 
     def testRevenuFoncierImpossableA(self):

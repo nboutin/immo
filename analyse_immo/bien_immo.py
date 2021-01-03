@@ -52,12 +52,28 @@ class Bien_Immo:
             self._budget_travaux - self._apport
 
     @property
-    def loyer_nu_mensuel(self):
-        return sum(lot.loyer_nu_mensuel for lot in self._lots)
+    def loyer_nu_brut_mensuel(self):
+        '''
+        Loyer nu (hors charges) brut (sans provision)
+        Voir loyer nu net
+        '''
+        return sum(lot.loyer_nu_brut_mensuel for lot in self._lots)
 
     @property
-    def loyer_nu_annuel(self):
-        return self.loyer_nu_mensuel * 12
+    def loyer_nu_brut_annuel(self):
+        return self.loyer_nu_brut_mensuel * 12
+
+    @property
+    def loyer_nu_net_mensuel(self):
+        '''
+        Provision sur loyer nu brut de :
+            - vacance locative
+        '''
+        return sum(lot.loyer_nu_net_mensuel for lot in self._lots)
+
+    @property
+    def loyer_nu_net_annuel(self):
+        return self.loyer_nu_net_mensuel * 12
 
     @property
     def surface_total(self):
@@ -68,21 +84,22 @@ class Bien_Immo:
         return self._prix_net_vendeur / self.surface_total
 
     def get_charge(self, charges_list):
-        return sum(lot.charge.get_montant(charges_list) for lot in self._lots)
+        return sum(lot.charge.get_montant_annuel(charges_list) for lot in self._lots)
 
     @property
-    def charge_gestion(self):
+    def charges(self):
         return self.get_charge(
-            [Charge.gestion_e.provision_travaux,
-                Charge.gestion_e.vacance_locative,
-                Charge.gestion_e.agence_immo])
+            [Charge.charge_e.copropriete,
+             Charge.charge_e.taxe_fonciere,
+             Charge.charge_e.prime_assurance,
+             Charge.charge_e.agence_immo])
 
     @property
-    def charge_fonciere(self):
-        return self.get_charge(
-            [Charge.deductible_e.copropriete,
-             Charge.deductible_e.taxe_fonciere,
-             Charge.deductible_e.prime_assurance])
+    def provisions(self):
+        '''
+        Charge.charge_e.vacance_locative is not used here but for loyer_nu_net
+        '''
+        return self.get_charge([Charge.charge_e.provision_travaux])
 
     def add_lot(self, lot):
         self._lots.append(lot)

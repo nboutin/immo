@@ -21,12 +21,25 @@ class Lot:
         return self._surface
 
     @property
-    def loyer_nu_mensuel(self):
+    def loyer_nu_brut_mensuel(self):
         return self._loyer_nu_mensuel
 
     @property
-    def loyer_nu_annuel(self):
-        return self.loyer_nu_mensuel * 12
+    def loyer_nu_brut_annuel(self):
+        return self.loyer_nu_brut_mensuel * 12
+
+    @property
+    def loyer_nu_net_mensuel(self):
+        return self.loyer_nu_net_annuel / 12
+
+    @property
+    def loyer_nu_net_annuel(self):
+        '''
+        Provision sur loyer nu brut de:
+            - vacance locative
+        '''
+        vacance_locative = self.charge.get_montant_annuel(Charge.charge_e.vacance_locative)
+        return self.loyer_nu_brut_annuel - vacance_locative
 
     @property
     def charge(self):
@@ -42,7 +55,7 @@ class Lot:
 #
 #     @property
 #     def vacance_locative_montant_annuel(self):
-#         return self.loyer_nu_annuel * self._vacance_locative_taux_annuel
+#         return self.loyer_nu_brut_annuel * self._vacance_locative_taux_annuel
 
 #     @property
 #     def pno_montant_annuel(self):
@@ -50,7 +63,7 @@ class Lot:
 #
 #     @property
 #     def gestion_agence_montant_annuel(self):
-#         return self.loyer_nu_annuel * self._gestion_agence_taux
+#         return self.loyer_nu_brut_annuel * self._gestion_agence_taux
 #
 #     @property
 #     def copropriete_mensuel(self):

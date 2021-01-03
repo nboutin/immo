@@ -23,11 +23,11 @@ def rapport_achat(bien_immo):
 def rapport_location(bien_immo):
 
     rapport = [
-        ['Loyer\nannuel', 'Loyer\nmensuel', 'Charges\nfonciere', 'Charges\ngestion'],
-        [bien_immo.loyer_nu_annuel,
-         bien_immo.loyer_nu_mensuel,
-         bien_immo.charge_fonciere,
-         bien_immo.charge_gestion],
+        ['Loyer brut\nmensuel/annuel', 'Loyer net\nmensuel/annuel', 'Charges', 'Provisions'],
+        ['{:.0f}/{:.0f}'.format(bien_immo.loyer_nu_brut_mensuel, bien_immo.loyer_nu_brut_annuel),
+         '{:.0f}/{:.0f}'.format(bien_immo.loyer_nu_net_mensuel, bien_immo.loyer_nu_net_annuel),
+         bien_immo.charges,
+         bien_immo.provisions],
     ]
     print(tabulate(rapport, headers="firstrow") + '\n')
 
