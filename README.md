@@ -17,7 +17,11 @@ Run Unittest
 
 # Todo
 
+- [ ] Tester IRPP
+- [ ] Generer rapport micro-foncier
 - [ ] Exprimer le cashflow par année
+- [ ] Prise en compte indexation des loyers (options)
+
 - [ ] Calcul de la rentabilité nette de prelevement sociaux (https://www.devenir-rentier.fr/t1918-2)
 - [ ] Calculer rendement net-net (net d'impot)
 - [ ] Evaluer restauration de la tresorerie avec le différré d'amortissement

@@ -23,11 +23,11 @@ class Database:
     def salaire_abattement(self):
         return self._impot_data['salaire_abattement']
 
-    def TMI(self, annee):
+    def irpp_bareme(self, annee):
         '''
         :param annee: (string)
         '''
-        return self._impot_data['TMI'][annee]
+        return self._impot_data['irpp_bareme'][annee]
 
     @property
     def reduction_dons(self):

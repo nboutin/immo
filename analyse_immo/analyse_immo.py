@@ -50,7 +50,7 @@ def main(argv):
     irpp.add_annexe(annexe_2044_list[0])
 
     # Rapport
-    generate_rapport(bien_immo, credit, achat_data['annee'], annexe_2044_list, rendement)
+    generate_rapport(bien_immo, credit, achat_data['annee'], annexe_2044_list, irpp, rendement)
 
 
 def parse_args(argv):

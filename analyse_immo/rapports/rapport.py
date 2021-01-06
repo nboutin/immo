@@ -4,16 +4,19 @@
 import logging
 from tabulate import tabulate
 
-from rapports.rapport_fiscale import print_rapport_fiscale
 from rapports.rapport_annexe_2044 import rapport_annexe_2044
+from rapports.rapport_irpp import rapport_irpp
 
 
-def generate_rapport(bien_immo, credit, annee, annexe_2044_list, rendement):
+def generate_rapport(bien_immo, credit, annee, annexe_2044_list, irpp, rendement):
+
+    annee -= 2000
 
     rapport_achat(bien_immo)
     rapport_location(bien_immo)
     rapport_credit(credit)
     rapport_annexe_2044(annee, annexe_2044_list)
+    rapport_irpp(annee, irpp)
     rapport_rendement(rendement)
 
 

@@ -60,14 +60,15 @@ class IRPP:
 
     @property
     def revenu_fiscale_reference(self):
-        '''
-        :todo Ajouter revenu foncier
-        '''
         rfr = self.salaires * (1 - self._database.salaire_abattement)
-        for annexe in self._annexes:
-            if isinstance(annexe, Annexe_2044):
-                rfr += annexe.revenu_foncier_taxable
+        rfr += self.revenu_foncier
         return rfr
+
+    @property
+    def revenu_foncier(self):
+        return sum(
+            annexe.revenu_foncier_taxable for annexe in self._annexes if isinstance(
+                annexe, Annexe_2044))
 
     @property
     def total_reduction_impot(self):
@@ -78,12 +79,15 @@ class IRPP:
         return self.__get_ligne(('7AE'))
 
     @property
+    def quotient_familial(self):
+        return self.revenu_fiscale_reference / self._part_fiscale
+
+    @property
     def impots_brut(self):
         '''
         impot sur le revenu sousmis au bareme
         '''
-        quotient_familial = self.revenu_fiscale_reference / self._part_fiscale
-        impot_brut = self._impots_brut(self._database.TMI(str(self._annee)), quotient_familial)
+        impot_brut = self._impots_brut(self._database.irpp_bareme(str(self._annee)), self.quotient_familial)
         impot_brut *= self._part_fiscale
         return impot_brut
 
@@ -97,14 +101,15 @@ class IRPP:
     def __get_ligne(self, numero):
         return sum(ligne[1] for ligne in self._lignes if ligne[0].numero in numero)
 
-    def _impots_brut(self, tmi, quotient_familial):
+    def _impots_brut(self, bareme, quotient_familial):
 
         impots_brut = 0
         tranche_p = 0
 
-        for tranche, taux in tmi:
-
-            impots_brut += max(min(tranche - tranche_p, quotient_familial - tranche_p) * taux, 0)
+        for tranche, taux in bareme:
+            tranche_restant = min(tranche - tranche_p, quotient_familial - tranche_p)
+            tranche_restant = max(tranche_restant, 0)
+            impots_brut += tranche_restant * taux
             tranche_p = tranche
 
         return impots_brut
