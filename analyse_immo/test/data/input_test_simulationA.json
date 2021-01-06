@@ -1,53 +1,50 @@
 {
-    "achat": {
-        "prix_net_vendeur": 50926,
-        "__commnent": "montant ou taux",
-        "frais_agence": 0.08,
-        "frais_notaire": 4936,
-        "budget_travaux": 0,
-        "apport": 0
-    },
-    "defaut": {
-        "provision_travaux_taux": 0.01,
-        "__comment": "1/12=0.083, 1/24=0.042",
-        "vacance_locative_taux_T1": 0.083,
-        "vacance_locative_taux_T2": 0.042,
-        "gestion_agence_taux": 0.08
-    },
-    "lots": [{
-            "type": "T2",
-            "surface": 45,
-            "loyer_nu_mensuel": 440,
-            "charge": {
-                "provision_charge_mensuel": 25,
-                "copropriete": 1075,
-                "taxe_fonciere": 800,
-                "PNO": 0
-            },
-            "gestion": {
-                "__comment": "0: off, 1: default, autre: utilise",
-                "travaux_provision_taux": 0,
-                "vacance_locative_taux": 0.042,
-                "agence_immo": 0
-            }
-        }],
-    "credit": {
-        "duree_annee": 20,
-        "taux_interet": 0.0115,
-        "taux_assurance": 0.0036,
-        "mode": "mode_1",
-        "frais_dossier": 550,
-        "frais_garantie": 1000
-    },
-    "impot": {
-        "2019": {
-            "n_parts_fiscales": 2,
-            "n_demi_parts_fiscales": 1,
-            "dons": 0,
-            "syndicat": 0,
-            "salaires": [31400,
-                23000],
-            "tmi": 0.11
-        }
+  "achat" : {
+    "prix_net_vendeur" : 50926,
+    "__commnent" : "montant ou taux",
+    "frais_agence" : 0.08,
+    "frais_notaire" : 4936,
+    "budget_travaux" : 0,
+    "apport" : 0
+  },
+  "defaut" : {
+    "provision_travaux_taux" : 0.01,
+    "__comment" : "1/12=0.083, 1/24=0.042",
+    "vacance_locative_taux_T1" : 0.083,
+    "vacance_locative_taux_T2" : 0.042,
+    "gestion_agence_taux" : 0.08
+  },
+  "lots" : [ {
+    "type" : "T2",
+    "surface" : 45,
+    "loyer_nu_mensuel" : 440,
+    "charges" : {
+      "__comment" : "0: off, 1: default, autre: utilise",
+      "provision_charge_mensuel" : 25,
+      "copropriete" : 1075,
+      "taxe_fonciere" : 800,
+      "PNO" : 0,
+      "travaux_provision_taux" : 0,
+      "vacance_locative_taux" : 0.042,
+      "agence_immo" : 0
     }
+  } ],
+  "credit" : {
+    "duree_annee" : 20,
+    "taux_interet" : 0.0115,
+    "taux_assurance" : 0.0036,
+    "mode" : "mode_1",
+    "frais_dossier" : 550,
+    "frais_garantie" : 1000
+  },
+  "impot" : {
+    "2019" : {
+      "n_parts_fiscales" : 2,
+      "n_demi_parts_fiscales" : 1,
+      "dons" : 0,
+      "syndicat" : 0,
+      "salaires" : [ 31400, 23000 ],
+      "tmi" : 0.11
+    }
+  }
 }

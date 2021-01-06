@@ -71,7 +71,7 @@ class TestRendementNet(TestAnalyseImmoBase):
     def testTaxeFonciere(self):
         self.achat_data['prix_net_vendeur'] = 115000
         self.lots_data[0]['loyer_nu_mensuel'] = 500
-        self.lots_data[0]['charge']['taxe_fonciere'] = 1000
+        self.lots_data[0]['charges']['taxe_fonciere'] = 1000
         bi = Factory.make_bien_immo(self.achat_data, self.lots_data)
         rdt = Rendement(bi)
         self.assertAlmostEqual(rdt.rendement_net, 0.0435, 4)
@@ -79,7 +79,7 @@ class TestRendementNet(TestAnalyseImmoBase):
     def testTravauxProvision(self):
         self.achat_data['prix_net_vendeur'] = 115000
         self.lots_data[0]['loyer_nu_mensuel'] = 500
-        self.lots_data[0]['gestion']['travaux_provision_taux'] = 0.01
+        self.lots_data[0]['charges']['travaux_provision_taux'] = 0.01
         bi = Factory.make_bien_immo(self.achat_data, self.lots_data)
         rdt = Rendement(bi)
         self.assertAlmostEqual(rdt.rendement_net, 0.0517, 4)
@@ -87,7 +87,7 @@ class TestRendementNet(TestAnalyseImmoBase):
     def testVacanceLocative(self):
         self.achat_data['prix_net_vendeur'] = 115000
         self.lots_data[0]['loyer_nu_mensuel'] = 500
-        self.lots_data[0]['gestion']['vacance_locative_taux'] = 1 / 24
+        self.lots_data[0]['charges']['vacance_locative_taux'] = 1 / 24
         bi = Factory.make_bien_immo(self.achat_data, self.lots_data)
         rdt = Rendement(bi)
         self.assertAlmostEqual(rdt.rendement_net, 0.05, 4)
@@ -95,7 +95,7 @@ class TestRendementNet(TestAnalyseImmoBase):
     def testPNO(self):
         self.achat_data['prix_net_vendeur'] = 115000
         self.lots_data[0]['loyer_nu_mensuel'] = 500
-        self.lots_data[0]['charge']['PNO'] = 100
+        self.lots_data[0]['charges']['PNO'] = 100
         bi = Factory.make_bien_immo(self.achat_data, self.lots_data)
         rdt = Rendement(bi)
         self.assertAlmostEqual(rdt.rendement_net, 0.0513, 4)
@@ -103,7 +103,7 @@ class TestRendementNet(TestAnalyseImmoBase):
     def testGestionAgence(self):
         self.achat_data['prix_net_vendeur'] = 115000
         self.lots_data[0]['loyer_nu_mensuel'] = 500
-        self.lots_data[0]['gestion']['agence_immo'] = 0.075
+        self.lots_data[0]['charges']['agence_immo'] = 0.075
         bi = Factory.make_bien_immo(self.achat_data, self.lots_data)
         rdt = Rendement(bi)
         self.assertAlmostEqual(rdt.rendement_net, 0.0483, 4)
@@ -111,7 +111,7 @@ class TestRendementNet(TestAnalyseImmoBase):
     def testCopropriete(self):
         self.achat_data['prix_net_vendeur'] = 115000
         self.lots_data[0]['loyer_nu_mensuel'] = 500
-        self.lots_data[0]['charge']['copropriete'] = 1000
+        self.lots_data[0]['charges']['copropriete'] = 1000
         bi = Factory.make_bien_immo(self.achat_data, self.lots_data)
         rdt = Rendement(bi)
         self.assertAlmostEqual(rdt.rendement_net, 0.0435, 4)
@@ -122,9 +122,9 @@ class TestCashflow(TestAnalyseImmoBase):
     def testCashflowMensuel(self):
         self.achat_data['prix_net_vendeur'] = 136000
         self.lots_data[0]['loyer_nu_mensuel'] = 1000
-        self.lots_data[0]['charge']['taxe_fonciere'] = 1500
-        self.lots_data[0]['charge']['PNO'] = 100
-        self.lots_data[0]['gestion']['travaux_provision_taux'] = 0.05
+        self.lots_data[0]['charges']['taxe_fonciere'] = 1500
+        self.lots_data[0]['charges']['PNO'] = 100
+        self.lots_data[0]['charges']['travaux_provision_taux'] = 0.05
         self.credit_data['duree_annee'] = 20
         self.credit_data['taux_interet'] = 0.018
         self.credit_data['taux_assurance'] = 0.0036

@@ -8,7 +8,7 @@ Provision
     - charges locative (du locataire)
 Charge recuperable/locative
     https://www.service-public.fr/particuliers/vosdroits/F947
-    Les charges locatives (ou charges récupérables) sont des dépenses payées initialement par le propriétaire. 
+    Les charges locatives (ou charges récupérables) sont des dépenses payées initialement par le propriétaire.
     Le propriétaire se fait rembourser par le locataire.
     - entretien de l'immeuble et des equipements
     - consommations communes
@@ -42,59 +42,63 @@ from enum import unique, Enum, auto
 
 
 class Charge:
+    '''
+    Store and handle charges and provisions
+    '''
 
     @unique
-    class gestion_e(Enum):
+    class charge_e(Enum):
+        # Provisions
         provision_travaux = auto()
         vacance_locative = auto()
-        agence_immo = auto()
-        charge_locative = auto()
-        
-    @unique
-    class deductible_e(Enum):
+    # Charges proprietaire
         copropriete = auto()
         taxe_fonciere = auto()
         prime_assurance = auto()
-    
+        agence_immo = auto()
+    # Charges locataire
+        charge_locative = auto()
+
     def __init__(self, lot, defaut=None):
-        
+
         self._lot = lot
         self._default_data = defaut
         self._charges = []
-        
-    def get_montant(self, charges_list):
+
+    def get_montant_annuel(self, charges_list):
         '''
-        charges, list of charges
+        :param charges_list: list of charges
         '''
-        value = 0
-        for charge_request in charges_list:
-            for charge in self._charges:
-                if charge_request == charge[0]:
-                    value += charge[2]
-        return value
-        
+        if not isinstance(charges_list, list):
+            charges_list = [charges_list]
+        return sum(charge['value'] for charge in self._charges if charge['type'] in charges_list)
+
+    def get_taux(self, type_):
+        return sum(charge['taux'] for charge in self._charges if charge['type'] == type_)
+
     def add(self, type_, value):
         taux = 0
         montant = 0
-        
+
         if value == 1 and self._default_data:  # use default
             value = self.__get_default(type_)
-        
+
         if value < 1:
             taux = value
-            montant = self._lot.loyer_nu_annuel * taux
+            montant = self._lot.loyer_nu_brut_annuel * taux
         elif value > 1:
             montant = value
-            taux = montant / self._lot.loyer_nu_annuel
-        
-        self._charges.append((type_, taux, montant))
-        
+            taux = montant / self._lot.loyer_nu_brut_annuel
+
+        self._charges.append({'type': type_, 'taux': taux, 'value': montant})
+
     def __get_default(self, type_):
-        if type_ == Charge.gestion_e.provision_travaux:
-            return  self._default_data.provision_travaux_taux
-        elif type_ == Charge.gestion_e.vacance_locative:
+        if type_ == Charge.charge_e.provision_travaux:
+            return self._default_data.provision_travaux_taux
+        elif type_ == Charge.charge_e.vacance_locative:
             return self._default_data.vacance_locative_taux(self._lot.type)
-        
+
+
 '''
 /* emptying table `typologie` */
 truncate table `typologie` ;
@@ -123,4 +127,3 @@ insert into `typologie` (`id`,`type`,`foncier`,`comptable`,`tresorerie`) values 
 insert into `typologie` (`id`,`type`,`foncier`,`comptable`,`tresorerie`) values ('97','Syndic de copropriété : Avances, provisions et cotisations travaux (non déductible)','0','1','1');
 insert into `typologie` (`id`,`type`,`foncier`,`comptable`,`tresorerie`) values ('98','Syndic de copropriété : Gros travaux déductibles','1','0','0');
 '''
-    
