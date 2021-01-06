@@ -5,24 +5,26 @@ import sys
 import os
 import getopt
 import json
+import logging
 
 from factory import Factory
 from database import Database
 from rendement import Rendement
 from impots.irpp import IRPP
-from rapports.rapport_fiscale import print_rapport_fiscale
-from rapports.rapport_annexe_2044 import rapport_annexe_2044
-from rapports.rapport import rapport_achat, rapport_location, rapport_credit, rapport_rendement
+from rapports.rapport import generate_rapport
 
 __NAME = 'Analyse Immo'
 __VERSION = '1.0.0-dev'
 
 __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 __INPUT_FILEPATH = os.path.join(__location__, 'data', 'input.json')
+__OUTPUT_FILEPATH = os.path.join(__location__, 'output', 'analyse_immo.log')
 
 
 def main(argv):
-    print('{} {}'.format(__NAME, __VERSION))
+    configure_logger()
+
+    logging.info('{} {}'.format(__NAME, __VERSION))
 
     inputfile = parse_args(argv)
     input_data = load_file(inputfile)
@@ -48,11 +50,7 @@ def main(argv):
     irpp.add_annexe(annexe_2044_list[0])
 
     # Rapport
-    rapport_achat(bien_immo)
-    rapport_location(bien_immo)
-    rapport_credit(credit)
-    rapport_annexe_2044(achat_data['annee'], annexe_2044_list)
-    rapport_rendement(rendement)
+    generate_rapport(bien_immo, credit, achat_data['annee'], annexe_2044_list, rendement)
 
 
 def parse_args(argv):
@@ -77,6 +75,27 @@ def parse_args(argv):
 
 def print_help():
     print('help')
+
+
+def configure_logger():
+    '''
+    write to console, simple message with log level info
+    write to file, formatted message with log level debug
+    '''
+    logger = logging.getLogger()
+    logger.setLevel(logging.DEBUG)
+
+    consoleHandler = logging.StreamHandler()
+    consoleHandler.setLevel(logging.INFO)
+    consoleFormatter = logging.Formatter('%(message)s')
+    consoleHandler.setFormatter(consoleFormatter)
+    logger.addHandler(consoleHandler)
+
+    fileHandler = logging.FileHandler(__OUTPUT_FILEPATH, mode='w')
+    fileHandler.setLevel(logging.DEBUG)
+    fileFormatter = logging.Formatter('%(message)s')
+    fileHandler.setFormatter(fileFormatter)
+    logger.addHandler(fileHandler)
 
 
 def load_file(inputfile):

@@ -1,7 +1,20 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import logging
 from tabulate import tabulate
+
+from rapports.rapport_fiscale import print_rapport_fiscale
+from rapports.rapport_annexe_2044 import rapport_annexe_2044
+
+
+def generate_rapport(bien_immo, credit, annee, annexe_2044_list, rendement):
+
+    rapport_achat(bien_immo)
+    rapport_location(bien_immo)
+    rapport_credit(credit)
+    rapport_annexe_2044(annee, annexe_2044_list)
+    rapport_rendement(rendement)
 
 
 def rapport_achat(bien_immo):
@@ -17,7 +30,7 @@ def rapport_achat(bien_immo):
          bien_immo.rapport_surface_prix
          ],
     ]
-    print(tabulate(rapport, headers="firstrow") + '\n')
+    logging.info(tabulate(rapport, headers="firstrow") + '\n')
 
 
 def rapport_location(bien_immo):
@@ -29,7 +42,7 @@ def rapport_location(bien_immo):
          bien_immo.charges,
          bien_immo.provisions],
     ]
-    print(tabulate(rapport, headers="firstrow") + '\n')
+    logging.info(tabulate(rapport, headers="firstrow") + '\n')
 
 
 def rapport_credit(credit):
@@ -53,8 +66,8 @@ def rapport_credit(credit):
          '{:.2f}'.format(credit.get_montant_assurance_total()),
          '{:.2f}'.format(credit.get_cout_total())],
     ]
-    print(tabulate(credit_in, headers="firstrow") + '\n')
-    print(tabulate(credit_out, headers="firstrow") + '\n')
+    logging.info(tabulate(credit_in, headers="firstrow") + '\n')
+    logging.info(tabulate(credit_out, headers="firstrow") + '\n')
 
 
 def rapport_rendement(rendement):
@@ -67,4 +80,4 @@ def rapport_rendement(rendement):
          '{:.2f}'.format(rendement.cashflow_annuel)
          ]
     ]
-    print(tabulate(rdt, headers="firstrow") + '\n')
+    logging.info(tabulate(rdt, headers="firstrow") + '\n')

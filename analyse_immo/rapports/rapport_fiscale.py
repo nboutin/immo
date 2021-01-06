@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import logging
 from tabulate import tabulate
 
 
@@ -31,4 +32,4 @@ def print_rapport_fiscale(annee_start, annexe_2044):
                ]
 
     rotate = list(zip(*rapport[::-1]))
-    print(tabulate(rotate, headers="firstrow") + '\n')
+    logging.info(tabulate(rotate, headers="firstrow") + '\n')

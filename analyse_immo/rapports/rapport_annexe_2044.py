@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import logging
 from tabulate import tabulate
 
 from impots.annexe_2044 import L211_loyer_brut, L221_frais_administration, L222_autre_frais_gestion, \
@@ -15,6 +16,8 @@ def rapport_annexe_2044(annee_start, annexe_2044_list):
     for i, annexe_2044 in enumerate(annexe_2044_list):
         rapport_annee = [annee_start + i - 2000,
                          '{:.0f}'.format(annexe_2044.get_ligne(L211_loyer_brut)),
+                         '-',
+                         '-',
                          '{:.0f}'.format(annexe_2044.total_recettes),
                          '{:.0f}'.format(annexe_2044.get_ligne(L221_frais_administration)),
                          '{:.0f}'.format(annexe_2044.get_ligne(L222_autre_frais_gestion)),
@@ -35,7 +38,9 @@ def rapport_annexe_2044(annee_start, annexe_2044_list):
 
     rapport.append(
         ['Année',
-         'Loyer nu',
+         'Loyer nu brut annuel',
+         'Vacance locative',
+         'Loyer nu net annuel',
          'Total recettes',
          'Frais administration',
          'Autres frais gestion',
@@ -54,4 +59,4 @@ def rapport_annexe_2044(annee_start, annexe_2044_list):
          ])
 
     rotate = list(zip(*rapport[::-1]))
-    print(tabulate(rotate, headers="firstrow") + '\n')
+    logging.info(tabulate(rotate, headers="firstrow") + '\n')
