@@ -14,22 +14,41 @@ Run Unittest
     $ cd analyse_immo
     $ python -m unittest -v
     $ python -m unittest test.test_rendement
+    
+# Code coverage
+
+    pip install --user coverage 
+    
+## Unittest
+
+    coverage run test/test_*.py
+    coverage run --branch test/test_*.py
+    coverage report -m
+    coverage annotate -d ./Annotate
+    coverage html -d ./dossier_sortie
+    coverage erase
+    
+## Pytest
+    
+    pytest-cov
+    pytest --cov=folder --cov-report html test_*.py
 
 # Todo
 
-- [ ] Exprimer le cashflow par année
+- [ ] Move test folder up
+- [ ] Exprimer le cashflow par annÃ©e
 - [ ] Generer rapport micro-foncier
 - [ ] Prise en compte indexation des loyers (options)
 - [x] Tester IRPP
 
-- [ ] Calcul de la rentabilité nette de prelevement sociaux (https://www.devenir-rentier.fr/t1918-2)
+- [ ] Calcul de la rentabilitï¿½ nette de prelevement sociaux (https://www.devenir-rentier.fr/t1918-2)
 - [ ] Calculer rendement net-net (net d'impot)
-- [ ] Evaluer restauration de la tresorerie avec le différré d'amortissement
-- [ ] Capacité d'investissement 70% loyer >= credit
-- [ ] Cout copropriete au m²
+- [ ] Evaluer restauration de la tresorerie avec le diffï¿½rrï¿½ d'amortissement
+- [ ] Capacitï¿½ d'investissement 70% loyer >= credit
+- [ ] Cout copropriete au mï¿½
 - [ ] Indicateur global Go/NoGo
 - [ ] Prendre en compte les impots dans le calcul du cashflow
-- [x] Prix au m²
+- [x] Prix au mï¿½
 - [x] Ajouter parametre d'entree apport personnel
 
 # Dependencies
