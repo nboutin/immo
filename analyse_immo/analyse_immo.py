@@ -24,7 +24,7 @@ __OUTPUT_FILEPATH = os.path.join(__location__, 'output', 'analyse_immo.log')
 def main(argv):
     configure_logger()
 
-    logging.info('{} {}'.format(__NAME, __VERSION))
+    logging.info('{} {}\n'.format(__NAME, __VERSION))
 
     inputfile = parse_args(argv)
     input_data = load_file(inputfile)
