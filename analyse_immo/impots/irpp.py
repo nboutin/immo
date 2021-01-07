@@ -39,12 +39,12 @@ class IRPP:
         primes = auto()
     '''
 
-    def __init__(self, database, annee, part_fiscale, n_enfant):
+    def __init__(self, database, annee_revenu, part_fiscale, n_enfant):
         '''
-        :param salaires: list des salaires du foyer
+        :param annee_revenu(int): annee_revenu + 1 = annee_imposition
         '''
         self._database = database
-        self._annee = annee
+        self._annee_revenu = annee_revenu
         self._part_fiscale = part_fiscale
         self._n_enfant = n_enfant
 
@@ -103,7 +103,8 @@ class IRPP:
         impot_brut_sans_enfant = self.__impots_brut_sans_enfant(self.salaires)
 
         reduction_enfants = impot_brut_sans_enfant - impot_brut
-        plafond_quotient_familial = self._database.plafond_quotient_familial(self._annee) * self._n_enfant
+        plafond_quotient_familial = self._database.plafond_quotient_familial(
+            self._annee_revenu + 1) * self._n_enfant
 
         if reduction_enfants > plafond_quotient_familial:
             impot_brut += reduction_enfants - plafond_quotient_familial
@@ -124,12 +125,13 @@ class IRPP:
 
     def __impots_brut_sans_enfant(self, salaires):
         part = self._part_fiscale - self._n_enfant / 2
-        irpp_sans_enfant = IRPP(self._database, self._annee, part, 0)
+        irpp_sans_enfant = IRPP(self._database, self._annee_revenu, part, 0)
         irpp_sans_enfant.add_ligne(L1AJ_salaire, salaires)
         return irpp_sans_enfant.__impots_brut_part_fiscale()
 
     def __impots_brut_part_fiscale(self):
-        impot_brut = self._impots_brut(self._database.irpp_bareme(str(self._annee)), self.quotient_familial)
+        bareme = self._database.irpp_bareme(str(self._annee_revenu + 1))
+        impot_brut = self._impots_brut(bareme, self.quotient_familial)
         impot_brut *= self._part_fiscale
         return impot_brut
 

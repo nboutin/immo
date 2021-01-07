@@ -11,7 +11,10 @@ class Rendement:
 
     @property
     def rendement_brut(self):
-        return self._bi.loyer_nu_brut_annuel / self.investissement_initial
+        try:
+            return self._bi.loyer_nu_brut_annuel / self.investissement_initial
+        except ZeroDivisionError:
+            return 0
 
     @property
     def rendement_methode_larcher(self):
@@ -20,12 +23,18 @@ class Rendement:
         du rendement net.
         Les charges sont évaluées à 25% soit 3 mois de loyer
         '''
-        return (self._bi.loyer_nu_brut_mensuel * 9) / self.investissement_initial
+        try:
+            return (self._bi.loyer_nu_brut_mensuel * 9) / self.investissement_initial
+        except ZeroDivisionError:
+            return 0
 
     @property
     def rendement_net(self):
-        return (self._bi.loyer_nu_net_annuel - self._bi.charges -
-                self._bi.provisions) / self.investissement_initial
+        try:
+            return (self._bi.loyer_nu_net_annuel - self._bi.charges -
+                    self._bi.provisions) / self.investissement_initial
+        except ZeroDivisionError:
+            return 0
 
     @property
     def investissement_initial(self):

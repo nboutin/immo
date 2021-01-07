@@ -67,14 +67,14 @@ class TestIRPP(unittest.TestCase):
         self.assertAlmostEqual(ibrut, 18718.28, 2)
 
     def testImpotBrut(self):
-        irpp = IRPP(self.database, 2019, 2.5, 1)
+        irpp = IRPP(self.database, 2018, 2.5, 1)
         irpp.add_ligne(L1AJ_salaire, 31407)
         irpp.add_ligne(L1BJ_salaire, 23055)
         self.assertAlmostEqual(irpp.impots_brut, 3339, 0)
         self.assertAlmostEqual(irpp.impots_brut, 3339.46, 2)
 
     def testImpotNet(self):
-        irpp = IRPP(self.database, 2019, 2.5, 1)
+        irpp = IRPP(self.database, 2018, 2.5, 1)
         irpp.add_ligne(L1AJ_salaire, 31407)
         irpp.add_ligne(L1BJ_salaire, 23055)
         irpp.add_ligne(L7UF_dons, 200)
@@ -87,7 +87,7 @@ class TestIRPP(unittest.TestCase):
         '''
         https://www.service-public.fr/particuliers/actualites/A14556?xtor=EPR-141
         '''
-        irpp = IRPP(self.database, 2021, 3, 2)
+        irpp = IRPP(self.database, 2020, 3, 2)
         irpp.add_ligne(L1AJ_salaire, 55950 / 0.9)
 
         self.assertEqual(irpp.revenu_net_impossable, 55950)
@@ -99,7 +99,7 @@ class TestIRPP(unittest.TestCase):
         '''
         https://www.service-public.fr/particuliers/vosdroits/F1419
         '''
-        irpp = IRPP(self.database, 2021, 1, 0)
+        irpp = IRPP(self.database, 2020, 1, 0)
         irpp.add_ligne(L1AJ_salaire, 30000 / 0.9)
 
         self.assertAlmostEqual(irpp.revenu_net_impossable, 30000, 0)
@@ -111,7 +111,7 @@ class TestIRPP(unittest.TestCase):
         '''
         https://www.service-public.fr/particuliers/vosdroits/F1419
         '''
-        irpp = IRPP(self.database, 2021, 2, 0)
+        irpp = IRPP(self.database, 2020, 2, 0)
         irpp.add_ligne(L1AJ_salaire, 60000 / 0.9)
 
         self.assertAlmostEqual(irpp.revenu_net_impossable, 60000, 0)
@@ -123,7 +123,7 @@ class TestIRPP(unittest.TestCase):
         https://www.service-public.fr/particuliers/vosdroits/F2705
         '''
         # Sans plafonnement
-        irpp = IRPP(self.database, 2021, 2, 0)
+        irpp = IRPP(self.database, 2020, 2, 0)
         irpp.add_ligne(L1AJ_salaire, 63000 / 0.9)
 
         self.assertAlmostEqual(irpp.revenu_net_impossable, 63000, 0)
@@ -131,7 +131,7 @@ class TestIRPP(unittest.TestCase):
         self.assertAlmostEqual(irpp.impots_net, 6910.90, 2)
 
         # Avec plafonnement
-        irpp = IRPP(self.database, 2021, 2.5, 1)
+        irpp = IRPP(self.database, 2020, 2.5, 1)
         irpp.add_ligne(L1AJ_salaire, 63000 / 0.9)
 
         self.assertAlmostEqual(irpp.revenu_net_impossable, 63000, 0)

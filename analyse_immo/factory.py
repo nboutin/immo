@@ -78,12 +78,12 @@ class Factory:
         return defaut
 
     @staticmethod
-    def make_irpp(database, achat_data, impot_data, annee_courante):
+    def make_irpp(database, impot_data, annee_revenu):
         '''
-        :param annee_courante: int, current year
+        :param annee_revenu: int, current year
         '''
-        impot = impot_data[str(annee_courante)]
-        irpp = IRPP(database, annee_courante, impot['parts_fiscales'], impot['enfants'])
+        impot = impot_data[str(annee_revenu)]
+        irpp = IRPP(database, annee_revenu, impot['parts_fiscales'], impot['enfants'])
         irpp.add_ligne(L1AJ_salaire, impot['salaires'][0])
         irpp.add_ligne(L1BJ_salaire, impot['salaires'][1])
         irpp.add_ligne(L7UF_dons, impot['dons'])
