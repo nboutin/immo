@@ -103,8 +103,10 @@ class IRPP:
         impot_brut_sans_enfant = self.__impots_brut_sans_enfant(self.salaires)
 
         reduction_enfants = impot_brut_sans_enfant - impot_brut
-        if reduction_enfants > self._database.plafond_enfant * self._n_enfant:
-            impot_brut += reduction_enfants - self._database.plafond_enfant * self._n_enfant
+        plafond_quotient_familial = self._database.plafond_quotient_familial(self._annee) * self._n_enfant
+
+        if reduction_enfants > plafond_quotient_familial:
+            impot_brut += reduction_enfants - plafond_quotient_familial
 
         return impot_brut
 

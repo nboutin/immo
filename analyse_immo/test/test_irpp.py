@@ -139,6 +139,42 @@ class TestIRPP(unittest.TestCase):
         self.assertNotEqual(irpp.impots_net, 4157)  # Dépassement
         self.assertAlmostEqual(irpp.impots_net, 5341, 0)
 
+    @unittest.skip('')
+    def testExemple5(self):
+        '''
+        http://impotsurlerevenu.org/exemple/123-celibataire-sans-enfant-revenus-modestes.php
+        '''
+        irpp = IRPP(self.database, 2019, 1, 0)
+        irpp.add_ligne(L1AJ_salaire, 17372)
+
+        self.assertAlmostEqual(irpp.revenu_net_impossable, 17372 * .9, 0)
+        self.assertAlmostEqual(irpp.quotient_familial, 15635, 0)
+        self.assertAlmostEqual(irpp.impots_net, 794, 0)
+
+    @unittest.skip('')
+    def testExemple6(self):
+        '''
+        http://impotsurlerevenu.org/exemple/124-celibataire-sans-enfant-revenus-eleves.php
+        '''
+        irpp = IRPP(self.database, 2019, 1, 0)
+        irpp.add_ligne(L1AJ_salaire, 51039)
+
+        self.assertAlmostEqual(irpp.revenu_net_impossable, 51039 * .9, 0)
+        self.assertAlmostEqual(irpp.quotient_familial, 45935, 0)
+        self.assertAlmostEqual(irpp.impots_net, 7983, 0)
+
+    @unittest.skip('')
+    def testExemple7(self):
+        '''
+        http://impotsurlerevenu.org/exemple/125-couple-marie-sans-enfant-revenus-eleves.php
+        '''
+        irpp = IRPP(self.database, 2018, 2, 0)
+        irpp.add_ligne(L1AJ_salaire, 139099)
+
+        self.assertAlmostEqual(irpp.revenu_net_impossable, 139099 * .9, 0)
+        self.assertAlmostEqual(irpp.quotient_familial, 63299, 0)
+        self.assertAlmostEqual(irpp.impots_net, 26383, 0)
+
 
 class TestIRPPAnnexe2044(unittest.TestCase):
 

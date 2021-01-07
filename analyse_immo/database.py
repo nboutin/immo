@@ -24,14 +24,14 @@ class Database:
         return self._impot_data['salaire_abattement']
 
     def irpp_bareme(self, annee):
-        '''
-        :param annee: (string)
-        '''
+        if isinstance(annee, int):
+            annee = str(annee)
         return self._impot_data['irpp_bareme'][annee]
 
-    @property
-    def plafond_enfant(self):
-        return self._impot_data['plafond_enfant']
+    def plafond_quotient_familial(self, annee):
+        if isinstance(annee, int):
+            annee = str(annee)
+        return self._impot_data['plafond_quotient_familial'][annee]
 
     @property
     def reduction_dons(self):
