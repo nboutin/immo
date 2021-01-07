@@ -18,6 +18,9 @@ class IRPP:
     '''
     L’impôt sur le revenu des personnes physiques (IRPP)
     IR = IRPP + CSG(secu) + CRDS (dettes)
+
+    Source:
+    https://www.service-public.fr/particuliers/vosdroits/F34328
     https://www.tacotax.fr/guides/impot-sur-le-revenu
 
     Revenu
@@ -59,8 +62,15 @@ class IRPP:
         return self.__get_ligne(('1AJ', '1BJ'))
 
     @property
+    def revenu_net_impossable(self):
+        '''
+        sommes des salaires retrancher de 10% moins les charges déductibles et abattements
+        '''
+        return self.salaires * (1 - self._database.salaire_abattement)
+
+    @property
     def revenu_fiscale_reference(self):
-        rfr = self.salaires * (1 - self._database.salaire_abattement)
+        rfr = self.revenu_net_impossable
         rfr += self.revenu_foncier
         return rfr
 
@@ -87,8 +97,15 @@ class IRPP:
         '''
         impot sur le revenu sousmis au bareme
         '''
-        impot_brut = self._impots_brut(self._database.irpp_bareme(str(self._annee)), self.quotient_familial)
-        impot_brut *= self._part_fiscale
+        impot_brut = self.__impots_brut_part_fiscale()
+
+        # Controler dépassement d'abattement enfant
+        impot_brut_sans_enfant = self.__impots_brut_sans_enfant(self.salaires)
+
+        reduction_enfants = impot_brut_sans_enfant - impot_brut
+        if reduction_enfants > self._database.plafond_enfant * self._n_enfant:
+            impot_brut += reduction_enfants - self._database.plafond_enfant * self._n_enfant
+
         return impot_brut
 
     @property
@@ -98,8 +115,21 @@ class IRPP:
         net -= self._database.reduction_syndicat * self.total_credit_impot
         return net
 
+    # Private
+
     def __get_ligne(self, numero):
         return sum(ligne[1] for ligne in self._lignes if ligne[0].numero in numero)
+
+    def __impots_brut_sans_enfant(self, salaires):
+        part = self._part_fiscale - self._n_enfant / 2
+        irpp_sans_enfant = IRPP(self._database, self._annee, part, 0)
+        irpp_sans_enfant.add_ligne(L1AJ_salaire, salaires)
+        return irpp_sans_enfant.__impots_brut_part_fiscale()
+
+    def __impots_brut_part_fiscale(self):
+        impot_brut = self._impots_brut(self._database.irpp_bareme(str(self._annee)), self.quotient_familial)
+        impot_brut *= self._part_fiscale
+        return impot_brut
 
     def _impots_brut(self, bareme, quotient_familial):
 
@@ -110,6 +140,6 @@ class IRPP:
             tranche_restant = min(tranche - tranche_p, quotient_familial - tranche_p)
             tranche_restant = max(tranche_restant, 0)
             impots_brut += tranche_restant * taux
-            tranche_p = tranche
+            tranche_p = tranche + 1
 
         return impots_brut

@@ -30,6 +30,10 @@ class Database:
         return self._impot_data['irpp_bareme'][annee]
 
     @property
+    def plafond_enfant(self):
+        return self._impot_data['plafond_enfant']
+
+    @property
     def reduction_dons(self):
         return self._impot_data['reduction']['dons']
 

@@ -44,13 +44,15 @@ def main(argv):
 
     # Impot
     annexe_2044_list = list()
-    for annee in range(credit_data['duree_annee']):
-        annexe_2044_list.append(Factory.make_annexe_2044(bien_immo, credit, annee + 1))
-    irpp = Factory.make_irpp(database, achat_data, impot_data)
+    for annee_index in range(credit_data['duree_annee']):
+        annexe_2044_list.append(Factory.make_annexe_2044(bien_immo, credit, annee_index + 1))
+
+    annee_courante = achat_data['annee']
+    irpp = Factory.make_irpp(database, achat_data, impot_data, annee_courante)
     irpp.add_annexe(annexe_2044_list[0])
 
     # Rapport
-    generate_rapport(bien_immo, credit, achat_data['annee'], annexe_2044_list, irpp, rendement)
+    generate_rapport(bien_immo, credit, annee_courante, annexe_2044_list, irpp, rendement)
 
 
 def parse_args(argv):
