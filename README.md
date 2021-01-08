@@ -21,11 +21,11 @@ Run Unittest
     
 ## Unittest
 
-    coverage run test/test_*.py
-    coverage run --branch test/test_*.py
+    coverage run --source=analyse_immo --branch -m unittest -v
     coverage report -m
-    coverage annotate -d ./Annotate
-    coverage html -d ./dossier_sortie
+    coverage html -d ./test/coverage/html
+    coverage annotate -d ./test/coverage/annotate
+    
     coverage erase
     
 ## Pytest
@@ -36,12 +36,12 @@ Run Unittest
 # Todo
 
 - [ ] Move test folder up
-- [ ] Exprimer le cashflow par annÃ©e
+- [ ] Exprimer le cashflow par année
 - [ ] Generer rapport micro-foncier
 - [ ] Prise en compte indexation des loyers (options)
 - [x] Tester IRPP
 
-- [ ] Calcul de la rentabilitï¿½ nette de prelevement sociaux (https://www.devenir-rentier.fr/t1918-2)
+- [ ] Calcul de la rentabilité nette de prelevement sociaux (https://www.devenir-rentier.fr/t1918-2)
 - [ ] Calculer rendement net-net (net d'impot)
 - [ ] Evaluer restauration de la tresorerie avec le diffï¿½rrï¿½ d'amortissement
 - [ ] Capacitï¿½ d'investissement 70% loyer >= credit
