@@ -2,10 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import unittest
-import sys
 import os
-sys.path.insert(0, os.path.join('..'))
-
 import json
 
 from analyse_immo.factory import Factory

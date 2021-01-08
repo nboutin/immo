@@ -2,16 +2,14 @@
 # -*- coding: utf-8 -*-
 
 import unittest
-import sys
 import os
-sys.path.insert(0, os.path.join('..'))
 
 import json
 
-from factory import Factory
-from rendement import Rendement
-from database import Database
-from impots.annexe_2044 import Annexe_2044
+from analyse_immo.factory import Factory
+from analyse_immo.rendement import Rendement
+# from analyse_immo.database import Database
+# from analyse_immo.impots.annexe_2044 import Annexe_2044
 
 
 class TestSimulationB(unittest.TestCase):
@@ -54,7 +52,7 @@ class TestSimulationB(unittest.TestCase):
         self.bi = Factory.make_bien_immo(self.achat_data, self.lots_data)
         self.credit = Factory.make_credit(self.credit_data, self.bi)
         self.rdt = Rendement(self.bi, self.credit)
-        database = Database()
+#         database = Database()
 #         self.irr = Annexe_2044(database, self.bi, self.credit, 0.11)
 
     def testOffre(self):

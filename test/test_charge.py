@@ -2,14 +2,12 @@
 # -*- coding: utf-8 -*-
 
 import unittest
-import sys
 import os
-sys.path.insert(0, os.path.join('..'))
-
 import json
-from factory import Factory
-from charge import Charge
-from lot import Lot
+
+from analyse_immo.factory import Factory
+from analyse_immo.charge import Charge
+from analyse_immo.lot import Lot
 
 
 class TestCharge(unittest.TestCase):

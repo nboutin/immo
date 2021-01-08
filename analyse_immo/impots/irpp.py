@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from enum import unique, Enum, auto
-from impots.ligne import Ligne
-from impots.annexe_2044 import Annexe_2044
+# from enum import unique, Enum, auto
+from analyse_immo.impots.ligne import Ligne
+from analyse_immo.impots.annexe_2044 import Annexe_2044
 
 L1AJ_salaire = Ligne('1AJ', 'Salaires - Déclarant 1')
 L1BJ_salaire = Ligne('1BJ', 'Salaires - Déclarant 2')

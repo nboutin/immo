@@ -11,7 +11,7 @@ Report is generated in output folder
 # Test
 Run Unittest
 
-    $ cd analyse_immo
+    $ cd immo
     $ python -m unittest -v
     $ python -m unittest test.test_rendement
     

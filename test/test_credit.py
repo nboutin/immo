@@ -1,13 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import sys
-import os
-sys.path.insert(0, os.path.join('..'))
-
 import unittest
 
-from credit import Credit
+from analyse_immo.credit import Credit
 
 
 class TestCredit(unittest.TestCase):

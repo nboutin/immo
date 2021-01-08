@@ -2,12 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import unittest
-import sys
-import os
-sys.path.insert(0, os.path.join('..'))
-sys.path.insert(1, os.path.join('..', '..'))
 
-from impots.annexe_2044 import Annexe_2044, L211_loyer_brut, L221_frais_administration, L222_autre_frais_gestion, \
+from analyse_immo.impots.annexe_2044 import Annexe_2044, L211_loyer_brut, L221_frais_administration, L222_autre_frais_gestion, \
     L223_prime_assurance, L224_travaux, L227_taxe_fonciere, L250_interet_emprunt,\
     L250_assurance_emprunteur, L250_frais_dossier, L250_frais_garantie
 

@@ -7,11 +7,11 @@ import getopt
 import json
 import logging
 
-from factory import Factory
-from database import Database
-from rendement import Rendement
-from impots.irpp import IRPP
-from rapports.rapport import generate_rapport
+from analyse_immo.factory import Factory
+from analyse_immo.database import Database
+from analyse_immo.rendement import Rendement
+# from analyse_immo.impots.irpp import IRPP
+from analyse_immo.rapports.rapport import generate_rapport
 
 __NAME = 'Analyse Immo'
 __VERSION = '1.0.0-dev'

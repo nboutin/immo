@@ -2,17 +2,13 @@
 # -*- coding: utf-8 -*-
 
 import unittest
-import sys
-import os
-sys.path.insert(0, os.path.join('..'))
-sys.path.insert(1, os.path.join('..', '..'))
 
-from database import Database
-from bien_immo import Bien_Immo
-from lot import Lot
-from charge import Charge
-from credit import Credit
-# from impotregime_reel import Annexe_2044
+from analyse_immo.database import Database
+from analyse_immo.bien_immo import Bien_Immo
+from analyse_immo.lot import Lot
+from analyse_immo.charge import Charge
+from analyse_immo.credit import Credit
+from analyse_immo.impots.annexe_2044 import Annexe_2044
 
 
 @unittest.skip('fixme')

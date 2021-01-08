@@ -2,12 +2,9 @@
 # -*- coding: utf-8 -*-
 
 import unittest
-import sys
-import os
-sys.path.insert(0, os.path.join('..'))
 
-from database import Database
-# from impot_micro_foncier import Micro_Foncier
+from analyse_immo.database import Database
+from analyse_immo.impots.micro_foncier import Micro_Foncier
 
 
 @unittest.skip('fixme')
