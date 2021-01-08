@@ -97,6 +97,8 @@ class Charge:
             return self._default_data.provision_travaux_taux
         elif type_ == Charge.charge_e.vacance_locative:
             return self._default_data.vacance_locative_taux(self._lot.type)
+        else:
+            raise LookupError
 
 
 '''
