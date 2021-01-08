@@ -2,27 +2,12 @@
 # -*- coding: utf-8 -*-
 
 import unittest
-import os
-import json
-
 from analyse_immo.factory import Factory
 from analyse_immo.rendement import Rendement
+from test.testcase_fileloader import TestCaseFileLoader
 
 
-class TestAnalyseImmoBase(unittest.TestCase):
-
-    def setUp(self):
-        __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
-        __DATA_TEST_PATHNAME = os.path.join(__location__, 'data', 'input_test.json')
-        with open(__DATA_TEST_PATHNAME, 'r') as file:
-            input_data = json.load(file)
-
-        self.achat_data = input_data['achat']
-        self.lots_data = input_data['lots']
-        self.credit_data = input_data['credit']
-
-
-class TestRendement(TestAnalyseImmoBase):
+class TestRendement(TestCaseFileLoader):
 
     def testRendementBrut(self):
         self.achat_data['prix_net_vendeur'] = 100000
@@ -56,7 +41,7 @@ class TestRendement(TestAnalyseImmoBase):
         self.assertEqual(rdt.rendement_methode_larcher, 0.045)
 
 
-class TestRendementNet(TestAnalyseImmoBase):
+class TestRendementNet(TestCaseFileLoader):
 
     def testSansCharges(self):
         self.achat_data['prix_net_vendeur'] = 115000
@@ -114,7 +99,7 @@ class TestRendementNet(TestAnalyseImmoBase):
         self.assertAlmostEqual(rdt.rendement_net, 0.0435, 4)
 
 
-class TestCashflow(TestAnalyseImmoBase):
+class TestCashflow(TestCaseFileLoader):
 
     def testCashflowMensuel(self):
         self.achat_data['prix_net_vendeur'] = 136000

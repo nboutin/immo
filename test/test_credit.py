@@ -15,6 +15,34 @@ class TestCredit(unittest.TestCase):
         Credit(0, 0, 0, 0, Credit.mode_e.m1, 0, 0)
         Credit(0, 1, 0, 0, Credit.mode_e.m2, 0, 0)
 
+    def testCapital(self):
+        credit = Credit(100, 0, 0, 0, Credit.mode_e.m1, 0, 0)
+        self.assertEqual(credit.capital, 100)
+
+    def testDureeMois(self):
+        credit = Credit(0, 15, 0, 0, Credit.mode_e.m1, 0, 0)
+        self.assertEqual(credit.duree_mois, 15)
+
+    def testTaux(self):
+        credit = Credit(0, 0, 1.15, 0, Credit.mode_e.m1, 0, 0)
+        self.assertEqual(credit.taux, 1.15)
+
+    def testTauxAssurance(self):
+        credit = Credit(0, 0, 0, 0.040, Credit.mode_e.m1, 0, 0)
+        self.assertEqual(credit.taux_assurance, 0.040)
+
+    def testMode(self):
+        credit = Credit(0, 0, 0, 0, Credit.mode_e.m1, 0, 0)
+        self.assertEqual(credit.mode, Credit.mode_e.m1)
+
+    def testFraisDossier(self):
+        credit = Credit(0, 0, 0, 0, Credit.mode_e.m1, 500, 0)
+        self.assertEqual(credit.frais_dossier, 500)
+
+    def testFraisGarantie(self):
+        credit = Credit(0, 0, 0, 0, Credit.mode_e.m1, 0, 300)
+        self.assertEqual(credit.frais_garantie, 300)
+
     def testGetMensualiteConstante(self):
 
         self.assertAlmostEqual(Credit._calcul_mensualite_constante(100000, 0.015, 240), 482.55, 2)

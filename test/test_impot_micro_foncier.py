@@ -5,14 +5,13 @@ import unittest
 
 from analyse_immo.database import Database
 from analyse_immo.impots.micro_foncier import Micro_Foncier
+from test.testcase_fileloader import TestCaseFileLoader
 
 
 @unittest.skip('fixme')
-class TestImpotMicroFoncier(unittest.TestCase):
+class TestImpotMicroFoncier(TestCaseFileLoader):
 
     def setUp(self):
-        #         __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
-        #         self._database = Database(os.path.join(__location__, 'data', 'database_test.json'))
         self._database = Database()
 
     def testInit(self):

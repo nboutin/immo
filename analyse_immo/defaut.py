@@ -20,9 +20,9 @@ class Defaut:
         return self._provision_travaux_taux
 
     def vacance_locative_taux(self, type_):
-        if type_:
+        try:
             return self._vacance_locative_taux[type_]
-        else:
+        except KeyError:
             return 0
 
     @property

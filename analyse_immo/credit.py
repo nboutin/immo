@@ -12,7 +12,7 @@ class Credit:
         m1 = auto()  # mensualite constant, assurance capital initial
         m2 = auto()  # mensualite constant, assurance capital restant
         m3 = auto()  # mensualite degressive, assurance capital restant mensuel
-        m4 = auto()  # mensualite degressive, assurance capital restant annuel
+#         m4 = auto()  # mensualite degressive, assurance capital restant annuel
 
     def __init__(self, capital, duree_mois, taux, taux_assurance, mode, frais_dossier, frais_garantie):
 
@@ -49,14 +49,14 @@ class Credit:
     @property
     def mode(self):
         return self._mode
-    
+
     @property
-    def frais_dossier(self): 
+    def frais_dossier(self):
         return self._frais_dossier
-    
+
     @property
     def frais_garantie(self):
-        return self._frais_garantie 
+        return self._frais_garantie
 
     # Static
     @staticmethod
@@ -171,11 +171,11 @@ class Credit:
                 amortissement = mensualite_ha - interet
                 mensualite_aa = mensualite_ha + assurance
 
-            elif self._mode == Credit.mode_e.m4:
-                if mois % 12 == 0:
-                    assurance = capital_restant * self._taux_assurance / 12
-                amortissement = mensualite_ha - interet
-                mensualite_aa = mensualite_ha + assurance
+#             elif self._mode == Credit.mode_e.m4:
+#                 if mois % 12 == 0:
+#                     assurance = capital_restant * self._taux_assurance / 12
+#                 amortissement = mensualite_ha - interet
+#                 mensualite_aa = mensualite_ha + assurance
 
             self._tam.append({'capital': capital_restant,
                               'amortissement': amortissement,

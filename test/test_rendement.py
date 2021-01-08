@@ -18,13 +18,25 @@ class TestRendement(unittest.TestCase):
         rdt = Rendement(bi)
         self.assertEqual(rdt.rendement_brut, 0.12)
 
+        bi = Bien_Immo(0, 0, 0, 0, 0)
+        rdt = Rendement(bi)
+        self.assertEqual(rdt.rendement_brut, 0)
+
     def testRendementMethodeLarcher(self):
         bi = Bien_Immo(50000, 0, 0, 0, 0)
         bi.add_lot(Lot("T2", 50, 500))
         rdt = Rendement(bi)
         self.assertEqual(rdt.rendement_methode_larcher, 0.09)
 
+        bi = Bien_Immo(0, 0, 0, 0, 0)
+        rdt = Rendement(bi)
+        self.assertEqual(rdt.rendement_methode_larcher, 0)
+
     def testRendementNet(self):
+        bi = Bien_Immo(0, 0, 0, 0, 0)
+        rdt = Rendement(bi)
+        self.assertEqual(rdt.rendement_net, 0)
+
         bi = Bien_Immo(50000, 0, 0, 0, 0)
         bi.add_lot(Lot("T2", 50, 500))
         rdt = Rendement(bi)
