@@ -61,10 +61,22 @@ class TestBienImmo(unittest.TestCase):
         self.assertEqual(bi.surface_total, 116)
 
     def testSurfacePrix(self):
-
         bi = Bien_Immo(130000, 0, 0, 0, 0)
         bi.add_lot(Lot("T2", 65, 0))
         self.assertEqual(bi.rapport_surface_prix, 2000)
+
+        bi = Bien_Immo(130000, 0, 0, 0, 0)
+        bi.add_lot(Lot("T2", 0, 0))
+        self.assertEqual(bi.rapport_surface_prix, 0)
+
+    def testLotCount(self):
+        bi = Bien_Immo(130000, 0, 0, 0, 0)
+        bi.add_lot(Lot("T2", 65, 0))
+        self.assertEqual(bi.lot_count, 1)
+
+        bi.add_lot(Lot("T1", 30, 0))
+        bi.add_lot(Lot("T2", 50, 0))
+        self.assertEqual(bi.lot_count, 3)
 
     def testCharges(self):
 
