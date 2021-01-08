@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import sys
 import os
 import getopt
 import json
@@ -10,7 +9,6 @@ import logging
 from analyse_immo.factory import Factory
 from analyse_immo.database import Database
 from analyse_immo.rendement import Rendement
-# from analyse_immo.impots.irpp import IRPP
 from analyse_immo.rapports.rapport import generate_rapport
 
 __NAME = 'Analyse Immo'
@@ -110,7 +108,3 @@ def load_file(inputfile):
         user_input = json.load(file)
 
     return user_input
-
-
-if __name__ == '__main__':
-    main(sys.argv[1:])

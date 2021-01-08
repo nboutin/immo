@@ -4,8 +4,8 @@
 import logging
 from tabulate import tabulate
 
-from rapports.rapport_annexe_2044 import rapport_annexe_2044
-from rapports.rapport_irpp import rapport_irpp
+from analyse_immo.rapports.rapport_annexe_2044 import rapport_annexe_2044
+from analyse_immo.rapports.rapport_irpp import rapport_irpp
 
 
 def generate_rapport(bien_immo, credit, annee, annexe_2044_list, irpp, rendement):

@@ -4,14 +4,14 @@ Complete data/input.json file.
 
 Run script:
 
-    $ python analyse_immo.py
+    $ python -m analyse_immo
+    $ python -m analyse_immo -i analyse_immo/data/input.json
     
-Report is generated in output folder
+Report is generated in analyse_immo/output folder
 
 # Test
 Run Unittest
 
-    $ cd immo
     $ python -m unittest -v
     $ python -m unittest test.test_rendement
     
@@ -28,18 +28,11 @@ Run Unittest
     
     coverage erase
     
-## Pytest
-    
-    pytest-cov
-    pytest --cov=folder --cov-report html test_*.py
-
 # Todo
 
-- [ ] Move test folder up
 - [ ] Exprimer le cashflow par année
 - [ ] Generer rapport micro-foncier
 - [ ] Prise en compte indexation des loyers (options)
-- [x] Tester IRPP
 
 - [ ] Calcul de la rentabilité nette de prelevement sociaux (https://www.devenir-rentier.fr/t1918-2)
 - [ ] Calculer rendement net-net (net d'impot)
@@ -48,8 +41,6 @@ Run Unittest
 - [ ] Cout copropriete au mï¿½
 - [ ] Indicateur global Go/NoGo
 - [ ] Prendre en compte les impots dans le calcul du cashflow
-- [x] Prix au mï¿½
-- [x] Ajouter parametre d'entree apport personnel
 
 # Dependencies
 
