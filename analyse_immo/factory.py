@@ -55,8 +55,8 @@ class Factory:
             mode = Credit.mode_e.m2
         elif credit_data['mode'] == 'mode_3':
             mode = Credit.mode_e.m3
-        elif credit_data['mode'] == 'mode_4':
-            mode = Credit.mode_e.m4
+#         elif credit_data['mode'] == 'mode_4':
+#             mode = Credit.mode_e.m4
 
         credit = Credit(bien_immo.financement_total,
                         credit_data['duree_annee'] * 12,

@@ -112,11 +112,11 @@ class Credit:
             stop = start
         return sum(item['mensualite_aa'] for item in self._tam[start - 1:stop])
 
-    def get_tableau_amortissement(self, start=1, stop=None):
-        if not stop:
-            return self._tam[start - 1]
-        else:
-            return self._tam[start - 1:stop]
+#     def get_tableau_amortissement(self, start=1, stop=None):
+#         if not stop:
+#             return self._tam[start - 1]
+#         else:
+#             return self._tam[start - 1:stop]
 
     # Total
     def get_montant_interet_total(self):
@@ -154,7 +154,7 @@ class Credit:
         assurance = self._calcul_mensualite_assurance_capital_constant(self._capital, self._taux_assurance)
 
         # Calcul
-        for mois in range(self._duree_mois):
+        for _ in range(self._duree_mois):
             interet = capital_restant * self._taux / 12
 
             if self._mode == Credit.mode_e.m1:

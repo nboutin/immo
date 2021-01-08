@@ -118,53 +118,49 @@ class TestCredit(unittest.TestCase):
     def testAmortissementMode1A(self):
         cred = Credit(10000, 36, 0.02, 0, Credit.mode_e.m1, 0, 0)
 
-        tam = cred.get_tableau_amortissement(1)
-        self.assertAlmostEqual(tam['capital'], 10000, 2)
-        self.assertAlmostEqual(tam['amortissement'], 269.76, 2)
-        self.assertAlmostEqual(tam['interet'], 16.67, 2)
-        self.assertAlmostEqual(tam['assurance'], 0, 2)
-        self.assertAlmostEqual(tam['mensualite_aa'], 286.43, 2)
+        self.assertAlmostEqual(cred.capital, 10000, 2)
+        self.assertAlmostEqual(cred.get_amortissement(), 269.76, 2)
+        self.assertAlmostEqual(cred.get_interet(), 16.67, 2)
+        self.assertAlmostEqual(cred.get_mensualite_assurance(), 0, 2)
+        self.assertAlmostEqual(cred.get_mensualite_avec_assurance(), 286.43, 2)
 
-        tam = cred.get_tableau_amortissement(36)
-        self.assertAlmostEqual(tam['capital'], 285.95, 2)
-        self.assertAlmostEqual(tam['amortissement'], 285.95, 2)
-        self.assertAlmostEqual(tam['interet'], 0.48, 2)
-        self.assertAlmostEqual(tam['assurance'], 0, 2)
-        self.assertAlmostEqual(tam['mensualite_aa'], 286.43, 2)
+        start = 36
+        self.assertAlmostEqual(cred.get_amortissement(start), 285.95, 2)
+        self.assertAlmostEqual(cred.get_interet(start), 0.48, 2)
+        self.assertAlmostEqual(cred.get_mensualite_assurance(start), 0, 2)
+        self.assertAlmostEqual(cred.get_mensualite_avec_assurance(start), 286.43, 2)
 
     def testAmortissementMode1B(self):
         cred = Credit(10000, 36, 0.02, 0.0030, Credit.mode_e.m1, 0, 0)
 
-        tam = cred.get_tableau_amortissement(1)
-        self.assertAlmostEqual(tam['capital'], 10000, 2)
-        self.assertAlmostEqual(tam['interet'], 16.67, 2)
-        self.assertAlmostEqual(tam['assurance'], 2.50, 2)
-        self.assertAlmostEqual(tam['amortissement'], 269.76, 2)
-        self.assertAlmostEqual(tam['mensualite_aa'], 288.93, 2)
+        start = 1
+        self.assertAlmostEqual(cred.capital, 10000, 2)
+        self.assertAlmostEqual(cred.get_amortissement(start), 269.76, 2)
+        self.assertAlmostEqual(cred.get_interet(start), 16.67, 2)
+        self.assertAlmostEqual(cred.get_mensualite_assurance(start), 2.5, 2)
+        self.assertAlmostEqual(cred.get_mensualite_avec_assurance(start), 288.93, 2)
 
-        tam = cred.get_tableau_amortissement(36)
-        self.assertAlmostEqual(tam['capital'], 285.95, 2)
-        self.assertAlmostEqual(tam['amortissement'], 285.95, 2)
-        self.assertAlmostEqual(tam['interet'], 0.48, 2)
-        self.assertAlmostEqual(tam['assurance'], 2.5, 2)
-        self.assertAlmostEqual(tam['mensualite_aa'], 288.93, 2)
+        start = 36
+        self.assertAlmostEqual(cred.get_amortissement(start), 285.95, 2)
+        self.assertAlmostEqual(cred.get_interet(start), 0.48, 2)
+        self.assertAlmostEqual(cred.get_mensualite_assurance(start), 2.5, 2)
+        self.assertAlmostEqual(cred.get_mensualite_avec_assurance(start), 288.93, 2)
 
     def testAmortissementMode2(self):
         cred = Credit(10000, 36, 0.02, 0.0030, Credit.mode_e.m2, 0, 0)
 
-        tam = cred.get_tableau_amortissement(1)
-        self.assertAlmostEqual(tam['capital'], 10000, 2)
-        self.assertAlmostEqual(tam['interet'], 16.67, 2)
-        self.assertAlmostEqual(tam['assurance'], 2.50, 2)
-        self.assertAlmostEqual(tam['amortissement'], 268.57, 2)
-        self.assertAlmostEqual(tam['mensualite_aa'], 287.74, 2)
+        start = 1
+        self.assertAlmostEqual(cred.capital, 10000, 2)
+        self.assertAlmostEqual(cred.get_amortissement(start), 268.57, 2)
+        self.assertAlmostEqual(cred.get_interet(start), 16.67, 2)
+        self.assertAlmostEqual(cred.get_mensualite_assurance(start), 2.50, 2)
+        self.assertAlmostEqual(cred.get_mensualite_avec_assurance(start), 287.74, 2)
 
-        tam = cred.get_tableau_amortissement(36)
-        self.assertAlmostEqual(tam['capital'], 287.19, 2)
-        self.assertAlmostEqual(tam['interet'], 0.48, 2)
-        self.assertAlmostEqual(tam['assurance'], 0.07, 2)
-        self.assertAlmostEqual(tam['amortissement'], 287.19, 2)
-        self.assertAlmostEqual(tam['mensualite_aa'], 287.74, 2)
+        start = 36
+        self.assertAlmostEqual(cred.get_amortissement(start), 287.19, 2)
+        self.assertAlmostEqual(cred.get_interet(start), 0.48, 2)
+        self.assertAlmostEqual(cred.get_mensualite_assurance(start), 0.07, 2)
+        self.assertAlmostEqual(cred.get_mensualite_avec_assurance(start), 287.74, 2)
 
         self.assertAlmostEqual(cred.get_amortissement_total(), 10000, 2)
         self.assertAlmostEqual(cred.get_montant_interet_total(), 311.78, 2)
@@ -175,8 +171,7 @@ class TestCredit(unittest.TestCase):
     def testAmortissementMode3(self):
         cred = Credit(81600, 240, 0.0115, 0.0026, Credit.mode_e.m3, 0, 0)
 
-        tam = cred.get_tableau_amortissement(1)
-        self.assertAlmostEqual(tam['mensualite_ha'], 380.76, 2)
+        self.assertAlmostEqual(cred.get_mensualite_hors_assurance(), 380.76, 2)
 
         self.assertAlmostEqual(cred.get_amortissement_total(), 81600, 2)
         self.assertAlmostEqual(cred.get_montant_interet_total(), 9782.33, 2)
