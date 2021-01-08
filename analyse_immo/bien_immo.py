@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from charge import Charge
+from analyse_immo.charge import Charge
 
 
 class Bien_Immo:
@@ -81,7 +81,10 @@ class Bien_Immo:
 
     @property
     def rapport_surface_prix(self):
-        return self._prix_net_vendeur / self.surface_total
+        try:
+            return self._prix_net_vendeur / self.surface_total
+        except ZeroDivisionError:
+            return 0
 
     def get_charge(self, charges_list):
         return sum(lot.charge.get_montant_annuel(charges_list) for lot in self._lots)

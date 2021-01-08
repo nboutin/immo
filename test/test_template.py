@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import unittest, sys, os
-sys.path.insert(0, os.path.join('..'))
+import unittest
 
 
 class TestTemplate(unittest.TestCase):
-    
+
     def testTemplate(self):
         self.assertTrue(True)
 

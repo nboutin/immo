@@ -2,13 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import unittest
-import sys
-import os
-sys.path.insert(0, os.path.join('..'))
 
-from bien_immo import Bien_Immo
-from lot import Lot
-from charge import Charge
+from analyse_immo.bien_immo import Bien_Immo
+from analyse_immo.lot import Lot
+from analyse_immo.charge import Charge
 
 
 class TestBienImmo(unittest.TestCase):

@@ -23,11 +23,15 @@ class Database:
     def salaire_abattement(self):
         return self._impot_data['salaire_abattement']
 
-    def TMI(self, annee):
-        '''
-        :param annee: (string)
-        '''
-        return self._impot_data['TMI'][annee]
+    def irpp_bareme(self, annee):
+        if isinstance(annee, int):
+            annee = str(annee)
+        return self._impot_data['irpp_bareme'][annee]
+
+    def plafond_quotient_familial(self, annee):
+        if isinstance(annee, int):
+            annee = str(annee)
+        return self._impot_data['plafond_quotient_familial'][annee]
 
     @property
     def reduction_dons(self):

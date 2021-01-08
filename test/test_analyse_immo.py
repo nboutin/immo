@@ -2,14 +2,11 @@
 # -*- coding: utf-8 -*-
 
 import unittest
-import sys
 import os
-sys.path.insert(0, os.path.join('..'))
-
 import json
 
-from factory import Factory
-from rendement import Rendement
+from analyse_immo.factory import Factory
+from analyse_immo.rendement import Rendement
 
 
 class TestAnalyseImmoBase(unittest.TestCase):

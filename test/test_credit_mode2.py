@@ -2,11 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import unittest
-import sys
-import os
-sys.path.insert(0, os.path.join('..'))
 
-from credit import Credit
+from analyse_immo.credit import Credit
 
 
 class TestCreditMode2(unittest.TestCase):

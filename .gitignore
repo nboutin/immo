@@ -1,4 +1,7 @@
 __pycache__/
+test/coverage/
 
 *.pyc
 .~*
+*.log
+.coverage

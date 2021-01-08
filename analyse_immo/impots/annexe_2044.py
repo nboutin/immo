@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from impots.ligne import Ligne
+from analyse_immo.impots.ligne import Ligne
 
 
 L211_loyer_brut = Ligne(211, "loyer brut")
