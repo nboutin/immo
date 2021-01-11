@@ -1,7 +1,7 @@
 {
   "achat" : {
     "annee" : 2020,
-    "prix_net_vendeur" : 45000,
+    "prix_net_vendeur" : 40000,
     "__commnent" : "montant ou taux",
     "frais_agence" : 0.07,
     "frais_notaire" : 0.1,
@@ -27,7 +27,7 @@
       "PNO" : 100,
       "agence_immo" : 0,
       "travaux_provision_taux" : 1,
-      "vacance_locative_taux" : 0
+      "vacance_locative_taux" : 1
     }
   } ],
   "credit" : {

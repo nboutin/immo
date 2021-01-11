@@ -97,7 +97,8 @@ class Factory:
         :todo put 20 into database
         '''
         an = Annexe_2044()
-        an.add_ligne(L211_loyer_brut, bien_immo.loyer_nu_brut_annuel)
+        # bien_immo loyer_nu_net = import loyer_nu_brut
+        an.add_ligne(L211_loyer_brut, bien_immo.loyer_nu_net_annuel)
         an.add_ligne(L221_frais_administration, bien_immo.get_charge(Charge.charge_e.agence_immo))
         an.add_ligne(L222_autre_frais_gestion, 20 * bien_immo.lot_count)
         an.add_ligne(L223_prime_assurance, bien_immo.get_charge(Charge.charge_e.prime_assurance))

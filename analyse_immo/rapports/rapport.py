@@ -15,7 +15,7 @@ def generate_rapport(bien_immo, credit, annee, annexe_2044_list, irpp, rendement
     rapport_achat(bien_immo)
     rapport_location(bien_immo)
     rapport_credit(credit)
-    rapport_annexe_2044(annee, annexe_2044_list)
+    rapport_annexe_2044(annee, annexe_2044_list, bien_immo)
     rapport_irpp(annee, irpp)
     rapport_rendement(rendement)
 
