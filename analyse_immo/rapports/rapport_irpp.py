@@ -22,8 +22,8 @@ def rapport_irpp(annee_start, irpp):
             irpp.total_credit_impot,
             '{:.0f}'.format(irpp.impots_net),
             separator,
-            '-',
-            '-',
+            '{:.0f}'.format(irpp.impots_salaires_net),
+            '{:.0f}'.format(irpp.impots_net - irpp.impots_salaires_net),
         ]
     ]
 

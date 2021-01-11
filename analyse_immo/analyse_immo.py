@@ -49,7 +49,7 @@ def main(argv):
         annexe_2044_list.append(Factory.make_annexe_2044(bien_immo, credit, annee_index + 1))
 
     if annexe_2044_list:
-        irpp.add_annexe(annexe_2044_list[0])
+        irpp.annexe_2044 = annexe_2044_list[0]
 
     # Rapport
     generate_rapport(bien_immo, credit, annee_revenu, annexe_2044_list, irpp, rendement)

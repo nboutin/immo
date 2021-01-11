@@ -3,7 +3,7 @@
 
 # from enum import unique, Enum, auto
 from analyse_immo.impots.ligne import Ligne
-from analyse_immo.impots.annexe_2044 import Annexe_2044
+# from analyse_immo.impots.annexe_2044 import Annexe_2044
 
 L1AJ_salaire = Ligne('1AJ', 'Salaires - Déclarant 1')
 L1BJ_salaire = Ligne('1BJ', 'Salaires - Déclarant 2')
@@ -49,13 +49,18 @@ class IRPP:
         self._n_enfant = n_enfant
 
         self._lignes = list()
-        self._annexes = list()
+        self._annexe_2044 = None
 
     def add_ligne(self, type_, value):
         self._lignes.append((type_, value))
 
-    def add_annexe(self, annexe):
-        self._annexes.append(annexe)
+    @property
+    def annexe_2044(self):
+        return self._annexe_2044
+
+    @annexe_2044.setter
+    def annexe_2044(self, annexe_2044):
+        self._annexe_2044 = annexe_2044
 
     @property
     def salaires(self):
@@ -76,9 +81,10 @@ class IRPP:
 
     @property
     def revenu_foncier(self):
-        return sum(
-            annexe.revenu_foncier_taxable for annexe in self._annexes if isinstance(
-                annexe, Annexe_2044))
+        if self._annexe_2044:
+            return self._annexe_2044.revenu_foncier_taxable
+        else:
+            return 0
 
     @property
     def total_reduction_impot(self):
@@ -117,6 +123,16 @@ class IRPP:
         net -= self._database.reduction_dons * self.total_reduction_impot
         net -= self._database.reduction_syndicat * self.total_credit_impot
         return net
+
+    @property
+    def impots_salaires_net(self):
+        '''
+        :return impot net en considérant uniquement les salaires
+        '''
+        import copy
+        irpp = copy.deepcopy(self)
+        irpp.annexe_2044 = None
+        return irpp.impots_net
 
     # Private
 

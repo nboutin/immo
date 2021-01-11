@@ -79,6 +79,20 @@ class TestIRPP(unittest.TestCase):
         self.assertAlmostEqual(irpp.impots_net, 3113, 0)
         self.assertAlmostEqual(irpp.impots_net, 3113.08, 2)
 
+    def testImpotSalaireNet(self):
+        irpp = IRPP(self.database, 2019, 2, 0)
+        irpp.add_ligne(L1AJ_salaire, 30000)
+        irpp.add_ligne(L1BJ_salaire, 20000)
+
+        annexe_2044 = Annexe_2044()
+        annexe_2044.add_ligne(L211_loyer_brut, 5000)
+        irpp.annexe_2044 = annexe_2044
+
+        self.assertEqual(irpp.revenu_fiscale_reference, 50000 * .9 + 5000)
+        self.assertEqual(irpp.quotient_familial, (50000 * .9 + 5000) / 2)
+        self.assertAlmostEqual(irpp.impots_net, 4182, 0)
+        self.assertAlmostEqual(irpp.impots_salaires_net, 3482, 0)
+
     def testExemple1(self):
         '''
         https://www.service-public.fr/particuliers/actualites/A14556?xtor=EPR-141
@@ -234,9 +248,9 @@ class TestIRPPAnnexe2044(unittest.TestCase):
         irpp = IRPP(self.database, 2019, 2, 0)
         irpp.add_ligne(L1AJ_salaire, 30000)
         irpp.add_ligne(L1BJ_salaire, 20000)
-        an = Annexe_2044()
-        an.add_ligne(L211_loyer_brut, 6000)
-        irpp.add_annexe(an)
+        annexe_2044 = Annexe_2044()
+        annexe_2044.add_ligne(L211_loyer_brut, 6000)
+        irpp.annexe_2044 = annexe_2044
         self.assertEqual(irpp.revenu_fiscale_reference, 51000)
 
 
