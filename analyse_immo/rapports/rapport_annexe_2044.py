@@ -11,6 +11,9 @@ from analyse_immo.impots.annexe_2044 import L211_loyer_brut, L221_frais_administ
 
 def rapport_annexe_2044(annee_start, annexe_2044_list):
 
+    if not annexe_2044_list:
+        return
+
     rapport = list()
     separator = ''
 
