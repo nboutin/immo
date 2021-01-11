@@ -100,7 +100,7 @@ class IRPP:
         impot_brut = self.__impots_brut_part_fiscale()
 
         # Controler dépassement d'abattement enfant
-        impot_brut_sans_enfant = self.__impots_brut_sans_enfant(self.salaires)
+        impot_brut_sans_enfant = self.__impots_brut_sans_enfant()
 
         reduction_enfants = impot_brut_sans_enfant - impot_brut
         plafond_quotient_familial = self._database.plafond_quotient_familial(
@@ -123,11 +123,16 @@ class IRPP:
     def __get_ligne(self, numero):
         return sum(ligne[1] for ligne in self._lignes if ligne[0].numero in numero)
 
-    def __impots_brut_sans_enfant(self, salaires):
+    def __impots_brut_sans_enfant(self):
+        import copy
         part = self._part_fiscale - self._n_enfant / 2
-        irpp_sans_enfant = IRPP(self._database, self._annee_revenu, part, 0)
-        irpp_sans_enfant.add_ligne(L1AJ_salaire, salaires)
+        irpp_sans_enfant = copy.deepcopy(self)
+        irpp_sans_enfant._part_fiscale = part
+        irpp_sans_enfant._n_enfant = 0
         return irpp_sans_enfant.__impots_brut_part_fiscale()
+#         irpp_sans_enfant = IRPP(self._database, self._annee_revenu, part, 0)
+#         irpp_sans_enfant.add_ligne(L1AJ_salaire, salaires)
+#         return irpp_sans_enfant.__impots_brut_part_fiscale()
 
     def __impots_brut_part_fiscale(self):
         bareme = self._database.irpp_bareme(str(self._annee_revenu + 1))
