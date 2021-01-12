@@ -15,7 +15,7 @@ __NAME = 'Analyse Immo'
 __VERSION = '1.0.0-dev'
 
 __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
-__INPUT_FILEPATH = os.path.join(__location__, 'data', 'input.json')
+__INPUT_FILEPATH = os.path.join(__location__, 'data', 'input_2020.json')
 __OUTPUT_FILEPATH = os.path.join(__location__, 'output', 'analyse_immo.log')
 
 
@@ -49,7 +49,7 @@ def main(argv):
         annexe_2044_list.append(Factory.make_annexe_2044(bien_immo, credit, annee_index + 1))
 
     if annexe_2044_list:
-        irpp.add_annexe(annexe_2044_list[0])
+        irpp.annexe_2044 = annexe_2044_list[0]
 
     # Rapport
     generate_rapport(bien_immo, credit, annee_revenu, annexe_2044_list, irpp, rendement)
