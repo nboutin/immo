@@ -15,7 +15,7 @@ __NAME = 'Analyse Immo'
 __VERSION = '1.0.0-dev'
 
 __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
-__INPUT_FILEPATH = os.path.join(__location__, 'data', 'input.json')
+__INPUT_FILEPATH = os.path.join(__location__, 'data', 'input_2020.json')
 __OUTPUT_FILEPATH = os.path.join(__location__, 'output', 'analyse_immo.log')
 
 
