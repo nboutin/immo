@@ -41,18 +41,27 @@ def main(argv):
     rendement = Rendement(bien_immo, credit)
 
     # Impot
-    annee_revenu = achat_data['annee']
-    irpp = Factory.make_irpp(database, impot_data, annee_revenu)
+    annee_achat = achat_data['annee']
+    credit_duree = credit_data['duree_annee']
 
-    annexe_2044_list = list()
-    for annee_index in range(credit_data['duree_annee']):
-        annexe_2044_list.append(Factory.make_annexe_2044(bien_immo, credit, annee_index + 1))
+    irpp_2044_list = list()
 
-    if annexe_2044_list:
-        irpp.annexe_2044 = annexe_2044_list[0]
+    for i_annee in range(credit_duree):
+        annee_revenu = annee_achat + i_annee
+        irpp = Factory.make_irpp(database, impot_data, annee_revenu)
+
+        irpp.annexe_2044 = Factory.make_annexe_2044(bien_immo, credit, i_annee + 1)
+        irpp_2044_list.append(irpp)
+
+#     annexe_2044_list = list()
+#     for annee_index in range(credit_data['duree_annee']):
+#         annexe_2044_list.append(Factory.make_annexe_2044(bien_immo, credit, annee_index + 1))
+#
+#     if annexe_2044_list:
+#         irpp.annexe_2044 = annexe_2044_list[0]
 
     # Rapport
-    generate_rapport(bien_immo, credit, annee_revenu, annexe_2044_list, irpp, rendement)
+    generate_rapport(bien_immo, credit, annee_achat, irpp_2044_list, rendement)
 
 
 def parse_args(argv):

@@ -26,12 +26,18 @@ class Database:
     def irpp_bareme(self, annee):
         if isinstance(annee, int):
             annee = str(annee)
-        return self._impot_data['irpp_bareme'][annee]
+        try:
+            return self._impot_data['irpp_bareme'][annee]
+        except KeyError:
+            return self._impot_data['irpp_bareme']['2021']
 
     def plafond_quotient_familial(self, annee):
         if isinstance(annee, int):
             annee = str(annee)
-        return self._impot_data['plafond_quotient_familial'][annee]
+        try:
+            return self._impot_data['plafond_quotient_familial'][annee]
+        except KeyError:
+            return self._impot_data['plafond_quotient_familial']['2021']
 
     @property
     def reduction_dons(self):

@@ -82,7 +82,11 @@ class Factory:
         '''
         :param annee_revenu: int, current year
         '''
-        impot = impot_data[str(annee_revenu)]
+        try:
+            impot = impot_data[str(annee_revenu)]
+        except KeyError:
+            impot = impot_data['2020']
+
         irpp = IRPP(database, annee_revenu, impot['parts_fiscales'], impot['enfants'])
         irpp.add_ligne(L1AJ_salaire, impot['salaires'][0])
         irpp.add_ligne(L1BJ_salaire, impot['salaires'][1])

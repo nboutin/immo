@@ -8,15 +8,15 @@ from analyse_immo.rapports.rapport_annexe_2044 import rapport_annexe_2044
 from analyse_immo.rapports.rapport_irpp import rapport_irpp
 
 
-def generate_rapport(bien_immo, credit, annee, annexe_2044_list, irpp, rendement):
+def generate_rapport(bien_immo, credit, annee_achat, irpp_2044_list, rendement):
 
-    annee -= 2000
+    annee_achat -= 2000
 
     rapport_achat(bien_immo)
     rapport_location(bien_immo)
     rapport_credit(credit)
-    rapport_annexe_2044(annee, annexe_2044_list, bien_immo)
-    rapport_irpp(annee, irpp)
+    rapport_annexe_2044(annee_achat, irpp_2044_list, bien_immo)
+    rapport_irpp(annee_achat, irpp_2044_list)
     rapport_rendement(rendement)
 
 
@@ -26,10 +26,10 @@ def rapport_achat(bien_immo):
         [bien_immo.prix_net_vendeur,
          '{:.0f} ({:.2f}%)'.format(bien_immo.notaire_montant, bien_immo.notaire_taux * 100),
          '{:.0f} ({:.2f}%)'.format(bien_immo.agence_montant, bien_immo.agence_taux * 100),
-         bien_immo.budget_travaux,
-         bien_immo.apport,
-         bien_immo.financement_total,
-         bien_immo.rapport_surface_prix
+         '{:.0F}'.format(bien_immo.budget_travaux),
+         '{:.0F}'.format(bien_immo.apport),
+         '{:.0F}'.format(bien_immo.financement_total),
+         '{:.0F}'.format(bien_immo.rapport_surface_prix)
          ],
         ['Prix net vendeur', 'Notaire', 'Agence', 'Travaux', 'Apport', 'Financement total', 'Prix €/m²'],
     ]
@@ -43,8 +43,8 @@ def rapport_location(bien_immo):
     rapport = [
         ['{:.0f}/{:.0f}'.format(bien_immo.loyer_nu_brut_mensuel, bien_immo.loyer_nu_brut_annuel),
          '{:.0f}/{:.0f}'.format(bien_immo.loyer_nu_net_mensuel, bien_immo.loyer_nu_net_annuel),
-         bien_immo.charges,
-         bien_immo.provisions],
+         '{:.0F}'.format(bien_immo.charges),
+         '{:.0F}'.format(bien_immo.provisions)],
         ['Loyer brut mensuel/annuel', 'Loyer net mensuel/annuel', 'Charges', 'Provisions'],
     ]
     rotate = list(zip(*rapport[::-1]))

@@ -10,17 +10,19 @@ from analyse_immo.impots.annexe_2044 import L211_loyer_brut, L221_frais_administ
     L250_assurance_emprunteur, L250_frais_dossier, L250_frais_garantie
 
 
-def rapport_annexe_2044(annee_start, annexe_2044_list, bien_immo):
-
-    if not annexe_2044_list:
-        return
+def rapport_annexe_2044(annee_achat, irpp_2044_list, bien_immo):
 
     rapport = list()
     separator = ''
 
-    for i, annexe_2044 in enumerate(annexe_2044_list):
+    for i, irpp in enumerate(irpp_2044_list):
+        annexe_2044 = irpp.annexe_2044
+
+        if not annexe_2044:
+            continue
+
         rapport_annee = [
-            annee_start + i,
+            annee_achat + i,
             '{:.0f}'.format(bien_immo.loyer_nu_brut_annuel),
             '{:.0f}'.format(bien_immo.get_charge(Charge.charge_e.vacance_locative)),
             '{:.0f}'.format(annexe_2044.get_ligne(L211_loyer_brut)),
