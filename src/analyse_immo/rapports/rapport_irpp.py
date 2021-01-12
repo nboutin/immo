@@ -23,7 +23,7 @@ def rapport_irpp(annee_start, irpp):
             '{:.0f}'.format(irpp.impots_net),
             separator,
             '{:.0f}'.format(irpp.impots_salaires_net),
-            '{:.0f}'.format(irpp.impots_net - irpp.impots_salaires_net),
+            '{:.0f}'.format(irpp.impots_revenu_foncier),
         ]
     ]
 
@@ -39,8 +39,8 @@ def rapport_irpp(annee_start, irpp):
         'Credit impot',
         'Impot net',
         separator,
-        "Impot net (sans foncier)",
-        "Delta impot",
+        "Impot salaires net",
+        "Impot revenu foncier",
     ],)
 
     rotate = list(zip(*rapport[::-1]))
