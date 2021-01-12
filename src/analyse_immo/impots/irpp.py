@@ -134,6 +134,10 @@ class IRPP:
         irpp.annexe_2044 = None
         return irpp.impots_net
 
+    @property
+    def impots_revenu_foncier(self):
+        return self.impots_net - self.impots_salaires_net
+
     # Private
 
     def __get_ligne(self, numero):
@@ -146,9 +150,6 @@ class IRPP:
         irpp_sans_enfant._part_fiscale = part
         irpp_sans_enfant._n_enfant = 0
         return irpp_sans_enfant.__impots_brut_part_fiscale()
-#         irpp_sans_enfant = IRPP(self._database, self._annee_revenu, part, 0)
-#         irpp_sans_enfant.add_ligne(L1AJ_salaire, salaires)
-#         return irpp_sans_enfant.__impots_brut_part_fiscale()
 
     def __impots_brut_part_fiscale(self):
         bareme = self._database.irpp_bareme(str(self._annee_revenu + 1))

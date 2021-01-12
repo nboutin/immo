@@ -31,7 +31,7 @@ class TestIRPP(unittest.TestCase):
         irpp.add_ligne(L1BJ_salaire, 23055)
         self.assertEqual(irpp.revenu_fiscale_reference, 49015.80, 2)
 
-    def test(self):
+    def testImpotBrutInternal(self):
         irpp = IRPP(self.database, 0, 0, 0)
         tmi = [[10084, 0], [25710, 0.11], [73516, 0.30], [158122, 0.41]]
 
@@ -79,7 +79,7 @@ class TestIRPP(unittest.TestCase):
         self.assertAlmostEqual(irpp.impots_net, 3113, 0)
         self.assertAlmostEqual(irpp.impots_net, 3113.08, 2)
 
-    def testImpotSalaireNet(self):
+    def testImpotSalaireNetA(self):
         irpp = IRPP(self.database, 2019, 2, 0)
         irpp.add_ligne(L1AJ_salaire, 30000)
         irpp.add_ligne(L1BJ_salaire, 20000)
@@ -92,6 +92,21 @@ class TestIRPP(unittest.TestCase):
         self.assertEqual(irpp.quotient_familial, (50000 * .9 + 5000) / 2)
         self.assertAlmostEqual(irpp.impots_net, 4182, 0)
         self.assertAlmostEqual(irpp.impots_salaires_net, 3482, 0)
+
+    def testImpotSalaireNetB(self):
+        irpp = IRPP(self.database, 2020, 2.5, 1)
+        irpp.add_ligne(L1AJ_salaire, 31500)
+        irpp.add_ligne(L1BJ_salaire, 23100)
+
+        annexe_2044 = Annexe_2044()
+        annexe_2044.add_ligne(L211_loyer_brut, 2212)
+        irpp.annexe_2044 = annexe_2044
+
+        self.assertEqual(irpp.revenu_fiscale_reference, 51352)
+        self.assertAlmostEqual(irpp.quotient_familial, 20541, 0)
+        self.assertAlmostEqual(irpp.impots_net, 2875, 0)
+        self.assertAlmostEqual(irpp.impots_salaires_net, 2632, 0)
+        self.assertAlmostEqual(irpp.impots_revenu_foncier, 243, 0)
 
     def testExemple1(self):
         '''
@@ -252,6 +267,7 @@ class TestIRPPAnnexe2044(unittest.TestCase):
         annexe_2044.add_ligne(L211_loyer_brut, 6000)
         irpp.annexe_2044 = annexe_2044
         self.assertEqual(irpp.revenu_fiscale_reference, 51000)
+        self.assertTrue(isinstance(irpp.annexe_2044, Annexe_2044))
 
 
 if __name__ == '__main__':
