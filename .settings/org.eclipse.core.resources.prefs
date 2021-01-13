@@ -8,4 +8,5 @@ encoding//src/analyse_immo/impots/micro_foncier.py=utf-8
 encoding//src/analyse_immo/rapports/rapport.py=utf-8
 encoding//src/analyse_immo/rapports/rapport_annexe_2044.py=utf-8
 encoding//src/analyse_immo/rapports/rapport_irpp.py=utf-8
+encoding//src/analyse_immo/rapports/rapport_micro_foncier.py=utf-8
 encoding//src/test/test_irpp.py=utf-8

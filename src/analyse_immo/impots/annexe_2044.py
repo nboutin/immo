@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from analyse_immo.impots.ligne import Ligne
-from msilib.schema import Property
+from .ligne import Ligne
 
 
 L211_loyer_brut = Ligne(211, "loyer brut")
@@ -50,12 +49,12 @@ class Annexe_2044:
         self._lignes = list()
 
     def add_ligne(self, type_, valeur):
-        self._lignes.append((type_, valeur))
+        self._lignes.append({'type': type_, 'valeur': valeur})
 
     def get_ligne(self, lignes):
         if not isinstance(lignes, list):
             lignes = [lignes]
-        return sum(ligne[1] for ligne in self._lignes if ligne[0] in lignes)
+        return sum(ligne['valeur'] for ligne in self._lignes if ligne['type'] in lignes)
 
     @property
     def total_recettes(self):

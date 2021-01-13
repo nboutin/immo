@@ -45,9 +45,8 @@ def rapport_annexe_2044(annee_achat, irpp_2044_list, bien_immo):
             separator,
             '{:.1f}'.format(annexe_2044.total_charges_taux * 100),
             '{:.0f}'.format(annexe_2044.revenu_foncier_taxable),
-            '{:.0f}'.format(irpp.impots_revenu_foncier),
             '{:.0f}'.format(annexe_2044.prelevement_sociaux),
-            '{:.0f}'.format(irpp.impots_revenu_foncier_total),
+            '{:.0f}'.format(irpp.impots_revenu_foncier),
         ]
 
         rapport.insert(0, rapport_annee)
@@ -76,9 +75,8 @@ def rapport_annexe_2044(annee_achat, irpp_2044_list, bien_immo):
         separator,
         'Total charges (%)',
         'Revenu foncier taxable',
-        'Impot revenu foncier',
         'Prelevement sociaux',
-        'Impot foncier total',
+        'Impot revenu foncier',
     ])
 
     rotate = list(zip(*rapport[::-1]))

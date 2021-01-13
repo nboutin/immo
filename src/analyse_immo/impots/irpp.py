@@ -1,10 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-# from enum import unique, Enum, auto
-from analyse_immo.impots.ligne import Ligne
-from _operator import xor
-# from analyse_immo.impots.annexe_2044 import Annexe_2044
+from .ligne import Ligne
 
 L1AJ_salaire = Ligne('1AJ', 'Salaires - Déclarant 1')
 L1BJ_salaire = Ligne('1BJ', 'Salaires - Déclarant 2')
@@ -135,6 +132,7 @@ class IRPP:
     @property
     def impots_net(self):
         net = self.impots_brut
+        net += self.prelevement_sociaux_foncier
         net -= self._database.reduction_dons * self.total_reduction_impot
         net -= self._database.reduction_syndicat * self.total_credit_impot
         return net
@@ -151,11 +149,17 @@ class IRPP:
 
     @property
     def impots_revenu_foncier(self):
+        ''' revenu foncier taxable et prelevement sociaux foncier'''
         return self.impots_net - self.impots_salaires_net
 
     @property
-    def impots_revenu_foncier_total(self):
-        return self.impots_net - self.impots_salaires_net + self.annexe_2044.prelevement_sociaux
+    def prelevement_sociaux_foncier(self):
+        if self.annexe_2044:
+            return self.annexe_2044.prelevement_sociaux
+        elif self.micro_foncier:
+            return self.micro_foncier.prelevement_sociaux
+        else:
+            return 0
 
     # Private
 

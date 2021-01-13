@@ -10,6 +10,7 @@ from analyse_immo.impots.irpp import IRPP, L1AJ_salaire, L1BJ_salaire, L7UF_dons
 from analyse_immo.impots.annexe_2044 import Annexe_2044, L211_loyer_brut, L221_frais_administration, L222_autre_frais_gestion, \
     L223_prime_assurance, L224_travaux, L227_taxe_fonciere, L229_copropriete_provision, L250_interet_emprunt, L250_assurance_emprunteur,\
     L250_frais_dossier, L250_frais_garantie
+from analyse_immo.impots.micro_foncier import Micro_Foncier, L4EB_recettes_brutes
 
 
 class Factory:
@@ -101,6 +102,7 @@ class Factory:
         :todo put 20 into database
         '''
         an = Annexe_2044(database)
+
         # bien_immo loyer_nu_net = import loyer_nu_brut
         an.add_ligne(L211_loyer_brut, bien_immo.loyer_nu_net_annuel)
         an.add_ligne(L221_frais_administration, bien_immo.get_charge(Charge.charge_e.agence_immo))
@@ -119,3 +121,11 @@ class Factory:
             an.add_ligne(L250_frais_garantie, credit.frais_garantie)
 
         return an
+
+    @staticmethod
+    def make_micro_foncier(database, bien_immo):
+        mf = Micro_Foncier(database)
+
+        # bien_immo loyer_nu_net = import loyer_nu_brut
+        mf.add_ligne(L4EB_recettes_brutes, bien_immo.loyer_nu_net_annuel)
+        return mf
