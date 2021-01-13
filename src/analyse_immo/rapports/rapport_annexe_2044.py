@@ -43,6 +43,7 @@ def rapport_annexe_2044(annee_achat, irpp_2044_list, bien_immo):
             '{:.0f}'.format(annexe_2044.get_ligne(L250_frais_garantie)),
             '{:.0f}'.format(annexe_2044.total_charges_emprunt),
             separator,
+            '{:.1f}'.format(annexe_2044.total_charges_taux * 100),
             '{:.0f}'.format(annexe_2044.revenu_foncier_taxable)
         ]
 
@@ -70,6 +71,7 @@ def rapport_annexe_2044(annee_achat, irpp_2044_list, bien_immo):
         'Frais de garantie',
         'Total charge emprunt',
         separator,
+        'Total charges (%)',
         'Revenu foncier taxable',
     ])
 

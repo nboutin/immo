@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from analyse_immo.impots.ligne import Ligne
+from msilib.schema import Property
 
 
 L211_loyer_brut = Ligne(211, "loyer brut")
@@ -70,6 +71,10 @@ class Annexe_2044:
         '''Ligne 250'''
         return self.get_ligne([L250_interet_emprunt, L250_assurance_emprunteur,
                                L250_frais_dossier, L250_frais_garantie])
+
+    @property
+    def total_charges_taux(self):
+        return 1 - (self.revenu_foncier_taxable / self.total_recettes)
 
     @property
     def revenu_foncier_taxable(self):
