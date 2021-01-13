@@ -95,12 +95,12 @@ class Factory:
         return irpp
 
     @staticmethod
-    def make_annexe_2044(bien_immo, credit, annee_index):
+    def make_annexe_2044(database, bien_immo, credit, annee_index):
         '''
         :param annee_index: start at 1, annee n depuis l'achat du bien
         :todo put 20 into database
         '''
-        an = Annexe_2044()
+        an = Annexe_2044(database)
         # bien_immo loyer_nu_net = import loyer_nu_brut
         an.add_ligne(L211_loyer_brut, bien_immo.loyer_nu_net_annuel)
         an.add_ligne(L221_frais_administration, bien_immo.get_charge(Charge.charge_e.agence_immo))

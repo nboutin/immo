@@ -153,6 +153,10 @@ class IRPP:
     def impots_revenu_foncier(self):
         return self.impots_net - self.impots_salaires_net
 
+    @property
+    def impots_revenu_foncier_total(self):
+        return self.impots_net - self.impots_salaires_net + self.annexe_2044.prelevement_sociaux
+
     # Private
 
     def __get_ligne(self, numero):

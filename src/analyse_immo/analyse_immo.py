@@ -50,7 +50,7 @@ def main(argv):
         annee_revenu = annee_achat + i_annee
         irpp = Factory.make_irpp(database, impot_data, annee_revenu)
 
-        irpp.annexe_2044 = Factory.make_annexe_2044(bien_immo, credit, i_annee + 1)
+        irpp.annexe_2044 = Factory.make_annexe_2044(database, bien_immo, credit, i_annee + 1)
         irpp_2044_list.append(irpp)
 
 #     annexe_2044_list = list()

@@ -45,11 +45,17 @@ class Annexe_2044:
     261 Revenu foncier taxable: 215-240-250
     '''
 
-    def __init__(self):
+    def __init__(self, database):
+        self._database = database
         self._lignes = list()
 
     def add_ligne(self, type_, valeur):
         self._lignes.append((type_, valeur))
+
+    def get_ligne(self, lignes):
+        if not isinstance(lignes, list):
+            lignes = [lignes]
+        return sum(ligne[1] for ligne in self._lignes if ligne[0] in lignes)
 
     @property
     def total_recettes(self):
@@ -81,7 +87,6 @@ class Annexe_2044:
         '''Ligne 260'''
         return self.total_recettes - self.total_frais_et_charges - self.total_charges_emprunt
 
-    def get_ligne(self, lignes):
-        if not isinstance(lignes, list):
-            lignes = [lignes]
-        return sum(ligne[1] for ligne in self._lignes if ligne[0] in lignes)
+    @property
+    def prelevement_sociaux(self):
+        return self.revenu_foncier_taxable * self._database.prelevement_sociaux_taux

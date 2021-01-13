@@ -24,7 +24,7 @@ def rapport_irpp(annee_achat, irpp_2044_list):
             '{:.0f}'.format(irpp.impots_net),
             separator,
             '{:.0f}'.format(irpp.impots_salaires_net),
-            '{:.0f}'.format(irpp.impots_revenu_foncier),
+            '{:.0f}'.format(irpp.impots_revenu_foncier_total),
         ]
         rapport.insert(0, rapport_annee)
 
@@ -41,7 +41,7 @@ def rapport_irpp(annee_achat, irpp_2044_list):
         'Impot net',
         separator,
         "Impot salaires net",
-        "Impot revenu foncier",
+        "Impot foncier total",
     ],)
 
     rotate = list(zip(*rapport[::-1]))
