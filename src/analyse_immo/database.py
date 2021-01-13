@@ -58,3 +58,7 @@ class Database:
     @property
     def micro_foncier_revenu_foncier_plafond(self):
         return self._impot_data['micro_foncier']['revenu_foncier_plafond']
+
+    @property
+    def deficit_foncier_plafond_annuel(self):
+        return self._impot_data['deficit_foncier_plafond']

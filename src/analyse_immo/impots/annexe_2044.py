@@ -21,6 +21,9 @@ L250_frais_garantie = Ligne(250, "Frais de garantie")
 class Annexe_2044:
     '''
     https://www.corrigetonimpot.fr/impot-location-vide-appartement-proprietaire-calcul/
+    Déficit foncier:
+    https://www.journaldunet.fr/patrimoine/guide-des-finances-personnelles/1201987-deficit-foncier-2021-imputation-report-et-calcul/
+    https://votreargent.lexpress.fr/conseils-placements/le-mecanisme-du-deficit-foncier-calcul-imputation-et-report_2122509.html
 
     210 Recettes (Titre)
     211 Loyer brut (année concernée, arriéré et percu d'avance)
