@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-# from enum import unique, Enum, auto
-from analyse_immo.impots.ligne import Ligne
-# from analyse_immo.impots.annexe_2044 import Annexe_2044
+from .ligne import Ligne
 
 L1AJ_salaire = Ligne('1AJ', 'Salaires - Déclarant 1')
 L1BJ_salaire = Ligne('1BJ', 'Salaires - Déclarant 2')
@@ -50,6 +48,7 @@ class IRPP:
 
         self._lignes = list()
         self._annexe_2044 = None
+        self._micro_foncier = None
 
     def add_ligne(self, type_, value):
         self._lignes.append((type_, value))
@@ -61,6 +60,14 @@ class IRPP:
     @annexe_2044.setter
     def annexe_2044(self, annexe_2044):
         self._annexe_2044 = annexe_2044
+
+    @property
+    def micro_foncier(self):
+        return self._micro_foncier
+
+    @micro_foncier.setter
+    def micro_foncier(self, micro_foncier):
+        self._micro_foncier = micro_foncier
 
     @property
     def salaires(self):
@@ -81,8 +88,13 @@ class IRPP:
 
     @property
     def revenu_foncier(self):
+        if self._annexe_2044 and self._micro_foncier:
+            raise Exception()
+
         if self._annexe_2044:
             return self._annexe_2044.revenu_foncier_taxable
+        elif self._micro_foncier:
+            return self._micro_foncier.revenu_foncier_taxable
         else:
             return 0
 
@@ -120,6 +132,7 @@ class IRPP:
     @property
     def impots_net(self):
         net = self.impots_brut
+        net += self.prelevement_sociaux_foncier
         net -= self._database.reduction_dons * self.total_reduction_impot
         net -= self._database.reduction_syndicat * self.total_credit_impot
         return net
@@ -136,7 +149,17 @@ class IRPP:
 
     @property
     def impots_revenu_foncier(self):
+        ''' revenu foncier taxable et prelevement sociaux foncier'''
         return self.impots_net - self.impots_salaires_net
+
+    @property
+    def prelevement_sociaux_foncier(self):
+        if self.annexe_2044:
+            return self.annexe_2044.prelevement_sociaux
+        elif self.micro_foncier:
+            return self.micro_foncier.prelevement_sociaux
+        else:
+            return 0
 
     # Private
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from analyse_immo.impots.ligne import Ligne
+from .ligne import Ligne
 
 
 L211_loyer_brut = Ligne(211, "loyer brut")
@@ -44,11 +44,17 @@ class Annexe_2044:
     261 Revenu foncier taxable: 215-240-250
     '''
 
-    def __init__(self):
+    def __init__(self, database):
+        self._database = database
         self._lignes = list()
 
     def add_ligne(self, type_, valeur):
-        self._lignes.append((type_, valeur))
+        self._lignes.append({'type': type_, 'valeur': valeur})
+
+    def get_ligne(self, lignes):
+        if not isinstance(lignes, list):
+            lignes = [lignes]
+        return sum(ligne['valeur'] for ligne in self._lignes if ligne['type'] in lignes)
 
     @property
     def total_recettes(self):
@@ -72,11 +78,14 @@ class Annexe_2044:
                                L250_frais_dossier, L250_frais_garantie])
 
     @property
+    def total_charges_taux(self):
+        return 1 - (self.revenu_foncier_taxable / self.total_recettes)
+
+    @property
     def revenu_foncier_taxable(self):
         '''Ligne 260'''
         return self.total_recettes - self.total_frais_et_charges - self.total_charges_emprunt
 
-    def get_ligne(self, lignes):
-        if not isinstance(lignes, list):
-            lignes = [lignes]
-        return sum(ligne[1] for ligne in self._lignes if ligne[0] in lignes)
+    @property
+    def prelevement_sociaux(self):
+        return self.revenu_foncier_taxable * self._database.prelevement_sociaux_taux
