@@ -25,11 +25,19 @@ class Annexe_2044:
     https://www.journaldunet.fr/patrimoine/guide-des-finances-personnelles/1201987-deficit-foncier-2021-imputation-report-et-calcul/
     https://votreargent.lexpress.fr/conseils-placements/le-mecanisme-du-deficit-foncier-calcul-imputation-et-report_2122509.html
 
+    Total case = somme des lignes
+    Case A, Lignes 111 Revenus bruts
+    Case B, Lignes 112 Frais et charges(sauf interet emprunt)
+    Case C, Lignes 113 Interet d'emprunt
+    Case D, Lignes 114 Benefice ou deficit
+
     210 Recettes (Titre)
     211 Loyer brut (année concernée, arriéré et percu d'avance)
     212 Dépense à payer par le proprietaire que le locataire à payé
     213 Subvention et indemnité impayé
-    215 Total des recettes (211 à 214)
+    214 Valeur locative réelle des propriétés dont vous vous réservez la jouissance
+    215 Total des recettes (total 211 à 214)
+
     220 Frais et charges (Titre)
     221 Frais d'administration (gardien, agence location, comptable, syndicat (UNPI), Procedure (avocat, huissier, expert))
     222 Autre frais de gestion (appel, courrier au locataire, 20€/lot)
@@ -43,13 +51,36 @@ class Annexe_2044:
     229 coproriete: provision pour charge annee n
     230 copropriete: regularisation des provisions pour charge annee n-1
     240 Total frais et charges: 221 à 229 - 230
+
     250 Interet d'emprunt, assurance emprunteur, frais dossier, frais garantie, ...
-    261 Revenu foncier taxable: 215-240-250
+
+    261 Revenu foncier taxable: +215-240-250
+    262 Reintegration du supplément de deduction
+
+    263 Benefice ou deficit: 261+262
+
+    420 Resultat
+    430-441 uniquement en cas de deficit
+    431 Total des revenus bruts
+    432 Total des interet d'emprunt
+    433 Total autres frais et charges
+
+    434 Si la ligne 432 est supérieure à la ligne 431
+    435 Report de la ligne 433 dans la limite de 10 700 €
+    436 Report de la ligne 433 : montant dépassant 10 700 €
+    437 Report de la différence : ligne 432 – ligne 431
+    438 Total : ligne 436 + ligne 437
+
+    439 Si la ligne 432 est inférieure ou égale à la ligne 431
+    440 Report de la ligne 420 dans la limite de 10 700 €
+    441 Report de la ligne 420 : montant dépassant 10 700 €
     '''
 
-    def __init__(self, database):
+    def __init__(self, database, is_first_year=False):
         self._database = database
         self._lignes = list()
+        self._is_first_year = is_first_year
+        self._deficit_reportable = None
 
     def add_ligne(self, type_, valeur):
         self._lignes.append({'type': type_, 'valeur': valeur})
@@ -87,8 +118,31 @@ class Annexe_2044:
     @property
     def revenu_foncier_taxable(self):
         '''Ligne 260'''
-        return self.total_recettes - self.total_frais_et_charges - self.total_charges_emprunt
+        revenu_foncier = self.total_recettes - self.total_frais_et_charges - self.total_charges_emprunt
+
+        if revenu_foncier > 0:
+            return revenu_foncier
+        else:
+            plafond = 0
+            if self._is_first_year:
+                plafond = self._database.micro_foncier_revenu_foncier_plafond
+
+            deficit_foncier = min(revenu_foncier, plafond)
+            self._deficit_reportable = self.total_frais_et_charges - self.total_charges_emprunt - deficit_foncier
+            return deficit_foncier
 
     @property
     def prelevement_sociaux(self):
         return self.revenu_foncier_taxable * self._database.prelevement_sociaux_taux
+
+#     @property
+#     def deficit_reportable(self):
+#         '''
+#         @return None: first year, otherwise: value
+#         '''
+#         if self._is_first_year:
+#             return min(self._deficit_reportable, self.database.deficit_foncier_plafond_annuel)
+#
+#     @deficit_reportable.setter
+#     def deficit_reportable(self, value):
+#         self._deficit_reportable = value

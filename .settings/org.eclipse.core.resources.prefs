@@ -1,6 +1,3 @@
-=\=\=\=\=\=\=
-<<<<<<<=HEAD
->>>>>>>=3ca94ae (Calcul deficit foncier)
 eclipse.preferences.version=1
 encoding//src/analyse_immo/__main__.py=utf-8
 encoding//src/analyse_immo/analyse_immo.py=utf-8
@@ -30,6 +27,8 @@ encoding//src/test/impots/test_annexe_2044.py=utf-8
 encoding//src/test/impots/test_irpp.py=utf-8
 encoding//src/test/test_analyse_immo.py=utf-8
 encoding//src/test/test_database.py=utf-8
+encoding//src/test/test_irpp.py=utf-8
+encoding//src/test/test_irpp_deficit_foncier.py=utf-8
 encoding//src/test/test_rendement.py=utf-8
 encoding//src/test/test_simulation_a.py=utf-8
 encoding//src/test/test_simulation_b.py=utf-8

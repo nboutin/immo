@@ -1,6 +1,6 @@
 # How-To Use
 
-Complete data/input.json file.
+> Complete data/input.json file.
 
 Run script:
 
@@ -13,6 +13,7 @@ Report is generated in analyse_immo/output folder
 # Test
 Run Unittest
 
+    cd src 
     python -m unittest -v
     python -m unittest test.test_rendement
     

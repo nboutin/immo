@@ -24,7 +24,7 @@ Revenuf foncier: 12K/an
 Interet emprunt: 2300/an
 Taxe Fonciere: 1000
 Assurance: 600
-Travaux: 40000:
+Travaux: 40000
 
 Annee 1
 Charges = 2300 + 1000 + 600
