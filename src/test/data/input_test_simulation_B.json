@@ -33,7 +33,7 @@
     "duree_annee" : 20,
     "taux_interet" : 0.02,
     "taux_assurance" : 0,
-    "mode" : "mode_1",
+    "mode" : "fixe_ci",
     "frais_dossier" : 0,
     "frais_garantie" : 0
   },

@@ -6,11 +6,19 @@ import unittest
 from analyse_immo.credit import Credit
 
 
-class TestCreditMode2(unittest.TestCase):
+class TestCredit_FixeCRD(unittest.TestCase):
 
     def setUp(self):
 
-        self.credit = Credit(50000, 240, 0.0115, 0.0026, Credit.mode_e.m2, 0, 0)
+        self.credit = Credit(
+            50000,
+            240,
+            0.0115,
+            Credit.taux_e.periodique,
+            0.0026,
+            Credit.mode_e.fixe_CRD,
+            0,
+            0)
 
     def testTotal(self):
         self.assertAlmostEqual(self.credit.get_montant_interet_total(), 6043.69, 2)
