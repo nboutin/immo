@@ -50,18 +50,19 @@ class Factory:
     @staticmethod
     def make_credit(credit_data, bien_immo):
 
-        if credit_data['mode'] == 'mode_1':
-            mode = Credit.mode_e.m1
-        elif credit_data['mode'] == 'mode_2':
-            mode = Credit.mode_e.m2
-        elif credit_data['mode'] == 'mode_3':
-            mode = Credit.mode_e.m3
-#         elif credit_data['mode'] == 'mode_4':
-#             mode = Credit.mode_e.m4
+        if credit_data['mode'] == 'fixe_ci':
+            mode = Credit.mode_e.fixe_CI
+        elif credit_data['mode'] == 'fixe_crd':
+            mode = Credit.mode_e.fixe_CRD
+        elif credit_data['mode'] == 'degressive_crd':
+            mode = Credit.mode_e.degressive_CRD
+        else:
+            raise Exception('Bad Credit mode')
 
         credit = Credit(bien_immo.financement_total,
                         credit_data['duree_annee'] * 12,
                         credit_data['taux_interet'],
+                        Credit.taux_e.periodique,
                         credit_data['taux_assurance'],
                         mode,
                         credit_data['frais_dossier'],

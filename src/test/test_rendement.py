@@ -59,7 +59,7 @@ class TestRendement(unittest.TestCase):
 
         lot1 = Lot("T2", 50, 500)
         bi.add_lot(lot1)
-        cr = Credit(50000, 240, 0.02, 0, Credit.mode_e.m1, 0, 0)
+        cr = Credit(50000, 240, 0.02, Credit.taux_e.periodique, 0, Credit.mode_e.fixe_CI, 0, 0)
         rdt = Rendement(bi, cr)
         self.assertAlmostEqual(rdt.cashflow_mensuel, 247.06, 2)
 

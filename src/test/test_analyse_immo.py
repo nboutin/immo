@@ -110,7 +110,7 @@ class TestCashflow(TestCaseFileLoader):
         self.credit_data['duree_annee'] = 20
         self.credit_data['taux_interet'] = 0.018
         self.credit_data['taux_assurance'] = 0.0036
-        self.credit_data['mode'] = 'mode_1'
+        self.credit_data['mode'] = 'fixe_ci'
 
         bi = Factory.make_bien_immo(self.achat_data, self.lots_data)
         cred = Factory.make_credit(self.credit_data, bi)

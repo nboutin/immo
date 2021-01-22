@@ -84,7 +84,7 @@ class TestIRPP(unittest.TestCase):
         irpp.add_ligne(L1AJ_salaire, 30000)
         irpp.add_ligne(L1BJ_salaire, 20000)
 
-        annexe_2044 = Annexe_2044()
+        annexe_2044 = Annexe_2044(self.database)
         annexe_2044.add_ligne(L211_loyer_brut, 5000)
         irpp.annexe_2044 = annexe_2044
 
@@ -98,7 +98,7 @@ class TestIRPP(unittest.TestCase):
         irpp.add_ligne(L1AJ_salaire, 31500)
         irpp.add_ligne(L1BJ_salaire, 23100)
 
-        annexe_2044 = Annexe_2044()
+        annexe_2044 = Annexe_2044(self.database)
         annexe_2044.add_ligne(L211_loyer_brut, 2212)
         irpp.annexe_2044 = annexe_2044
 
@@ -263,7 +263,7 @@ class TestIRPPAnnexe2044(unittest.TestCase):
         irpp = IRPP(self.database, 2019, 2, 0)
         irpp.add_ligne(L1AJ_salaire, 30000)
         irpp.add_ligne(L1BJ_salaire, 20000)
-        annexe_2044 = Annexe_2044()
+        annexe_2044 = Annexe_2044(self.database)
         annexe_2044.add_ligne(L211_loyer_brut, 6000)
         irpp.annexe_2044 = annexe_2044
         self.assertEqual(irpp.revenu_fiscale_reference, 51000)
