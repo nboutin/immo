@@ -64,7 +64,7 @@ class Credit:
         self._tam_total = {'capital': 0, 'amortissement': 0, 'interet': 0,
                            'assurance': 0, 'mensualite_ha': 0, 'mensualite_aa': 0}
 
-        self._calcul_tableau_amortissement2()
+        self._calcul_tableau_amortissement()
 
     # Attibut
     @property
@@ -96,27 +96,6 @@ class Credit:
         return self._frais_garantie
 
     # Static
-    # TODO remove
-
-    @staticmethod
-    def _calcul_mensualite_constante(capital, taux, duree_mois):
-        '''
-        Calcul de base pour connaitre la mensualite constante de remboursement
-        Assurance non-comprise
-        mensualite = ( capital_emprunte * taux_interet/12) / 1 - (1 + taux_interet / 12) ^ - duree_mois
-        :return: mensualite
-        '''
-        if capital == 0 or taux == 0 or duree_mois == 0:
-            return 0
-        return (capital * taux / 12) / (1 - math.pow(1 + (taux / 12), -duree_mois))
-
-    @staticmethod
-    def _calcul_mensualite_assurance_capital_constant(capital, taux_assurance):
-        '''Calcul mensualite d'assurance sur capital constant'''
-        return capital * (taux_assurance / 12)
-
-# TODO remove
-
     @staticmethod
     def taux_periodique(taux_annuel, n_periode):
         '''
@@ -143,11 +122,6 @@ class Credit:
             return (capital * taux_periodique) / (1 - math.pow(1 + taux_periodique, -duree_mois))
         except ZeroDivisionError:
             return 0
-
-#     @staticmethod
-#     def mensualite_periodiqueB(capital, taux_periodique, duree_mois):
-#         return (capital * taux_periodique * math.pow((1 + taux_periodique), duree_mois)) / \
-#             (math.pow((1 + taux_periodique), duree_mois) - 1)
 
     # Mensualite
     def get_capital_restant(self, start=1, stop=None):
@@ -260,54 +234,6 @@ class Credit:
 
             else:
                 break
-
-            self._tam.append({'capital': capital_restant,
-                              'amortissement': amortissement,
-                              'interet': interet,
-                              'assurance': assurance,
-                              'mensualite_ha': mensualite_ha,
-                              'mensualite_aa': mensualite_aa})
-
-            self._tam_total['amortissement'] += amortissement
-            self._tam_total['interet'] += interet
-            self._tam_total['assurance'] += assurance
-            self._tam_total['mensualite_ha'] += mensualite_ha
-            self._tam_total['mensualite_aa'] += mensualite_aa
-
-    def _calcul_tableau_amortissement2(self):
-        '''
-        mode calcul possible:
-            - mode_1: mensualite constant, assurance capital initial
-            - mode_2: mensualite constant, assurance capital restant
-            - mode_3: mensualite degressive, assurance capital restant
-            - mode_4: mensualite degressive, assurance capital restant annuel
-        '''
-        capital_restant = self._capital
-        mensualite_ha = Credit._calcul_mensualite_constante(self._capital, self._taux, self._duree_mois)
-        mensualite_aa = Credit._calcul_mensualite_constante(
-            self._capital, self._taux + self._taux_assurance, self._duree_mois)
-        assurance = self._calcul_mensualite_assurance_capital_constant(self._capital, self._taux_assurance)
-
-        # Calcul
-        for _ in range(self._duree_mois):
-
-            interet = capital_restant * self._taux / 12
-
-            if self._mode == Credit.mode_e.fixe_CI:
-                amortissement = mensualite_ha - interet
-                mensualite_aa = mensualite_ha + assurance
-
-            elif self._mode == Credit.mode_e.fixe_CRD:
-                assurance = capital_restant * self._taux_assurance / 12
-                amortissement = mensualite_aa - interet - assurance
-                mensualite_ha = mensualite_aa - assurance
-
-            elif self._mode == Credit.mode_e.degressive_CRD:
-                assurance = capital_restant * self._taux_assurance / 12
-                amortissement = mensualite_ha - interet
-                mensualite_aa = mensualite_ha + assurance
-
-            capital_restant -= amortissement
 
             self._tam.append({'capital': capital_restant,
                               'amortissement': amortissement,
