@@ -25,6 +25,12 @@ def main(argv):
     logging.info('{} {}\n'.format(__NAME, __VERSION))
 
     inputfile = parse_args(argv)
+    # If path to input file is provided, create output log file in the same folder
+    if inputfile:
+        location = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(inputfile)))
+        filepath = os.path.join(location, 'analyse_immo.log')
+        add_logger_file_handler(filepath)
+
     input_data = load_file(inputfile)
 
     achat_data = input_data['achat']
@@ -107,7 +113,13 @@ def configure_logger():
     consoleHandler.setFormatter(consoleFormatter)
     logger.addHandler(consoleHandler)
 
-    fileHandler = logging.FileHandler(__OUTPUT_FILEPATH, mode='w')
+    add_logger_file_handler(__OUTPUT_FILEPATH)
+
+
+def add_logger_file_handler(filepath):
+    logger = logging.getLogger()
+
+    fileHandler = logging.FileHandler(filepath, mode='w')
     fileHandler.setLevel(logging.DEBUG)
     fileFormatter = logging.Formatter('%(message)s')
     fileHandler.setFormatter(fileFormatter)
