@@ -1,6 +1,28 @@
 https://www.leboncoin.fr/ventes_immobilieres/1909721877.htm?ac=206978287
 https://www.squarehabitat.fr/immo/achat-immeuble-lencloitre-ag-900-2431685.aspx
 
+# 2021-01-29 Entretien telephonique
+
+Grand rue
+Baux de 1an
+1 départ de locataire prévu
+Double vitrage
+Avenant sur baux pour exploitation dépendance
+
+RDC:
+- rénavation en 2000
+- 1 couple + 1 bébé
+
+Etage:
+- 1 couple + 2 enfants
+
+Vendeur:
+- Agence ne répond pas aux questions
+- Depuis combien de temps il est proprio ?
+- Pourquoi ? 
+
+# Annonce
+
 Immeuble 158 m² Lencloitre
 102 000 €
 646 €/m²
