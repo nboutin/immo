@@ -89,7 +89,8 @@ def parse_args(argv):
 
 
 def print_help():
-    print('help')
+    print('-i input file')
+    print('-h help')
 
 
 def configure_logger():

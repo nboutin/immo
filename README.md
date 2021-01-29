@@ -4,16 +4,17 @@ Complete data/input.json file.
 
 Run script:
 
-    $ python -m analyse_immo
-    $ python -m analyse_immo -i analyse_immo/data/input.json
+    cd src
+    python -m analyse_immo
+    python -m analyse_immo -i analyse_immo/data/input.json
     
 Report is generated in analyse_immo/output folder
 
 # Test
 Run Unittest
 
-    $ python -m unittest -v
-    $ python -m unittest test.test_rendement
+    python -m unittest -v
+    python -m unittest test.test_rendement
     
 # Code coverage
 
