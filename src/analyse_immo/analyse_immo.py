@@ -113,13 +113,18 @@ def configure_logger():
     consoleHandler.setFormatter(consoleFormatter)
     logger.addHandler(consoleHandler)
 
-    add_logger_file_handler(__OUTPUT_FILEPATH)
+    fileHandler = logging.FileHandler(__OUTPUT_FILEPATH, mode='w')
+    fileHandler.setLevel(logging.DEBUG)
+    fileFormatter = logging.Formatter('%(message)s')
+    fileHandler.setFormatter(fileFormatter)
+    logger.addHandler(fileHandler)
 
 
 def add_logger_file_handler(filepath):
+    import logging.handlers
     logger = logging.getLogger()
 
-    fileHandler = logging.FileHandler(filepath, mode='w')
+    fileHandler = logging.handlers.TimedRotatingFileHandler(filepath, when='S')
     fileHandler.setLevel(logging.DEBUG)
     fileFormatter = logging.Formatter('%(message)s')
     fileHandler.setFormatter(fileFormatter)
