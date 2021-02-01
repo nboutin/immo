@@ -1,0 +1,26 @@
+Plan 	Dept 	Commune 	Adresse 	Date vente 	Année construct. 	Nb Pièces 	Surface terrain(m²) 	Surface utile(m²) 	Prix(€) 	Prix/m²(€) Surface utile 	Détail 	Sélection
+1 	86 	LENCLOITRE 	4 RUE DE BOUSSAGEAU 	13/03/2020 	1860 	5 	513 	108 	128 400 	1 188,89 	Visualiser détail de la vente 	Vente sélectionnée
+2 	86 	LENCLOITRE 	2 B RUE DU CHAMP BALLAN 	03/04/2018 	2007 	4 	1 219 	117 	165 000 	1 410,26 	Visualiser détail de la vente 	Vente sélectionnée
+3 	86 	LENCLOITRE 	22 PL DU CHAMP DE FOIRE 	19/06/2019 	1966 	4 	642 	79 	75 000 	949,37 	Visualiser détail de la vente 	Vente sélectionnée
+4 	86 	LENCLOITRE 	15 RUE CHARLES DE GAULLE 	24/07/2020 	1965 	4 	990 	110 	108 000 	981,82 	Visualiser détail de la vente 	Vente sélectionnée
+5 	86 	LENCLOITRE 	41 RUE CHARLES DE GAULLE 	05/10/2018 	1900 	3 	222 	67 	60 000 	895,52 	Visualiser détail de la vente 	Vente sélectionnée
+6 	86 	LENCLOITRE 	46 RUE CHARLES DE GAULLE 	28/11/2018 	1840 	3 	327 	65 	58 000 	892,31 	Visualiser détail de la vente 	Vente sélectionnée
+7 	86 	LENCLOITRE 	59 RUE CHARLES DE GAULLE 	26/09/2018 	1977 	6 	1 560 	92 	122 000 	1 326,09 	Visualiser détail de la vente 	Vente sélectionnée
+8 	86 	LENCLOITRE 	63 RUE CHARLES DE GAULLE 	31/08/2020 	1964 	4 	789 	90 	119 000 	1 322,22 	Visualiser détail de la vente 	Vente sélectionnée
+9 	86 	LENCLOITRE 	86 RUE CHARLES DE GAULLE 	06/02/2020 	1930 	3 	609 	63 	97 000 	1 539,68 	Visualiser détail de la vente 	Vente sélectionnée
+10 	86 	LENCLOITRE 	3 RUE DE L EPINETTE 	30/09/2019 	2004 	4 	502 	87 	128 000 	1 471,26 	Visualiser détail de la vente 	Vente sélectionnée
+11 	86 	LENCLOITRE 	25 ALL DES GENETS 	13/08/2019 	1997 	4 	410 	75 	75 000 	1 000,00 	Visualiser détail de la vente 	Vente sélectionnée
+12 	86 	LENCLOITRE 	2 RUE DU GUE DE LA GRANGE 	23/02/2018 	1915 	5 	896 	110 	122 000 	1 109,09 	Visualiser détail de la vente 	Vente sélectionnée
+13 	86 	LENCLOITRE 	11 RUE DU GUE DE LA GRANGE 	15/05/2020 	2010 	5 	2 852 	132 	190 000 	1 439,39 	Visualiser détail de la vente 	Vente sélectionnée
+14 	86 	LENCLOITRE 	18 RUE DU HUIT MAI 1945 	11/06/2020 	1980 	5 	841 	79 	128 000 	1 620,25 	Visualiser détail de la vente 	Vente sélectionnée
+15 	86 	LENCLOITRE 	32 RUE DU HUIT MAI 1945 	20/05/2020 	1886 	5 	1 853 	110 	79 750 	725,00 	Visualiser détail de la vente 	Vente sélectionnée
+16 	86 	LENCLOITRE 	32 B RUE DU HUIT MAI 1945 	06/05/2019 	2014 	5 	3 483 	101 	163 000 	1 613,86 	Visualiser détail de la vente 	Vente sélectionnée
+17 	86 	LENCLOITRE 	11 RUE JEAN JAURES 	18/08/2020 	1970 	5 	1 219 	113 	120 000 	1 061,95 	Visualiser détail de la vente 	Vente sélectionnée
+18 	86 	LENCLOITRE 	49 RUE LEON GAMBETTA 	03/05/2018 	1840 	5 	1 218 	92 	130 000 	1 413,04 	Visualiser détail de la vente 	Vente sélectionnée
+19 	86 	LENCLOITRE 	3 RUE PIERRE MARCHAND 	17/04/2019 	1964 	4 	638 	102 	80 000 	784,31 	Visualiser détail de la vente 	Vente sélectionnée
+20 	86 	LENCLOITRE 	6 PL ROBERT D ARBRISSEL 	27/04/2018 	1810 	3 	720 	72 	95 000 	1 319,44 	Visualiser détail de la vente 	Vente sélectionnée
+21 	86 	LENCLOITRE 	15 RUE DES SABLES 	12/09/2019 	1870 	1 	129 	60 	65 000 	1 083,33 	Visualiser détail de la vente 	Vente sélectionnée
+22 	86 	LENCLOITRE 	17 RUE SAINT EXUPERY 	27/11/2020 	1930 	5 	492 	137 	146 000 	1 065,69 	Visualiser détail de la vente 	Vente sélectionnée
+23 	86 	LENCLOITRE 	7 RUE DE LA TAILLE DES LYS 	03/12/2018 	2005 	4 	1 119 	100 	139 000 	1 390,00 	Visualiser détail de la vente 	Vente sélectionnée
+24 	86 	LENCLOITRE 	11 RUE DE LA TAILLE DES LYS 	14/06/2019 	2006 	5 	1 044 	101 	156 000 	1 544,55 	Visualiser détail de la vente 	Vente sélectionnée
+25 	86 	LENCLOITRE 	5 RUE DU TAILLIS DES TUILERIES 	17/12/2018 	1979 	2 	1 197 	59 	92 500 	1 567,80 	Visualiser détail de la vente 	Vente sélectionnée 	
