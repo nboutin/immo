@@ -28,18 +28,19 @@ Run Unittest
     coverage annotate -d ./test/coverage/annotate
     
     coverage erase
-    
+
 # Todo
 
 - [ ] Prendre en compte travaux dans les Impots
-- [ ] Exprimer le cashflow par année
+- [ ] Calculer le cashflow net-net
+- [ ] Exprimer le cashflow par annÃ©e
 - [ ] Prise en compte indexation des loyers (options)
 
-- [ ] Calcul de la rentabilité nette de prelevement sociaux (https://www.devenir-rentier.fr/t1918-2)
+- [ ] Calcul de la rentabilitï¿½ nette de prelevement sociaux (https://www.devenir-rentier.fr/t1918-2)
 - [ ] Calculer rendement net-net (net d'impot)
-- [ ] Evaluer restauration de la tresorerie avec le différé d'amortissement
-- [ ] Capacité d'investissement 70% loyer >= credit
-- [ ] Cout copropriete au m/€
+- [ ] Evaluer restauration de la tresorerie avec le diffï¿½rï¿½ d'amortissement
+- [ ] Capacitï¿½ d'investissement 70% loyer >= credit
+- [ ] Cout copropriete au m/ï¿½
 - [ ] Indicateur global Go/NoGo
 - [ ] Prendre en compte les impots dans le calcul du cashflow
 

@@ -93,8 +93,8 @@ def rapport_rendement(rendement):
                ['Rendement Brut (%)',
                 'Rendement Net (%)',
                 'Rendement Larcher (%)',
-                'Différentiel Mensuel (€)',
-                'Différentiel Annuel (€)'],
+                'Différentiel Mensuel Net (€)',
+                'Différentiel Annuel Net (€)'],
                ]
     rotate = list(zip(*rapport[::-1]))
     logging.info('# Rendement')

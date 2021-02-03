@@ -11,6 +11,7 @@ encoding//src/analyse_immo/rapports/rapport.py=utf-8
 encoding//src/analyse_immo/rapports/rapport_annexe_2044.py=utf-8
 encoding//src/analyse_immo/rapports/rapport_irpp.py=utf-8
 encoding//src/analyse_immo/rapports/rapport_micro_foncier.py=utf-8
+encoding//src/analyse_immo/rendement.py=utf-8
 encoding//src/test/test_analyse_immo.py=utf-8
 encoding//src/test/test_annexe_2044.py=utf-8
 encoding//src/test/test_credit.py=utf-8
