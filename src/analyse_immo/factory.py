@@ -125,8 +125,11 @@ class Factory:
 
     @staticmethod
     def make_micro_foncier(database, bien_immo):
-        mf = Micro_Foncier(database)
+        try:
+            mf = Micro_Foncier(database)
 
-        # bien_immo loyer_nu_net = import loyer_nu_brut
-        mf.add_ligne(L4EB_recettes_brutes, bien_immo.loyer_nu_net_annuel)
-        return mf
+            # bien_immo loyer_nu_net = import loyer_nu_brut
+            mf.add_ligne(L4EB_recettes_brutes, bien_immo.loyer_nu_net_annuel)
+            return mf
+        except Exception:
+            return None
