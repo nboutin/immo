@@ -3,24 +3,30 @@
 
 import unittest
 
+from test.testcase_fileloader import TestCaseFileLoader
+from analyse_immo.factory import Factory
 from analyse_immo.impots.annexe_2044 import Annexe_2044, L211_loyer_brut, L221_frais_administration, L222_autre_frais_gestion, \
     L223_prime_assurance, L224_travaux, L227_taxe_fonciere, L250_interet_emprunt,\
     L250_assurance_emprunteur, L250_frais_dossier, L250_frais_garantie
 
 
-class TestAnnexe2044(unittest.TestCase):
+class TestAnnexe2044(TestCaseFileLoader):
+
+    def setUp(self):
+        super().setUp()
+        self.defaut = Factory.make_defaut(self.defaut_data)
 
     def testInit(self):
-        _ = Annexe_2044()
+        _ = Annexe_2044(self.defaut)
 
     def testTotalRecettes(self):
-        an = Annexe_2044()
+        an = Annexe_2044(self.defaut)
         an.add_ligne(L211_loyer_brut, 6000)
 
         self.assertEqual(an.total_recettes, 6000)
 
     def testTotalFraisCharges(self):
-        an = Annexe_2044()
+        an = Annexe_2044(self.defaut)
         an.add_ligne(L211_loyer_brut, 6000)
         an.add_ligne(L221_frais_administration, 0)
         an.add_ligne(L222_autre_frais_gestion, 20)
@@ -31,7 +37,7 @@ class TestAnnexe2044(unittest.TestCase):
         self.assertEqual(an.total_frais_et_charges, 1270)
 
     def testTotalChargesEmprunt(self):
-        an = Annexe_2044()
+        an = Annexe_2044(self.defaut)
         an.add_ligne(L211_loyer_brut, 6000)
         an.add_ligne(L221_frais_administration, 0)
         an.add_ligne(L222_autre_frais_gestion, 20)
@@ -46,7 +52,7 @@ class TestAnnexe2044(unittest.TestCase):
         self.assertEqual(an.total_charges_emprunt, 3450)
 
     def testRevenuFoncierTaxable(self):
-        an = Annexe_2044()
+        an = Annexe_2044(self.defaut)
         an.add_ligne(L211_loyer_brut, 6000)
         an.add_ligne(L221_frais_administration, 0)
         an.add_ligne(L222_autre_frais_gestion, 20)
