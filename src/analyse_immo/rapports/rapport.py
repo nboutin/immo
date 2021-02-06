@@ -20,6 +20,27 @@ def generate_rapport(bien_immo, credit, annee_achat, irpp_2044_list, irpp_micro_
     rapport_micro_foncier(annee_achat, irpp_micro_foncier_list, bien_immo)
     rapport_irpp(annee_achat, irpp_2044_list, irpp_micro_foncier_list)
     rapport_rendement(rendement)
+    rapport_overview(bien_immo, credit, irpp_2044_list[0])
+
+
+def rapport_overview(bien_immo, credit, irpp):
+    rapport = [['{:.0f}'.format(bien_immo.financement_total),
+                bien_immo.loyer_nu_brut_annuel,
+                '{:.0f}/{:.0f}'.format(bien_immo.charges,
+                                       bien_immo.provisions),
+                '{:.0f}ans/{:.2f}%'.format(credit.duree_mois / 12, credit.taux * 100),
+                '{:.0f}'.format(irpp.impots_revenu_foncier),
+                None
+                ],
+               ['Financement Total',
+                'Loyer nu brut annuel',
+                'Charges/Provision',
+                'Credit durée/Taux',
+                'Impot foncier',
+                'Cashflow net-net']]
+    rotate = list(zip(*rapport[::-1]))
+    logging.info('# Overview')
+    logging.info(tabulate(rotate) + '\n')
 
 
 def rapport_achat(bien_immo):
@@ -28,10 +49,10 @@ def rapport_achat(bien_immo):
         [bien_immo.prix_net_vendeur,
          '{:.0f} ({:.2f}%)'.format(bien_immo.notaire_montant, bien_immo.notaire_taux * 100),
          '{:.0f} ({:.2f}%)'.format(bien_immo.agence_montant, bien_immo.agence_taux * 100),
-         '{:.0F}'.format(bien_immo.budget_travaux),
-         '{:.0F}'.format(bien_immo.apport),
-         '{:.0F}'.format(bien_immo.financement_total),
-         '{:.0F}'.format(bien_immo.rapport_surface_prix)
+         '{:.0f}'.format(bien_immo.budget_travaux),
+         '{:.0f}'.format(bien_immo.apport),
+         '{:.0f}'.format(bien_immo.financement_total),
+         '{:.0f}'.format(bien_immo.rapport_surface_prix)
          ],
         ['Prix net vendeur', 'Notaire', 'Agence', 'Travaux', 'Apport', 'Financement total', 'Prix €/m²'],
     ]
@@ -45,8 +66,8 @@ def rapport_location(bien_immo):
     rapport = [
         ['{:.0f}/{:.0f}'.format(bien_immo.loyer_nu_brut_mensuel, bien_immo.loyer_nu_brut_annuel),
          '{:.0f}/{:.0f}'.format(bien_immo.loyer_nu_net_mensuel, bien_immo.loyer_nu_net_annuel),
-         '{:.0F}'.format(bien_immo.charges),
-         '{:.0F}'.format(bien_immo.provisions)],
+         '{:.0f}'.format(bien_immo.charges),
+         '{:.0f}'.format(bien_immo.provisions)],
         ['Loyer brut mensuel/annuel', 'Loyer net mensuel/annuel', 'Charges', 'Provisions'],
     ]
     rotate = list(zip(*rapport[::-1]))
