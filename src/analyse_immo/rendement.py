@@ -43,10 +43,10 @@ class Rendement:
         return result
 
     @property
-    def cashflow_mensuel(self):
-        return self.cashflow_annuel / 12
+    def cashflow_net_mensuel(self):
+        return self.cashflow_net_annuel / 12
 
     @property
-    def cashflow_annuel(self):
+    def cashflow_net_annuel(self):
         return self._bi.loyer_nu_net_annuel - self._credit.get_mensualite_avec_assurance() * 12 - self._bi.charges - \
             self._bi.provisions

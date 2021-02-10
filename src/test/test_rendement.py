@@ -61,7 +61,7 @@ class TestRendement(unittest.TestCase):
         bi.add_lot(lot1)
         cr = Credit(50000, 240, 0.02, Credit.taux_e.periodique, 0, Credit.mode_e.fixe_CI, 0, 0)
         rdt = Rendement(bi, cr)
-        self.assertAlmostEqual(rdt.cashflow_mensuel, 247.06, 2)
+        self.assertAlmostEqual(rdt.cashflow_net_mensuel, 247.06, 2)
 
         lot2 = Lot("T2", 50, 500)
         charge = Charge(lot2, None)
@@ -75,8 +75,8 @@ class TestRendement(unittest.TestCase):
         self.assertAlmostEqual(bi.loyer_nu_brut_annuel, 12000, 2)
         self.assertAlmostEqual(bi.charges + bi.provisions, 1002, 2)
         self.assertAlmostEqual(cr.get_mensualite_avec_assurance(), 252.94, 2)
-        self.assertAlmostEqual(rdt.cashflow_mensuel, 621.89, 2)
-        self.assertAlmostEqual(rdt.cashflow_annuel, 7462.70, 2)
+        self.assertAlmostEqual(rdt.cashflow_net_mensuel, 621.89, 2)
+        self.assertAlmostEqual(rdt.cashflow_net_annuel, 7462.70, 2)
 
 
 if __name__ == '__main__':

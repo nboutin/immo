@@ -37,7 +37,7 @@ def rapport_overview(bien_immo, credit, irpp):
                 'Charges/Provision',
                 'Credit durée/Taux',
                 'Impot foncier',
-                'Cashflow net-net']]
+                'Différentiel annuel net-net']]
     rotate = list(zip(*rapport[::-1]))
     logging.info('# Overview')
     logging.info(tabulate(rotate) + '\n')
@@ -109,8 +109,8 @@ def rapport_rendement(rendement):
     rapport = [['{:.2f}'.format(rendement.rendement_brut * 100),
                 '{:.2f}'.format(rendement.rendement_net * 100),
                 '{:.2f}'.format(rendement.rendement_methode_larcher * 100),
-                '{:.2f}'.format(rendement.cashflow_mensuel),
-                '{:.2f}'.format(rendement.cashflow_annuel)],
+                '{:.2f}'.format(rendement.cashflow_net_mensuel),
+                '{:.2f}'.format(rendement.cashflow_net_annuel)],
                ['Rendement Brut (%)',
                 'Rendement Net (%)',
                 'Rendement Larcher (%)',

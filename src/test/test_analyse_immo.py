@@ -116,7 +116,7 @@ class TestCashflow(TestCaseFileLoader):
         cred = Factory.make_credit(self.credit_data, bi)
         rdt = Rendement(bi, cred)
 
-        self.assertAlmostEqual(rdt.cashflow_mensuel, 100.67, 2)
+        self.assertAlmostEqual(rdt.cashflow_net_mensuel, 100.67, 2)
 
 
 if __name__ == '__main__':
