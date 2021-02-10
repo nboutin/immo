@@ -6,10 +6,12 @@ All notable changes to this project will be documented in this file.
 * This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-## [Unreleased]
+## [2.1.0-dev]
 **Changed:**
+- [ ] Manage class bien_immo by year
 
 **Added:**
+- [ ] Release process
 
 ## [2.0.0] - 2021-02-10
 

@@ -12,7 +12,7 @@ from analyse_immo.rendement import Rendement
 from analyse_immo.rapports.rapport import generate_rapport
 
 __NAME = 'Analyse Immo'
-__VERSION = '2.0.0'
+__VERSION = '2.1.0-dev'
 
 __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 __INPUT_FILEPATH = os.path.join(__location__, 'data', 'input_2020.json')
