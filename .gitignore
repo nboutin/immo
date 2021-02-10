@@ -1,3 +1,9 @@
+# Folder
 __pycache__/
+*/test/coverage/
 
+# File
 *.pyc
+.~*
+*.log
+.coverage

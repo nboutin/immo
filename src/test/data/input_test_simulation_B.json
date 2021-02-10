@@ -1,0 +1,50 @@
+{
+  "achat" : {
+    "prix_net_vendeur" : 95000,
+    "__commnent" : "montant ou taux",
+    "frais_agence" : 0,
+    "frais_notaire" : 0.08,
+    "budget_travaux" : 91780.27,
+    "apport" : 0
+  },
+  "defaut" : {
+    "provision_travaux_taux" : 0.01,
+    "__comment" : "1/12=0.083, 1/24=0.042",
+    "vacance_locative_taux_T1" : 0.083,
+    "vacance_locative_taux_T2" : 0.042,
+    "gestion_agence_taux" : 0.08
+  },
+  "lots" : [ {
+    "type" : "T2",
+    "surface" : 170,
+    "loyer_nu_mensuel" : 1650,
+    "charges" : {
+      "__comment" : "0: off, 1: default, autre: utilise",
+      "provision_charge_mensuel" : 0,
+      "copropriete" : 0,
+      "taxe_fonciere" : 1700,
+      "PNO" : 255,
+      "travaux_provision_taux" : 0,
+      "vacance_locative_taux" : 0,
+      "agence_immo" : 0.07
+    }
+  } ],
+  "credit" : {
+    "duree_annee" : 20,
+    "taux_interet" : 0.02,
+    "taux_assurance" : 0,
+    "mode" : "fixe_ci",
+    "frais_dossier" : 0,
+    "frais_garantie" : 0
+  },
+  "impot" : {
+    "2019" : {
+      "n_parts_fiscales" : 0,
+      "n_demi_parts_fiscales" : 0,
+      "dons" : 0,
+      "syndicat" : 0,
+      "salaires" : [ 0 ],
+      "tmi" : 0
+    }
+  }
+}

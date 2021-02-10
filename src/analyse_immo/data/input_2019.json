@@ -1,0 +1,43 @@
+{
+  "achat" : {
+    "annee" : 2019,
+    "prix_net_vendeur" : 0,
+    "__commnent" : "montant ou taux",
+    "frais_agence" : 0,
+    "frais_notaire" : 0,
+    "budget_travaux" : 0,
+    "apport" : 0
+  },
+  "defaut" : {
+    "provision_travaux_taux" : 0.01,
+    "__comment" : "1/12=0.083, 1/24=0.042",
+    "vacance_locative_taux_T1" : 0.083,
+    "vacance_locative_taux_T2" : 0.042,
+    "gestion_agence_taux" : 0.08
+  },
+  "lots" : [ ],
+  "credit" : {
+    "duree_annee" : 0,
+    "taux_interet" : 0,
+    "taux_assurance" : 0,
+    "mode" : "mode_3",
+    "frais_dossier" : 0,
+    "frais_garantie" : 0
+  },
+  "impot" : {
+    "2020" : {
+      "parts_fiscales" : 2,
+      "enfants" : 1,
+      "dons" : 0,
+      "syndicat" : 143,
+      "salaires" : [ 31500, 23100 ]
+    },
+    "2019" : {
+      "parts_fiscales" : 2.5,
+      "enfants" : 1,
+      "dons" : 200,
+      "syndicat" : 143,
+      "salaires" : [ 31407, 23055 ]
+    }
+  }
+}

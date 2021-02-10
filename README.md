@@ -1,25 +1,46 @@
 # How-To Use
 
-Complete data.json file.
+Complete data/input.json file.
 
 Run script:
 
-    $ python rendement.py
+    cd src
+    python -m analyse_immo
+    python -m analyse_immo -i analyse_immo/data/input.json
+    
+Report is generated in analyse_immo/output folder
 
 # Test
 Run Unittest
 
-    $ cd immmo
-    $ python -m unittest -v
+    python -m unittest -v
+    python -m unittest test.test_rendement
+    
+# Code coverage
+
+    pip install --user coverage 
+    
+## Unittest
+
+    coverage run --source=analyse_immo --branch -m unittest -v
+    coverage report -m
+    coverage html -d ./test/coverage/html
+    coverage annotate -d ./test/coverage/annotate
+    
+    coverage erase
 
 # Todo
 
-- [ ] Ajouter parametre d'entree apport personnel
-- [ ] Evaluer restauration de la tresorerie avec le différré d'amortissement
+- [ ] Prendre en compte travaux dans les Impots
+- [ ] Calculer le cashflow net-net
+- [ ] Exprimer le cashflow par annÃ©e
+- [ ] Prise en compte indexation des loyers (options)
+
+- [ ] Calcul de la rentabilitï¿½ nette de prelevement sociaux (https://www.devenir-rentier.fr/t1918-2)
 - [ ] Calculer rendement net-net (net d'impot)
-- [ ] Capacité d'investissement 70% loyer >= credit
-- [ ] Prix au m²
-- [ ] Cout copropriete au m²
+- [ ] Evaluer restauration de la tresorerie avec le diffï¿½rï¿½ d'amortissement
+- [ ] Capacitï¿½ d'investissement 70% loyer >= credit
+- [ ] Cout copropriete au m/ï¿½
 - [ ] Indicateur global Go/NoGo
 - [ ] Prendre en compte les impots dans le calcul du cashflow
 
