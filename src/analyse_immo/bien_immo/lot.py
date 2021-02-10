@@ -2,11 +2,13 @@
 # -*- coding: utf-8 -*-
 
 from .charge import Charge
+from analyse_immo.tools import finance
 
 
 class Lot:
     '''
     IRL
+    https://www.anil.org/outils/indices-et-plafonds/tableau-de-lirl/
     2020 T4: 130.52 +0.19%
     2019 T4: 130.26 +0.95%
     2018 T4: 129.03 +1.74%
@@ -14,7 +16,7 @@ class Lot:
     2016 T4: 125.50
     '''
 
-    def __init__(self, type_, surface, loyer_nu_mensuel, irl_taux=None):
+    def __init__(self, type_, surface, loyer_nu_mensuel, irl_taux_annuel=0):
         '''
         @param type_: type du lot T1,T2,T3,T4
         @param surface: surface en m² du lot
@@ -23,8 +25,8 @@ class Lot:
         '''
         self._type = type_
         self._surface = surface
-        self._loyer_nu_mensuel = loyer_nu_mensuel
-        self._irl_taux = irl_taux
+        self._loyer_nu_brut_mensuel = loyer_nu_mensuel
+        self._irl_taux_annuel = irl_taux_annuel
         self._charge = Charge(self, None)
 
     @property
@@ -35,29 +37,40 @@ class Lot:
     def surface(self):
         return self._surface
 
-    @property
-    def loyer_nu_brut_mensuel(self):
-        return self._loyer_nu_mensuel
+    def loyer_nu_brut_mensuel(self, i_month=1):
+        '''
+        @param i_month: month index start at 1
+        january = i_month 1
+        december = i_month 12
+        i_month = 13 = year 2, month 1
+        '''
+        i_month -= 1
+        i_year = int(i_month / 12) + 1
+        return self.loyer_nu_brut_annuel(i_year) / 12
 
-    @property
-    def loyer_nu_brut_annuel(self):
-        return self.loyer_nu_brut_mensuel * 12
+    def loyer_nu_brut_annuel(self, i_year=1):
+        '''
+        @param: i_year: year index start at 1
+        '''
+        i_year -= 1
+        return finance.capital_compose(self._loyer_nu_brut_mensuel * 12, self._irl_taux_annuel, i_year)
 
-    @property
-    def loyer_nu_net_mensuel(self):
+    def loyer_nu_net_mensuel(self, i_month=1):
         '''
         @see: loyer_nu_net_annuel
         '''
-        return self.loyer_nu_net_annuel / 12
+        i_month -= 1
+        i_year = int(i_month / 12) + 1
+        return self.loyer_nu_net_annuel(i_year) / 12
 
-    @property
-    def loyer_nu_net_annuel(self):
+    def loyer_nu_net_annuel(self, i_year=1):
         '''
         Provision sur loyer nu brut de:
             - vacance locative
         '''
-        vacance_locative = self.charge.get_montant_annuel(Charge.charge_e.vacance_locative)
-        return self.loyer_nu_brut_annuel - vacance_locative
+#         vacance_locative = self.charge.get_montant_annuel(Charge.charge_e.vacance_locative)
+        vac_loc_taux = self.charge.get_taux(Charge.charge_e.vacance_locative)
+        return self.loyer_nu_brut_annuel(i_year) * (1 - vac_loc_taux)
 
     @property
     def charge(self):

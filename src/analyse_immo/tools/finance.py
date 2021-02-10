@@ -21,7 +21,7 @@ def taux_actuariel(taux_period, n_periode):
     return math.pow((1 + taux_period), 1 / n_periode) - 1
 
 
-def interets_compose(capital, taux_periodique, n_periode):
+def capital_compose(capital, taux_periodique, n_periode):
     '''
     @return: capital cumul = capital * (1 + taux_periodique)^(n_periode)
     '''

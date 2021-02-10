@@ -65,32 +65,36 @@ class Charge:
         self._default_data = defaut
         self._charges = []
 
-    def get_montant_annuel(self, charges_list):
+    def get_montant_annuel(self, charge_type_list):
         '''
-        :param charges_list: list of charges
+        :param charge_type_list: list of charge type
         '''
-        if not isinstance(charges_list, list):
-            charges_list = [charges_list]
-        return sum(charge['value'] for charge in self._charges if charge['type'] in charges_list)
+        # Convert to list
+        if not isinstance(charge_type_list, list):
+            charge_type_list = [charge_type_list]
+        return sum(charge['value'] for charge in self._charges if charge['charge'] in charge_type_list)
 
-    def get_taux(self, type_):
-        return sum(charge['taux'] for charge in self._charges if charge['type'] == type_)
+    def get_taux(self, charge_type):
+        '''
+        @param charge_type: charge type
+        '''
+        return sum(charge['taux'] for charge in self._charges if charge['charge'] == charge_type)
 
-    def add(self, type_, value):
-        taux = 0
-        montant = 0
+    def add(self, charge, value):
+        taux = None
+        montant = None
 
         if value == 1 and self._default_data:  # use default
-            value = self.__get_default(type_)
+            value = self.__get_default(charge)
 
         if value < 1:
             taux = value
-            montant = self._lot.loyer_nu_brut_annuel * taux
+#             montant = self._lot.loyer_nu_brut_annuel * taux
         elif value > 1:
             montant = value
-            taux = montant / self._lot.loyer_nu_brut_annuel
+#             taux = montant / self._lot.loyer_nu_brut_annuel
 
-        self._charges.append({'type': type_, 'taux': taux, 'value': montant})
+        self._charges.append({'charge': charge, 'taux': taux, 'value': montant})
 
     def __get_default(self, type_):
         if type_ == Charge.charge_e.provision_travaux:
