@@ -88,9 +88,10 @@ class TestIRPP(unittest.TestCase):
         annexe_2044.add_ligne(L211_loyer_brut, 5000)
         irpp.annexe_2044 = annexe_2044
 
+        self.assertAlmostEqual(annexe_2044.prelevement_sociaux, 5000 * .172, 2)
         self.assertEqual(irpp.revenu_fiscale_reference, 50000 * .9 + 5000)
         self.assertEqual(irpp.quotient_familial, (50000 * .9 + 5000) / 2)
-        self.assertAlmostEqual(irpp.impots_net, 4182, 0)
+        self.assertAlmostEqual(irpp.impots_net, 4182 + 5000 * .172, 0)
         self.assertAlmostEqual(irpp.impots_salaires_net, 3482, 0)
 
     def testImpotSalaireNetB(self):
@@ -102,11 +103,13 @@ class TestIRPP(unittest.TestCase):
         annexe_2044.add_ligne(L211_loyer_brut, 2212)
         irpp.annexe_2044 = annexe_2044
 
+        self.assertAlmostEqual(annexe_2044.prelevement_sociaux, 2212 * .172, 2)
+
         self.assertEqual(irpp.revenu_fiscale_reference, 51352)
         self.assertAlmostEqual(irpp.quotient_familial, 20541, 0)
-        self.assertAlmostEqual(irpp.impots_net, 2875, 0)
+        self.assertAlmostEqual(irpp.impots_net, 2875 + 2212 * .172, 0)
         self.assertAlmostEqual(irpp.impots_salaires_net, 2632, 0)
-        self.assertAlmostEqual(irpp.impots_revenu_foncier, 243, 0)
+        self.assertAlmostEqual(irpp.impots_revenu_foncier, 243 + 2212 * .172, 0)
 
     def testExemple1(self):
         '''
