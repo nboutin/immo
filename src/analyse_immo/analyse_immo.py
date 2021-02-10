@@ -16,7 +16,7 @@ __VERSION = '2.0.0-rc'
 
 __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 __INPUT_FILEPATH = os.path.join(__location__, 'data', 'input_2020.json')
-__OUTPUT_FILEPATH = os.path.join(__location__, 'output', 'analyse_immo.log')
+__OUTPUT_FILEPATH = os.path.join(__location__, 'analyse_immo.log')
 
 
 def main(argv):
