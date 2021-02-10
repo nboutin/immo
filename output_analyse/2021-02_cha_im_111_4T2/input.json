@@ -1,0 +1,112 @@
+{
+	"achat": {
+		"annee": 2020,
+		"prix_net_vendeur": 132000,
+		"__commnent": "montant ou taux",
+		"frais_agence": 0,
+		"frais_notaire": 0.08,
+		"budget_travaux": 0,
+		"apport": 0
+	},
+	"defaut": {
+		"provision_travaux_taux": 0.01,
+		"__comment": "1/12=0.083, 1/24=0.042",
+		"vacance_locative_taux_T1": 0.084,
+		"vacance_locative_taux_T2": 0.042,
+		"vacance_locative_taux_T3": 0.021,
+		"vacance_locative_taux_T4": 0.021,
+		"gestion_agence_taux": 0.08
+	},
+	"lots": [
+		{
+			"type": "T2",
+			"surface": 30,
+			"loyer_nu_mensuel": 293,
+			"charges": {
+				"__comment": "0: off, 1: default, autre: utilise",
+				"provision_charge_mensuel": 20,
+				"copropriete": 0,
+				"taxe_fonciere": 1300,
+				"PNO": 200,
+				"agence_immo": 0,
+				"travaux_provision_taux": 1,
+				"vacance_locative_taux": 1
+			}
+		},
+		{
+			"type": "T2",
+			"surface": 30,
+			"loyer_nu_mensuel": 310,
+			"charges": {
+				"__comment": "0: off, 1: default, autre: utilise",
+				"provision_charge_mensuel": 20,
+				"copropriete": 0,
+				"taxe_fonciere": 0,
+				"PNO": 0,
+				"agence_immo": 0,
+				"travaux_provision_taux": 1,
+				"vacance_locative_taux": 1
+			}
+		},
+		{
+			"type": "T2",
+			"surface": 30,
+			"loyer_nu_mensuel": 310,
+			"charges": {
+				"__comment": "0: off, 1: default, autre: utilise",
+				"provision_charge_mensuel": 20,
+				"copropriete": 0,
+				"taxe_fonciere": 0,
+				"PNO": 0,
+				"agence_immo": 0,
+				"travaux_provision_taux": 1,
+				"vacance_locative_taux": 1
+			}
+		},
+		{
+			"type": "T2",
+			"surface": 21,
+			"loyer_nu_mensuel": 290,
+			"charges": {
+				"__comment": "0: off, 1: default, autre: utilise",
+				"provision_charge_mensuel": 20,
+				"copropriete": 0,
+				"taxe_fonciere": 0,
+				"PNO": 0,
+				"agence_immo": 0,
+				"travaux_provision_taux": 1,
+				"vacance_locative_taux": 1
+			}
+		}
+	],
+	"credit": {
+		"duree_annee": 20,
+		"taux_interet": 0.0115,
+		"taux_assurance": 0.0035,
+		"mode": "degressive_crd",
+		"frais_dossier": 300,
+		"frais_garantie": 0
+	},
+	"impot": {
+		"2020": {
+			"parts_fiscales": 2.5,
+			"enfants": 1,
+			"dons": 0,
+			"syndicat": 143,
+			"salaires": [
+				31500,
+				23100
+			]
+		},
+		"2019": {
+			"parts_fiscales": 2.5,
+			"enfants": 1,
+			"dons": 200,
+			"syndicat": 143,
+			"salaires": [
+				31407,
+				23055
+			]
+		}
+	}
+}
