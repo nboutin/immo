@@ -3,6 +3,7 @@
 
 import math
 from enum import unique, Enum, auto
+from analyse_immo.tools import finance
 
 
 class Credit:
@@ -95,24 +96,6 @@ class Credit:
     def frais_garantie(self):
         return self._frais_garantie
 
-    # Static
-    @staticmethod
-    def taux_periodique(taux_annuel, n_periode):
-        '''
-        # Taux proportionnel (credit immo et pro)
-        taux_periodique = taux_annuel / n_periode
-        '''
-        return taux_annuel / n_periode
-
-    @staticmethod
-    def taux_actuariel(taux_annuel, n_periode):
-        '''
-        # Taux actuariel (credit conso)
-        taux_periodique = (1 + taux_annuel)^(1/n_periode)-1
-        exemple remboursement mensuel: taux periodique = (1 + taux)^(1/12)-1
-        '''
-        return math.pow((1 + taux_annuel), 1 / n_periode) - 1
-
     @staticmethod
     def mensualite_periodique(capital, taux_periodique, duree_mois):
         '''
@@ -191,8 +174,8 @@ class Credit:
 
         # Taux
         if self._taux_mode == Credit.taux_e.periodique:
-            taux_periodique = Credit.taux_periodique(self._taux, 12)
-            taux_assurance_periodique = Credit.taux_periodique(self._taux_assurance, 12)
+            taux_periodique = finance.taux_periodique(self._taux, 12)
+            taux_assurance_periodique = finance.taux_periodique(self._taux_assurance, 12)
         elif self._taux_mode == Credit.taux_e.actuariel:
             taux_periodique = Credit.taux_actuariel(self._taux, 12)
             taux_assurance_periodique = Credit.taux_actuariel(self._taux_assurance, 12)

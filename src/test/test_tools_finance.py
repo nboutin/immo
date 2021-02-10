@@ -3,7 +3,7 @@
 
 import unittest
 
-from analyse_immo.tools import interets_compose, taux_periodique, taux_actuariel
+from analyse_immo.tools.finance import interets_compose, taux_periodique, taux_actuariel
 
 
 class TestTools(unittest.TestCase):
@@ -17,6 +17,9 @@ class TestTools(unittest.TestCase):
         t_an = 0.10
         self.assertAlmostEqual(taux_actuariel(t_an, 1), t_an, 2)
         self.assertAlmostEqual(taux_actuariel(t_an, 12), 0.0080, 4)
+
+        self.assertAlmostEqual(taux_actuariel(0.04, 12), 0.00327, 5)
+        self.assertAlmostEqual(taux_actuariel(0.0234, 12), 0.00193, 5)
 
     def testInteretCompose(self):
         t_an = 0.05
