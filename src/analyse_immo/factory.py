@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from analyse_immo.bien_immo import Bien_Immo
 from analyse_immo.defaut import Defaut
-from analyse_immo.charge import Charge
-from analyse_immo.lot import Lot
+from analyse_immo.bien_immo.bien_immo import Bien_Immo
+from analyse_immo.bien_immo.charge import Charge
+from analyse_immo.bien_immo.lot import Lot
 from analyse_immo.credit import Credit
 from analyse_immo.impots.irpp import IRPP, L1AJ_salaire, L1BJ_salaire, L7UF_dons, L7AE_syndicat
 from analyse_immo.impots.annexe_2044 import Annexe_2044, L211_loyer_brut, L221_frais_administration, L222_autre_frais_gestion, \

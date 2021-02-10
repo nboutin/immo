@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from analyse_immo.charge import Charge
+from .charge import Charge
 
 
 class Lot:

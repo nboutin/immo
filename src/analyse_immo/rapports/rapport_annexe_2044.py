@@ -4,7 +4,7 @@
 import logging
 from tabulate import tabulate
 
-from analyse_immo.charge import Charge
+from analyse_immo.bien_immo.charge import Charge
 from analyse_immo.impots.annexe_2044 import L211_loyer_brut, L221_frais_administration, L222_autre_frais_gestion, \
     L223_prime_assurance, L224_travaux, L227_taxe_fonciere, L229_copropriete_provision, L230_copropriete_regularisation, L250_interet_emprunt,\
     L250_assurance_emprunteur, L250_frais_dossier, L250_frais_garantie

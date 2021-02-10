@@ -4,8 +4,8 @@
 import unittest
 
 from analyse_immo.factory import Factory
-from analyse_immo.lot import Lot
-from analyse_immo.charge import Charge
+from analyse_immo.bien_immo.lot import Lot
+from analyse_immo.bien_immo.charge import Charge
 from test.testcase_fileloader import TestCaseFileLoader
 
 

@@ -4,7 +4,7 @@
 import logging
 from tabulate import tabulate
 
-from analyse_immo.charge import Charge
+from analyse_immo.bien_immo.charge import Charge
 from analyse_immo.impots.micro_foncier import L4EB_recettes_brutes
 
 

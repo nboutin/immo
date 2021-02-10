@@ -1,6 +1,12 @@
+=\=\=\=\=\=\=
+<<<<<<<=HEAD
+>>>>>>>=3ca94ae (Calcul deficit foncier)
 eclipse.preferences.version=1
 encoding//src/analyse_immo/__main__.py=utf-8
 encoding//src/analyse_immo/analyse_immo.py=utf-8
+encoding//src/analyse_immo/bien_immo/bien_immo.py=utf-8
+encoding//src/analyse_immo/bien_immo/charge.py=utf-8
+encoding//src/analyse_immo/bien_immo/lot.py=utf-8
 encoding//src/analyse_immo/credit.py=utf-8
 encoding//src/analyse_immo/database.py=utf-8
 encoding//src/analyse_immo/factory.py=utf-8
@@ -20,7 +26,9 @@ encoding//src/test/test_credit.py=utf-8
 encoding//src/test/test_credit_fixecrd.py=utf-8
 encoding//src/test/test_credit_lacentraledefinancement.py=utf-8
 encoding//src/test/test_database.py=utf-8
+encoding//src/test/test_impot_regime_reel.py=utf-8
 encoding//src/test/test_irpp.py=utf-8
+encoding//src/test/test_lot.py=utf-8
 encoding//src/test/test_rendement.py=utf-8
 encoding//src/test/test_simulation_a.py=utf-8
 encoding//src/test/test_simulation_b.py=utf-8
