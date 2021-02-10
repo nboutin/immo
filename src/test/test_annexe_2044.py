@@ -66,6 +66,32 @@ class TestAnnexe2044(TestCaseFileLoader):
 
         self.assertEqual(an.revenu_foncier_taxable, 1280)
 
+    def testTotalChargesTaux(self):
+        '''
+        def total_charges_taux(self):
+            return 1 - (self.revenu_foncier_taxable / self.total_recettes)
+        '''
+        an = Annexe_2044(self.defaut)
+        an.add_ligne(L211_loyer_brut, 6000)
+        self.assertAlmostEqual(an.total_charges_taux, 0, 2)
+
+        an.add_ligne(L223_prime_assurance, 1000)
+        self.assertAlmostEqual(an.total_charges_taux, 1 - (5 / 6), 2)
+
+        anB = Annexe_2044(self.defaut)
+        anB.add_ligne(L211_loyer_brut, 6000)
+        anB.add_ligne(L221_frais_administration, 0)
+        anB.add_ligne(L222_autre_frais_gestion, 20)
+        anB.add_ligne(L223_prime_assurance, 100)
+        anB.add_ligne(L224_travaux, 500)
+        anB.add_ligne(L227_taxe_fonciere, 650)
+        anB.add_ligne(L250_interet_emprunt, 2000)
+        anB.add_ligne(L250_assurance_emprunteur, 300)
+        anB.add_ligne(L250_frais_dossier, 150)
+        anB.add_ligne(L250_frais_garantie, 1000)
+        self.assertEqual(anB.revenu_foncier_taxable, 1280)
+        self.assertAlmostEqual(anB.total_charges_taux, 1 - (1280 / 6000), 2)
+
 
 if __name__ == '__main__':
     unittest.main()
