@@ -33,7 +33,7 @@ Run Unittest
 
 - [ ] Prendre en compte travaux dans les Impots
 - [ ] Calculer le cashflow net-net
-- [ ] Exprimer le cashflow par annÃ©e
+- [ ] Exprimer le cashflow par année
 - [ ] Prise en compte indexation des loyers (options)
 
 - [ ] Calcul de la rentabilitï¿½ nette de prelevement sociaux (https://www.devenir-rentier.fr/t1918-2)

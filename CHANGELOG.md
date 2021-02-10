@@ -11,7 +11,7 @@ All notable changes to this project will be documented in this file.
 
 **Added:**
 
-## [2.0.0] - 2021-01-29
+## [2.0.0] - 2021-02-10
 
 Developpement restart from here
 
