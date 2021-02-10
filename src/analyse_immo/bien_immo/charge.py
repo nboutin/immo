@@ -51,12 +51,12 @@ class Charge:
         # Provisions
         provision_travaux = auto()
         vacance_locative = auto()
-    # Charges proprietaire
+        # Charges proprietaire
         copropriete = auto()
         taxe_fonciere = auto()
         prime_assurance = auto()
         agence_immo = auto()
-    # Charges locataire
+        # Charges locataire
         charge_locative = auto()
 
     def __init__(self, lot, defaut=None):

@@ -5,12 +5,27 @@ from .charge import Charge
 
 
 class Lot:
+    '''
+    IRL
+    2020 T4: 130.52 +0.19%
+    2019 T4: 130.26 +0.95%
+    2018 T4: 129.03 +1.74%
+    2017 T4: 126.82 +1.05%
+    2016 T4: 125.50
+    '''
 
-    def __init__(self, type_, surface, loyer_nu_mensuel):
+    def __init__(self, type_, surface, loyer_nu_mensuel, irl_taux=None):
+        '''
+        @param type_: type du lot T1,T2,T3,T4
+        @param surface: surface en m² du lot
+        @param loye_nu_mensuel: loyer du lot hors charges par mois
+        @param irl_taux: taux d'évolution annuel de l'indice de reference des loyers
+        '''
         self._type = type_
         self._surface = surface
         self._loyer_nu_mensuel = loyer_nu_mensuel
-        self.charge = Charge(self, None)
+        self._irl_taux = irl_taux
+        self._charge = Charge(self, None)
 
     @property
     def type(self):
@@ -30,6 +45,9 @@ class Lot:
 
     @property
     def loyer_nu_net_mensuel(self):
+        '''
+        @see: loyer_nu_net_annuel
+        '''
         return self.loyer_nu_net_annuel / 12
 
     @property
@@ -48,27 +66,3 @@ class Lot:
     @charge.setter
     def charge(self, value):
         self._charge = value
-
-#     @property
-#     def vacance_locative_taux_annuel(self):
-#         return self._vacance_locative_taux_annuel
-#
-#     @property
-#     def vacance_locative_montant_annuel(self):
-#         return self.loyer_nu_brut_annuel * self._vacance_locative_taux_annuel
-
-#     @property
-#     def pno_montant_annuel(self):
-#         return self._PNO
-#
-#     @property
-#     def gestion_agence_montant_annuel(self):
-#         return self.loyer_nu_brut_annuel * self._gestion_agence_taux
-#
-#     @property
-#     def copropriete_mensuel(self):
-#         return self._copropriete_mensuel
-#
-#     @property
-#     def copropriete_annuel(self):
-#         return self.copropriete_mensuel * 12

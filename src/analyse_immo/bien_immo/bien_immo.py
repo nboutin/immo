@@ -7,6 +7,8 @@ from .charge import Charge
 class Bien_Immo:
     '''
     Bien_Immo can contains several lot
+    Augmentation annuel du loyer 0.1%
+    Augmentation annuel des charges 2%
     '''
 
     def __init__(self, prix_net_vendeur, frais_agence, frais_notaire, budget_travaux, apport):
