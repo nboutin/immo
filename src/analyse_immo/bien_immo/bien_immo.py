@@ -93,7 +93,16 @@ class Bien_Immo:
             return 0
 
     def get_charge(self, charges_list):
-        return sum(lot.charge.get_montant_annuel(charges_list) for lot in self._lots)
+        #         return sum(lot.charge.get_montant_annuel(charges_list) for lot in self._lots)
+        sum = 0
+        for charge in charges_list:
+            for lot in self._lots:
+                value = lot.charge.get_montant_annuel(charge)
+                # If taux
+                if value < 1:
+                    value = value * lot.loyer_nu_net_annuel()
+                sum += value
+        return sum
 
     @property
     def charges(self):

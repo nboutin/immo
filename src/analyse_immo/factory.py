@@ -31,7 +31,7 @@ class Factory:
                       lot_data['loyer_nu_mensuel'])
 
             charges_data = lot_data['charges']
-            charge = Charge(lot, defaut)
+            charge = Charge(defaut, lot.type)
             charge.add(Charge.charge_e.charge_locative, charges_data['provision_charge_mensuel'])
 
             charge.add(Charge.charge_e.copropriete, charges_data['copropriete'])
