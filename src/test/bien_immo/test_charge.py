@@ -4,7 +4,6 @@
 import unittest
 from analyse_immo.factory import Factory
 from analyse_immo.bien_immo.charge import Charge
-from analyse_immo.bien_immo.lot import Lot
 from test.testcase_fileloader import TestCaseFileLoader
 
 
@@ -18,62 +17,81 @@ class TestCharge(TestCaseFileLoader):
         _ = Charge(None)
         _ = Charge(None, None)
 
+        with self.assertRaises(TypeError):
+            _ = Charge()
+
     def testAddMontant(self):
-        lot = Lot('T2', 45, 450)
-        charge = Charge(lot)
+        charge = Charge(self.defaut)
         type_ = Charge.charge_e.taxe_fonciere
         charge.add(type_, 500)
-
         self.assertEqual(charge.get_montant_annuel(type_), 500)
 
     def testAdd0(self):
-        lot = Lot('T2', 45, 450)
-        charge = Charge(lot)
+        charge = Charge(self.defaut)
         type_ = Charge.charge_e.taxe_fonciere
         charge.add(type_, 0)
-
         self.assertEqual(charge.get_montant_annuel(type_), 0)
 
     def testAddVacanceLocative0(self):
-        lot = Lot('T2', 45, 450)
-        charge = Charge(lot)
+        charge = Charge(self.defaut)
         type_ = Charge.charge_e.vacance_locative
         charge.add(type_, 0)
 
         self.assertEqual(charge.get_montant_annuel(type_), 0)
 
     def testAddVacanceLocative1A(self):
-        '''no default'''
-        lot = Lot('T2', 45, 450)
-        charge = Charge(lot)
+        '''looking for default value but lot_type is not defined'''
+        charge = Charge(self.defaut)
         type_ = Charge.charge_e.vacance_locative
         charge.add(type_, 1)
-
-        self.assertEqual(charge.get_montant_annuel(type_), 0)
+        self.assertEqual(charge.get_taux(type_), 0.083)
 
     def testAddVacanceLocative1B(self):
-        lot = Lot('T2', 45, 450)
-        charge = Charge(lot, self.defaut)
+        '''looking for default value'''
+        charge = Charge(self.defaut, 'T1')
         type_ = Charge.charge_e.vacance_locative
         charge.add(type_, 1)
+
+    def testAddVacanceLocative1C(self):
+        '''Add a taux and ask for a montant'''
+        charge = Charge(self.defaut, 'T1')
+        type_ = Charge.charge_e.vacance_locative
+        charge.add(type_, 0.5)
+        with self.assertRaises(Exception):
+            charge.get_montant_annuel(type_)
+
+    def testAddVacanceLocative1D(self):
+        charge = Charge(self.defaut, 'T2')
+        type_ = Charge.charge_e.vacance_locative
+        charge.add(type_, 0.5)
+        self.assertEqual(charge.get_taux(type_), 0.5)
 
     def testAddTravauxProvision(self):
         '''default'''
-        lot = Lot('T2', 45, 500)
-        charge = Charge(lot, self.defaut)
+        charge = Charge(self.defaut)
         type_ = Charge.charge_e.provision_travaux
         charge.add(type_, 1)
 
         self.assertEqual(charge.get_taux(type_), 0.01)
-        self.assertEqual(charge.get_montant_annuel(type_), 60)
+        with self.assertRaises(Exception):
+            charge.get_montant_annuel(type_)
 
     def testAddMissingDefaut(self):
-        lot = Lot('T2', 45, 500)
-        charge = Charge(lot, self.defaut)
+        charge = Charge(self.defaut)
         type_ = Charge.charge_e.copropriete
 
         with self.assertRaises(LookupError):
             charge.add(type_, 1)
+
+    def testGetMontantAnnuel(self):
+        '''get_montant_annuel with list'''
+        charge = Charge(self.defaut)
+        charge.add(Charge.charge_e.copropriete, 10)
+        charge.add(Charge.charge_e.taxe_fonciere, 20)
+        self.assertEqual(
+            charge.get_montant_annuel(
+                (Charge.charge_e.copropriete,
+                 Charge.charge_e.taxe_fonciere)), 30)
 
 
 if __name__ == '__main__':

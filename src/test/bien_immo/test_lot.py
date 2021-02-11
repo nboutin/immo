@@ -57,11 +57,15 @@ class TestLot(TestCaseFileLoader):
         self.assertEqual(lot.loyer_nu_brut_annuel(3), 350 * 12 * 1.01 * 1.01)
         self.assertEqual(lot.loyer_nu_brut_annuel(10), 350 * 12 * math.pow(1.01, 9))
 
-    def testLoyerNetMensuel(self):
+    def testLoyerNetMensuelA(self):
+        '''get loyer_nu_net_mensuel without vacance locative'''
         lot = Lot('T1', 30, 360)
         self.assertEqual(lot.loyer_nu_net_mensuel(), 360)
 
-        charge = Charge(lot, self.defaut)
+    def testLoyerNetMensuelB(self):
+        '''get loyer_nu_net_mensuel with vacance locative default value'''
+        lot = Lot('T1', 30, 360)
+        charge = Charge(self.defaut, lot.type)
         charge.add(Charge.charge_e.vacance_locative, 1)
         lot.charge = charge
         self.assertEqual(lot.loyer_nu_net_mensuel(), 330.12)
