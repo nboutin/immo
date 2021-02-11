@@ -70,6 +70,27 @@ class TestLot(TestCaseFileLoader):
         lot.charge = charge
         self.assertEqual(lot.loyer_nu_net_mensuel(), 330.12)
 
+    def testLoyerNuNetMensuel(self):
+        '''With irl_taux_annuel and vacance locative'''
+        lot = Lot('T2', 45, 400, irl_taux_annuel=0.01)
+        charge = Charge(self.defaut, lot.type)
+        charge.add(Charge.charge_e.vacance_locative, 1 / 24)
+        lot.charge = charge
+
+        self.assertAlmostEqual(lot.loyer_nu_net_mensuel(1), 400 * (1 - 1 / 24), 2)
+        self.assertAlmostEqual(lot.loyer_nu_net_mensuel(13), 400 * 1.01 * (1 - 1 / 24), 2)
+
+    def testLoyerNuNetAnnuel(self):
+        '''With irl_taux_annuel and vacance locative'''
+        lot = Lot('T2', 45, 500, irl_taux_annuel=0.02)
+        charge = Charge(self.defaut, lot.type)
+        charge.add(Charge.charge_e.vacance_locative, 0.04)
+        lot.charge = charge
+
+        self.assertAlmostEqual(lot.loyer_nu_net_annuel(1), 500 * 12 * (1 - 0.04), 2)
+        self.assertAlmostEqual(lot.loyer_nu_net_annuel(2), 500 * 12 * 1.02 * (1 - 0.04), 2)
+        self.assertAlmostEqual(lot.loyer_nu_net_annuel(10), 500 * 12 * math.pow(1.02, 9) * (1 - 0.04), 2)
+
 
 if __name__ == '__main__':
     unittest.main()
