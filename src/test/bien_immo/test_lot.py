@@ -19,6 +19,10 @@ class TestLot(TestCaseFileLoader):
     def testInit(self):
         _ = Lot('T1', 30, 350)
 
+    def testSurface(self):
+        lot = Lot('T1', 45, 123)
+        self.assertEqual(lot.surface, 45)
+
     def testLoyerNuBrutMensuel(self):
         lot = Lot('T1', 30, 350)
         self.assertEqual(lot.loyer_nu_brut_mensuel(), 350)

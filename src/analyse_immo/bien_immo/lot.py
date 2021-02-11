@@ -40,9 +40,6 @@ class Lot:
     def loyer_nu_brut_mensuel(self, i_month=1):
         '''
         @param i_month: month index start at 1
-        january = i_month 1
-        december = i_month 12
-        i_month = 13 = year 2, month 1
         '''
         i_month -= 1
         i_year = int(i_month / 12) + 1
@@ -68,7 +65,6 @@ class Lot:
         Provision sur loyer nu brut de:
             - vacance locative
         '''
-#         vacance_locative = self.charge.get_montant_annuel(Charge.charge_e.vacance_locative)
         vac_loc_taux = self.charge.get_taux(Charge.charge_e.vacance_locative)
         return self.loyer_nu_brut_annuel(i_year) * (1 - vac_loc_taux)
 
