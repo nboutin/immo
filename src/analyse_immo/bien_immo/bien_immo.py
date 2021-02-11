@@ -53,29 +53,33 @@ class Bien_Immo:
         return self._prix_net_vendeur + self._notaire_montant + self._agence_montant + \
             self._budget_travaux - self._apport
 
-    @property
-    def loyer_nu_brut_mensuel(self):
+    def loyer_nu_brut_mensuel(self, i_month=1):
         '''
         Loyer nu (hors charges) brut (sans provision)
-        Voir loyer nu net
+        @param i_month: month index
+        @see: loyer_nu_net_mensuel
         '''
-        return sum(lot.loyer_nu_brut_mensuel for lot in self._lots)
+        return sum(lot.loyer_nu_brut_mensuel(i_month) for lot in self._lots)
 
-    @property
-    def loyer_nu_brut_annuel(self):
-        return self.loyer_nu_brut_mensuel * 12
-
-    @property
-    def loyer_nu_net_mensuel(self):
+    def loyer_nu_brut_annuel(self, i_year=1):
         '''
+        @param i_year: year index
+        '''
+        return self.loyer_nu_brut_mensuel(i_year * 12) * 12
+
+    def loyer_nu_net_mensuel(self, i_month=1):
+        '''
+        @param i_month: month index
         Provision sur loyer nu brut de :
             - vacance locative
         '''
-        return sum(lot.loyer_nu_net_mensuel for lot in self._lots)
+        return sum(lot.loyer_nu_net_mensuel(i_month) for lot in self._lots)
 
-    @property
-    def loyer_nu_net_annuel(self):
-        return self.loyer_nu_net_mensuel * 12
+    def loyer_nu_net_annuel(self, i_year=1):
+        '''
+        @param i_year: year index
+        '''
+        return self.loyer_nu_net_mensuel(i_year * 12) * 12
 
     @property
     def surface_total(self):

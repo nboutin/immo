@@ -84,7 +84,7 @@ class TestCharge(TestCaseFileLoader):
             charge.add(type_, 1)
 
     def testGetMontantAnnuel(self):
-        '''get_montant_annuel with list'''
+        '''get_montant_annuel with tuple, list'''
         charge = Charge(self.defaut)
         charge.add(Charge.charge_e.copropriete, 10)
         charge.add(Charge.charge_e.taxe_fonciere, 20)
@@ -92,6 +92,10 @@ class TestCharge(TestCaseFileLoader):
             charge.get_montant_annuel(
                 (Charge.charge_e.copropriete,
                  Charge.charge_e.taxe_fonciere)), 30)
+        self.assertEqual(
+            charge.get_montant_annuel(
+                [Charge.charge_e.copropriete,
+                 Charge.charge_e.taxe_fonciere]), 30)
 
 
 if __name__ == '__main__':
