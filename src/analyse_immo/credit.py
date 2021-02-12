@@ -107,45 +107,45 @@ class Credit:
             return 0
 
     # Mensualite
-    def get_capital_restant(self, start=1, stop=None):
-        if not stop:
-            stop = start
-        return sum(item['capital'] for item in self._tam[start - 1:stop])
+    def get_capital_restant(self, b_month=1, e_month=None):
+        if not e_month:
+            e_month = b_month
+        return sum(item['capital'] for item in self._tam[b_month - 1:e_month])
 
-    def get_amortissement(self, start=1, stop=None):
+    def get_amortissement(self, b_month=1, e_month=None):
         '''
-        :param start: first month
-        :param stop: last month (included)
+        :param b_month: first month
+        :param e_month: last month (included)
         '''
-        if not stop:
-            stop = start
-        return sum(item['amortissement'] for item in self._tam[start - 1:stop])
+        if not e_month:
+            e_month = b_month
+        return sum(item['amortissement'] for item in self._tam[b_month - 1:e_month])
 
-    def get_interet(self, start=1, stop=None):
-        if not stop:
-            stop = start
-        return sum(item['interet'] for item in self._tam[start - 1:stop])
+    def get_interet(self, b_month=1, e_month=None):
+        if not e_month:
+            e_month = b_month
+        return sum(item['interet'] for item in self._tam[b_month - 1:e_month])
 
-    def get_mensualite_hors_assurance(self, start=1, stop=None):
-        if not stop:
-            stop = start
-        return sum(item['mensualite_ha'] for item in self._tam[start - 1:stop])
+    def get_mensualite_hors_assurance(self, b_month=1, e_month=None):
+        if not e_month:
+            e_month = b_month
+        return sum(item['mensualite_ha'] for item in self._tam[b_month - 1:e_month])
 
-    def get_mensualite_assurance(self, start=1, stop=None):
+    def get_mensualite_assurance(self, b_month=1, e_month=None):
         '''
         :return montant mensuel de l'assurance
         '''
-        if not stop:
-            stop = start
-        return sum(item['assurance'] for item in self._tam[start - 1:stop])
+        if not e_month:
+            e_month = b_month
+        return sum(item['assurance'] for item in self._tam[b_month - 1:e_month])
 
-    def get_mensualite_avec_assurance(self, start=1, stop=None):
+    def get_mensualite_avec_assurance(self, b_month=1, e_month=None):
         '''
         :return montant mensualite assurance incluse
         '''
-        if not stop:
-            stop = start
-        return sum(item['mensualite_aa'] for item in self._tam[start - 1:stop])
+        if not e_month:
+            e_month = b_month
+        return sum(item['mensualite_aa'] for item in self._tam[b_month - 1:e_month])
 
     # Total
     def get_montant_interet_total(self):

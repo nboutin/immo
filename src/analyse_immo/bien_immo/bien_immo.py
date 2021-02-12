@@ -21,6 +21,13 @@ class Bien_Immo:
         self.__set_notaire_taux_montant(frais_notaire)
         self.__set_agence_taux_montant(frais_agence)
 
+    def add_lot(self, lot):
+        self._lots.append(lot)
+
+    @property
+    def lot_count(self):
+        return len(self._lots)
+
     @property
     def prix_net_vendeur(self):
         return self._prix_net_vendeur
@@ -134,13 +141,6 @@ class Bien_Immo:
         Charge.charge_e.vacance_locative is not used here but for loyer_nu_net
         '''
         return self.get_charge([Charge.charge_e.provision_travaux], i_year)
-
-    def add_lot(self, lot):
-        self._lots.append(lot)
-
-    @property
-    def lot_count(self):
-        return len(self._lots)
 
     def __set_notaire_taux_montant(self, value):
         if value < 1:

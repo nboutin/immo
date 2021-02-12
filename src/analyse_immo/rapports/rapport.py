@@ -58,8 +58,8 @@ def rapport_location(duree, bien_immo):
             '{:.0f}'.format(bien_immo.loyer_nu_net_mensuel(i_month)),
             '{:.0f}'.format(bien_immo.loyer_nu_net_annuel(i_year)),
             separator,
-            '{:.0f}'.format(bien_immo.charges),
-            '{:.0f}'.format(bien_immo.provisions),
+            '{:.0f}'.format(bien_immo.charges(i_year)),
+            '{:.0f}'.format(bien_immo.provisions(i_year)),
         ]
         rapport.insert(0, rapport_annee)
 
@@ -79,8 +79,9 @@ def rapport_location(duree, bien_immo):
     logging.info(tabulate(rotate) + '\n')
 
 
-def rapport_credit(credit):
+def rapport_credit(duree, credit):
 
+    # Input
     rapport = [
         [
             '{:.0f}'.format(credit.capital),
@@ -94,17 +95,47 @@ def rapport_credit(credit):
     logging.info('# Credit')
     logging.info(tabulate(rotate) + '\n')
 
+    # Cout
     rapport = [
         [
-            '{:.2f}'.format(credit.get_mensualite_hors_assurance()),
-            '{:.2f}'.format(credit.get_mensualite_assurance()),
-            '{:.2f}'.format(credit.get_mensualite_avec_assurance()),
             '{:.2f}'.format(credit.get_montant_interet_total()),
             '{:.2f}'.format(credit.get_montant_assurance_total()),
-            '{:.2f}'.format(credit.get_cout_total())],
-        ['Mensualite hors assurance', 'Mensualite assurance', 'Mensualite avec assurance', 'Cout interet',
-         'Cout assurance', 'Cout credit'],
+            '{:.2f}'.format(credit.get_cout_total())
+        ],
+        [
+            'Cout interet',
+            'Cout assurance',
+            'Cout credit'
+        ]
     ]
+    rotate = list(zip(*rapport[::-1]))
+    logging.info('# Credit cout')
+    logging.info(tabulate(rotate) + '\n')
+
+    # Tableau amortissement
+    rapport = list()
+    for i in range(duree):
+        year = i + 1
+        month = year * 12
+        rapport_year = [
+            year,
+            '{:.2f}'.format(credit.get_amortissement(month)),
+            '{:.2f}'.format(credit.get_interet(month)),
+            '{:.2f}'.format(credit.get_mensualite_hors_assurance(month)),
+            '{:.2f}'.format(credit.get_mensualite_assurance(month)),
+            '{:.2f}'.format(credit.get_mensualite_avec_assurance(month)),
+            '{:.2f}'.format(credit.get_capital_restant(month))
+        ]
+        rapport.insert(0, rapport_year)
+
+    rapport.append(['Annee',
+                    'Amortissement',
+                    'Interet',
+                    'Mensualite hors assurance',
+                    'Mensualite assurance',
+                    'Mensualite avec assurance',
+                    'Capital restant', ])
+
     rotate = list(zip(*rapport[::-1]))
     logging.info(tabulate(rotate) + '\n')
 
