@@ -16,7 +16,7 @@ from analyse_immo.impots.micro_foncier import Micro_Foncier, L4EB_recettes_brute
 class Factory:
 
     @staticmethod
-    def make_bien_immo(achat_data, lots_data, defaut=Defaut(0, 0, 0, 0)):
+    def make_bien_immo(achat_data, lots_data, defaut):
 
         bien_immo = Bien_Immo(achat_data['prix_net_vendeur'],
                               achat_data['frais_agence'],
@@ -26,9 +26,15 @@ class Factory:
 
         for lot_data in lots_data:
 
+            irl = lot_data['irl_taux_annuel']
+            if irl == 1:
+                irl = defaut.irl_taux_annuel
+                print('use defaut {}'.format(irl))
+
             lot = Lot(lot_data['type'],
                       lot_data['surface'],
-                      lot_data['loyer_nu_mensuel'])
+                      lot_data['loyer_nu_mensuel'],
+                      irl)
 
             charges_data = lot_data['charges']
             charge = Charge(defaut, lot.type)
@@ -72,7 +78,8 @@ class Factory:
     @staticmethod
     def make_defaut(defaut_data):
 
-        defaut = Defaut(defaut_data['provision_travaux_taux'],
+        defaut = Defaut(defaut_data['irl_taux_annuel'],
+                        defaut_data['provision_travaux_taux'],
                         defaut_data['vacance_locative_taux_T1'],
                         defaut_data['vacance_locative_taux_T2'],
                         defaut_data['gestion_agence_taux'],)

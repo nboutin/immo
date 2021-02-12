@@ -23,6 +23,16 @@ class TestLot(TestCaseFileLoader):
         lot = Lot('T1', 45, 123)
         self.assertEqual(lot.surface, 45)
 
+    def testIRLTauxAnnuel(self):
+        lot = Lot('T1', 45, 123)
+        self.assertEqual(lot.irl_taux_annuel, 0)
+
+        lot = Lot('T1', 45, 123, 10)
+        self.assertEqual(lot.irl_taux_annuel, 10)
+
+        lot = Lot('T1', 45, 123, 0.01)
+        self.assertEqual(lot.irl_taux_annuel, 0.01)
+
     def testLoyerNuBrutMensuel(self):
         lot = Lot('T1', 30, 350)
         self.assertEqual(lot.loyer_nu_brut_mensuel(), 350)

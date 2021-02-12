@@ -37,6 +37,10 @@ class Lot:
     def surface(self):
         return self._surface
 
+    @property
+    def irl_taux_annuel(self):
+        return self._irl_taux_annuel
+
     def loyer_nu_brut_mensuel(self, i_month=1):
         '''
         @param i_month: month index start at 1

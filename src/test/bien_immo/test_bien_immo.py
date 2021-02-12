@@ -83,6 +83,21 @@ class TestBienImmo(unittest.TestCase):
         bi.add_lot(Lot("T2", 0, 0))
         self.assertEqual(bi.rapport_surface_prix, 0)
 
+    def testIrlTauxAnnuel(self):
+        bi = Bien_Immo(130000, 0, 0, 0, 0)
+        bi.add_lot(Lot("T2", 65, 0))
+        bi.add_lot(Lot("T1", 45, 0))
+        self.assertEqual(bi.irl_taux_annuel, 0)
+
+        bi = Bien_Immo(130000, 0, 0, 0, 0)
+        bi.add_lot(Lot("T2", 65, 0, 0.01))
+        bi.add_lot(Lot("T1", 45, 0, 0))
+        self.assertEqual(bi.irl_taux_annuel, 0.005)
+
+        bi = Bien_Immo(130000, 0, 0, 0, 0)
+        bi.add_lot(Lot("T2", 65, 0, 0.01))
+        self.assertEqual(bi.irl_taux_annuel, 0.01)
+
     def testLotCount(self):
         bi = Bien_Immo(130000, 0, 0, 0, 0)
         bi.add_lot(Lot("T2", 65, 0))

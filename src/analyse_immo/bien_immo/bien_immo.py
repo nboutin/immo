@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import statistics
 from .charge import Charge
 
 
@@ -53,6 +54,22 @@ class Bien_Immo:
         return self._prix_net_vendeur + self._notaire_montant + self._agence_montant + \
             self._budget_travaux - self._apport
 
+    @property
+    def surface_total(self):
+        return sum(lot.surface for lot in self._lots)
+
+    @property
+    def rapport_surface_prix(self):
+        try:
+            return self._prix_net_vendeur / self.surface_total
+        except ZeroDivisionError:
+            return 0
+
+    @property
+    def irl_taux_annuel(self):
+        data = [lot.irl_taux_annuel for lot in self._lots]
+        return statistics.mean(data)
+
     def loyer_nu_brut_mensuel(self, i_month=1):
         '''
         Loyer nu (hors charges) brut (sans provision)
@@ -80,17 +97,6 @@ class Bien_Immo:
         @param i_year: year index
         '''
         return self.loyer_nu_net_mensuel(i_year * 12) * 12
-
-    @property
-    def surface_total(self):
-        return sum(lot.surface for lot in self._lots)
-
-    @property
-    def rapport_surface_prix(self):
-        try:
-            return self._prix_net_vendeur / self.surface_total
-        except ZeroDivisionError:
-            return 0
 
     def get_charge(self, charge_type_list):
         '''

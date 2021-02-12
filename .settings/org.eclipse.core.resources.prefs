@@ -9,6 +9,7 @@ encoding//src/analyse_immo/bien_immo/charge.py=utf-8
 encoding//src/analyse_immo/bien_immo/lot.py=utf-8
 encoding//src/analyse_immo/credit.py=utf-8
 encoding//src/analyse_immo/database.py=utf-8
+encoding//src/analyse_immo/defaut.py=utf-8
 encoding//src/analyse_immo/factory.py=utf-8
 encoding//src/analyse_immo/impots/annexe_2044.py=utf-8
 encoding//src/analyse_immo/impots/irpp.py=utf-8

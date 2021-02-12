@@ -138,6 +138,7 @@ def load_file(inputfile):
     if not inputfile:
         inputfile = __INPUT_FILEPATH
 
+    logging.info('Load file:{}'.format(inputfile))
     with open(inputfile, 'r') as file:
         user_input = json.load(file)
 
