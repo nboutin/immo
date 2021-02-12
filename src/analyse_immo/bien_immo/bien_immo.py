@@ -103,7 +103,7 @@ class Bien_Immo:
         '''
         return self.loyer_nu_net_mensuel(i_year * 12) * 12
 
-    def get_charge(self, charge_type_list):
+    def get_charge(self, charge_type_list, i_year=1):
         '''
         Here it assumes that provision_travaux and vacance_locative are taux
         '''
@@ -116,26 +116,24 @@ class Bien_Immo:
             for lot in self._lots:
                 if charge == Charge.charge_e.provision_travaux or charge == Charge.charge_e.vacance_locative:
                     value = lot.charge.get_taux(charge)
-                    value = value * lot.loyer_nu_net_annuel()
+                    value = value * lot.loyer_nu_net_annuel(i_year)
                 else:
                     value = lot.charge.get_montant_annuel(charge)
                 sum_ += value
         return sum_
 
-    @property
-    def charges(self):
+    def charges(self, i_year=1):
         return self.get_charge(
             [Charge.charge_e.copropriete,
              Charge.charge_e.taxe_fonciere,
              Charge.charge_e.prime_assurance,
-             Charge.charge_e.agence_immo])
+             Charge.charge_e.agence_immo], i_year)
 
-    @property
-    def provisions(self):
+    def provisions(self, i_year=1):
         '''
         Charge.charge_e.vacance_locative is not used here but for loyer_nu_net
         '''
-        return self.get_charge([Charge.charge_e.provision_travaux])
+        return self.get_charge([Charge.charge_e.provision_travaux], i_year)
 
     def add_lot(self, lot):
         self._lots.append(lot)
