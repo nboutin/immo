@@ -70,6 +70,11 @@ class Bien_Immo:
         data = [lot.irl_taux_annuel for lot in self._lots]
         return statistics.mean(data)
 
+    @property
+    def vacance_locative_taux_annuel(self):
+        data = [lot.charge.get_taux(Charge.charge_e.vacance_locative) for lot in self._lots]
+        return statistics.mean(data)
+
     def loyer_nu_brut_mensuel(self, i_month=1):
         '''
         Loyer nu (hors charges) brut (sans provision)

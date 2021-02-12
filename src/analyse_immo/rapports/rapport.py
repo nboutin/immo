@@ -74,7 +74,7 @@ def rapport_location(duree, bien_immo):
             '{:.0f}'.format(bien_immo.loyer_nu_brut_mensuel(i_month)),
             '{:.0f}'.format(bien_immo.loyer_nu_brut_annuel(i_year)),
             '{:.1f}%'.format(bien_immo.irl_taux_annuel * 100),
-            '',
+            '{:.1f}%'.format(bien_immo.vacance_locative_taux_annuel * 100),
             '{:.0f}'.format(bien_immo.loyer_nu_net_mensuel(i_month)),
             '{:.0f}'.format(bien_immo.loyer_nu_net_annuel(i_year)),
             separator,
