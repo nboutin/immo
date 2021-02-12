@@ -61,15 +61,39 @@ def rapport_achat(bien_immo):
     logging.info(tabulate(rotate) + '\n')
 
 
-def rapport_location(bien_immo):
+def rapport_location(duree, bien_immo):
 
-    rapport = [
-        ['{:.0f}/{:.0f}'.format(bien_immo.loyer_nu_brut_mensuel, bien_immo.loyer_nu_brut_annuel),
-         '{:.0f}/{:.0f}'.format(bien_immo.loyer_nu_net_mensuel, bien_immo.loyer_nu_net_annuel),
-         '{:.0f}'.format(bien_immo.charges),
-         '{:.0f}'.format(bien_immo.provisions)],
-        ['Loyer brut mensuel/annuel', 'Loyer net mensuel/annuel', 'Charges', 'Provisions'],
-    ]
+    separator = ''
+    rapport = list()
+
+    for i in range(duree):
+        i_year = i + 1
+        i_month = i_year * 12
+        rapport_annee = [
+            i_year,
+            '{:.0f}'.format(bien_immo.loyer_nu_brut_mensuel(i_month)),
+            '{:.0f}'.format(bien_immo.loyer_nu_brut_annuel(i_year)),
+            '',
+            '',
+            '{:.0f}'.format(bien_immo.loyer_nu_net_mensuel(i_month)),
+            '{:.0f}'.format(bien_immo.loyer_nu_net_annuel(i_year)),
+            separator,
+            '{:.0f}'.format(bien_immo.charges),
+            '{:.0f}'.format(bien_immo.provisions),
+        ]
+        rapport.insert(0, rapport_annee)
+
+    rapport.append(['Annee',
+                    'Loyer brut mensuel',
+                    'Loyer brut annuel',
+                    'Taux IRL',
+                    'Taux vacance locative',
+                    'Loyer net mensuel',
+                    'Loyer net annuel',
+                    separator,
+                    'Charges',
+                    'Provisions',
+                    ])
     rotate = list(zip(*rapport[::-1]))
     logging.info('# Location')
     logging.info(tabulate(rotate) + '\n')

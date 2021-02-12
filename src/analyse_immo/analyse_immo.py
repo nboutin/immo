@@ -9,7 +9,7 @@ import logging
 from analyse_immo.factory import Factory
 from analyse_immo.database import Database
 from analyse_immo.rendement import Rendement
-from analyse_immo.rapports.rapport import generate_rapport
+from analyse_immo.rapports.rapport import rapport_achat, rapport_location
 
 __NAME = 'Analyse Immo'
 __VERSION = '2.1.0-dev'
@@ -71,7 +71,10 @@ def main(argv):
         irpp_micro_foncier_list.append(irpp)
 
     # Rapport
-    generate_rapport(bien_immo, credit, annee_achat, irpp_2044_list, irpp_micro_foncier_list, rendement)
+#     generate_rapport(bien_immo, credit, annee_achat, irpp_2044_list, irpp_micro_foncier_list, rendement)
+    rapport_duree = credit_duree + 5
+    rapport_achat(bien_immo)
+    rapport_location(rapport_duree, bien_immo)
 
 
 def parse_args(argv):
