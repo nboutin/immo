@@ -72,11 +72,7 @@ class Charge:
         # Convert to list
         if not isinstance(charge_type_list, list) and not isinstance(charge_type_list, tuple):
             charge_type_list = [charge_type_list]
-
-        try:
-            return sum(charge['value'] for charge in self._charges if charge['charge'] in charge_type_list)
-        except TypeError:
-            raise Exception('Charge {} does not support value'.format(charge_type_list))
+        return sum(charge['value'] for charge in self._charges if charge['charge'] in charge_type_list)
 
     def get_taux(self, charge_type):
         '''

@@ -92,17 +92,24 @@ class Bien_Immo:
         except ZeroDivisionError:
             return 0
 
-    def get_charge(self, charges_list):
-        #         return sum(lot.charge.get_montant_annuel(charges_list) for lot in self._lots)
-        sum = 0
-        for charge in charges_list:
+    def get_charge(self, charge_type_list):
+        '''
+        Here it assumes that provision_travaux and vacance_locative are taux
+        '''
+        # Convert to list
+        if not isinstance(charge_type_list, list) and not isinstance(charge_type_list, tuple):
+            charge_type_list = [charge_type_list]
+
+        sum_ = 0
+        for charge in charge_type_list:
             for lot in self._lots:
-                value = lot.charge.get_montant_annuel(charge)
-                # If taux
-                if value < 1:
+                if charge == Charge.charge_e.provision_travaux or charge == Charge.charge_e.vacance_locative:
+                    value = lot.charge.get_taux(charge)
                     value = value * lot.loyer_nu_net_annuel()
-                sum += value
-        return sum
+                else:
+                    value = lot.charge.get_montant_annuel(charge)
+                sum_ += value
+        return sum_
 
     @property
     def charges(self):
