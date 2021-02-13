@@ -98,6 +98,22 @@ class TestBienImmo(unittest.TestCase):
         bi.add_lot(Lot("T2", 65, 0, 0.01))
         self.assertEqual(bi.irl_taux_annuel, 0.01)
 
+    def testVacanceLocativeTauxAnnuel(self):
+        bi = Bien_Immo(130000, 0, 0, 0, 0)
+        lot = Lot("T2", 65, 0)
+        charge = Charge(lot, None)
+        charge.add(Charge.charge_e.vacance_locative, 1 / 12)
+        lot.charge = charge
+        bi.add_lot(lot)
+        self.assertEqual(bi.vacance_locative_taux_annuel, 1 / 12)
+
+        lotB = Lot("T2", 65, 0)
+        chargeB = Charge(lot, None)
+        chargeB.add(Charge.charge_e.vacance_locative, 1 / 24)
+        lotB.charge = chargeB
+        bi.add_lot(lotB)
+        self.assertEqual(bi.vacance_locative_taux_annuel, (1 / 12 + 1 / 24) / 2)
+
     def testLotCount(self):
         bi = Bien_Immo(130000, 0, 0, 0, 0)
         bi.add_lot(Lot("T2", 65, 0))
@@ -120,6 +136,7 @@ class TestBienImmo(unittest.TestCase):
         charge.add(Charge.charge_e.prime_assurance, 90)
         charge.add(Charge.charge_e.vacance_locative, 1 / 12)
         charge.add(Charge.charge_e.agence_immo, 500 * 12 * 0.05)
+        charge.add(Charge.charge_e.provision_travaux, 0.01)
         lot2.charge = charge
         bi.add_lot(lot2)
 
@@ -127,15 +144,15 @@ class TestBienImmo(unittest.TestCase):
         self.assertEqual(bi.loyer_nu_brut_mensuel(), 1000)
         self.assertEqual(bi.loyer_nu_brut_annuel(), 12000)
         self.assertEqual(bi.loyer_nu_net_annuel(), 11500)
-        self.assertAlmostEqual(bi.loyer_nu_net_mensuel(), 958.33, 2)
-        self.assertEqual(bi.charges + bi.provisions, 1002)
+        self.assertAlmostEqual(bi.loyer_nu_net_mensuel(), 500 + 500 * (1 - 1 / 12), 2)
 
         self.assertEqual(bi.get_charge(Charge.charge_e.taxe_fonciere), 0)
-        self.assertEqual(bi.get_charge(Charge.charge_e.provision_travaux), 0)
-#         self.assertEqual(bi.get_charge(Charge.charge_e.vacance_locative), 500)
+        self.assertEqual(bi.get_charge(Charge.charge_e.provision_travaux), 500 * (1 - 1 / 12) * 12 * 0.01)
+        self.assertEqual(bi.get_charge(Charge.charge_e.vacance_locative), 500)
         self.assertEqual(bi.get_charge(Charge.charge_e.prime_assurance), 90)
         self.assertEqual(bi.get_charge(Charge.charge_e.agence_immo), 25 * 12)
         self.assertEqual(bi.get_charge(Charge.charge_e.copropriete), 51 * 12)
+        self.assertEqual(bi.charges() + bi.provisions(), 1002 + 500 * (1 - 1 / 12) * 12 * 0.01)
 
 
 if __name__ == '__main__':

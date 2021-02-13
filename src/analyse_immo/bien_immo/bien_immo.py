@@ -121,9 +121,12 @@ class Bien_Immo:
         sum_ = 0
         for charge in charge_type_list:
             for lot in self._lots:
-                if charge == Charge.charge_e.provision_travaux or charge == Charge.charge_e.vacance_locative:
+                if charge == Charge.charge_e.provision_travaux:
                     value = lot.charge.get_taux(charge)
                     value = value * lot.loyer_nu_net_annuel(i_year)
+                elif charge == Charge.charge_e.vacance_locative:
+                    value = lot.charge.get_taux(charge)
+                    value = value * lot.loyer_nu_brut_annuel(i_year)
                 else:
                     value = lot.charge.get_montant_annuel(charge)
                 sum_ += value
