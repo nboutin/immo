@@ -11,6 +11,7 @@ from analyse_immo.impots.annexe_2044 import Annexe_2044, L211_loyer_brut, L221_f
     L223_prime_assurance, L224_travaux, L227_taxe_fonciere, L229_copropriete_provision, L250_interet_emprunt, L250_assurance_emprunteur,\
     L250_frais_dossier, L250_frais_garantie
 from analyse_immo.impots.micro_foncier import Micro_Foncier, L4EB_recettes_brutes
+from analyse_immo.tools.finance import capital_compose
 
 
 class Factory:
@@ -87,9 +88,10 @@ class Factory:
         return defaut
 
     @staticmethod
-    def make_irpp(database, impot_data, annee_revenu):
+    def make_irpp(database, impot_data, annee_revenu, i_annee, defaut_data):
         '''
         :param annee_revenu: int, current year
+        :param i_annee: int, index annee
         '''
         try:
             impot = impot_data[str(annee_revenu)]
@@ -97,34 +99,36 @@ class Factory:
             impot = impot_data['2020']
 
         irpp = IRPP(database, annee_revenu, impot['parts_fiscales'], impot['enfants'])
-        irpp.add_ligne(L1AJ_salaire, impot['salaires'][0])
-        irpp.add_ligne(L1BJ_salaire, impot['salaires'][1])
+        salaires_taux = defaut_data['salaire_taux_annuel']
+        irpp.add_ligne(L1AJ_salaire, capital_compose(impot['salaires'][0], salaires_taux, i_annee))
+        irpp.add_ligne(L1BJ_salaire, capital_compose(impot['salaires'][1], salaires_taux, i_annee))
         irpp.add_ligne(L7UF_dons, impot['dons'])
         irpp.add_ligne(L7AE_syndicat, impot['syndicat'])
         return irpp
 
     @staticmethod
-    def make_annexe_2044(database, bien_immo, credit, annee_index):
+    def make_annexe_2044(database, bien_immo, credit, i_annee):
         '''
-        :param annee_index: start at 1, annee n depuis l'achat du bien
+        :param i_annee: month_start at 1, annee n depuis l'achat du bien
         :todo put 20 into database
         '''
         an = Annexe_2044(database)
 
         # bien_immo loyer_nu_net = import loyer_nu_brut
-        an.add_ligne(L211_loyer_brut, bien_immo.loyer_nu_net_annuel)
-        an.add_ligne(L221_frais_administration, bien_immo.get_charge(Charge.charge_e.agence_immo))
+        an.add_ligne(L211_loyer_brut, bien_immo.loyer_nu_net_annuel(i_annee))
+        an.add_ligne(L221_frais_administration, bien_immo.get_charge(Charge.charge_e.agence_immo, i_annee))
         an.add_ligne(L222_autre_frais_gestion, 20 * bien_immo.lot_count)
-        an.add_ligne(L223_prime_assurance, bien_immo.get_charge(Charge.charge_e.prime_assurance))
-        an.add_ligne(L224_travaux, bien_immo.get_charge(Charge.charge_e.provision_travaux))
-        an.add_ligne(L227_taxe_fonciere, bien_immo.get_charge(Charge.charge_e.taxe_fonciere))
-        an.add_ligne(L229_copropriete_provision, bien_immo.get_charge(Charge.charge_e.copropriete))
+        an.add_ligne(L223_prime_assurance, bien_immo.get_charge(Charge.charge_e.prime_assurance, i_annee))
+        an.add_ligne(L224_travaux, bien_immo.get_charge(Charge.charge_e.provision_travaux, i_annee))
+        an.add_ligne(L227_taxe_fonciere, bien_immo.get_charge(Charge.charge_e.taxe_fonciere, i_annee))
+        an.add_ligne(L229_copropriete_provision, bien_immo.get_charge(Charge.charge_e.copropriete, i_annee))
 
-        stop = annee_index * 12
-        start = stop - 11
-        an.add_ligne(L250_interet_emprunt, credit.get_interet(start, stop))
-        an.add_ligne(L250_assurance_emprunteur, credit.get_mensualite_assurance(start, stop))
-        if annee_index == 1:
+        month_stop = i_annee * 12
+        month_start = month_stop - 11
+        an.add_ligne(L250_interet_emprunt, credit.get_interet(month_start, month_stop))
+        an.add_ligne(L250_assurance_emprunteur, credit.get_mensualite_assurance(month_start, month_stop))
+
+        if i_annee == 1:
             an.add_ligne(L250_frais_dossier, credit.frais_dossier)
             an.add_ligne(L250_frais_garantie, credit.frais_garantie)
 
@@ -140,3 +144,6 @@ class Factory:
             return mf
         except Exception:
             return None
+
+#     @staticmethod
+#     def make_irpp_2044_projection(database, impot_data, annee_revenu):

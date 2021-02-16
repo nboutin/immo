@@ -15,7 +15,7 @@ def generate_rapport(bien_immo, credit, annee_achat, irpp_2044_list, irpp_micro_
 
 #     rapport_achat(bien_immo)
 #     rapport_location(bien_immo)
-    rapport_credit(credit)
+#     rapport_credit(credit)
     rapport_annexe_2044(annee_achat, irpp_2044_list, bien_immo)
     rapport_micro_foncier(annee_achat, irpp_micro_foncier_list, bien_immo)
     rapport_irpp(annee_achat, irpp_2044_list, irpp_micro_foncier_list)
@@ -41,7 +41,7 @@ def rapport_achat(bien_immo):
     logging.info(tabulate(rotate) + '\n')
 
 
-def rapport_location(duree, bien_immo):
+def rapport_location(duree, bien_immo, annee_achat):
 
     separator = ''
     rapport = list()
@@ -50,7 +50,7 @@ def rapport_location(duree, bien_immo):
         i_year = i + 1
         i_month = i_year * 12
         rapport_annee = [
-            i_year,
+            annee_achat + i,
             '{:.0f}'.format(bien_immo.loyer_nu_brut_mensuel(i_month)),
             '{:.0f}'.format(bien_immo.loyer_nu_brut_annuel(i_year)),
             '{:.1f}%'.format(bien_immo.irl_taux_annuel * 100),
@@ -79,7 +79,7 @@ def rapport_location(duree, bien_immo):
     logging.info(tabulate(rotate) + '\n')
 
 
-def rapport_credit(duree, credit):
+def rapport_credit(duree, credit, annee_achat):
 
     # Input
     rapport = [
@@ -118,7 +118,7 @@ def rapport_credit(duree, credit):
         year = i + 1
         month = year * 12
         rapport_year = [
-            year,
+            '{}/12'.format(annee_achat + i),
             '{:.2f}'.format(credit.get_amortissement(month)),
             '{:.2f}'.format(credit.get_interet(month)),
             '{:.2f}'.format(credit.get_mensualite_hors_assurance(month)),

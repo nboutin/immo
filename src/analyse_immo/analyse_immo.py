@@ -10,12 +10,13 @@ from analyse_immo.factory import Factory
 from analyse_immo.database import Database
 from analyse_immo.rendement import Rendement
 from analyse_immo.rapports.rapport import rapport_achat, rapport_location, rapport_credit
+from analyse_immo.rapports.rapport_annexe_2044 import rapport_annexe_2044
 
 __NAME = 'Analyse Immo'
 __VERSION = '2.1.0-dev'
 
 __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
-__INPUT_FILEPATH = os.path.join(__location__, 'data', 'input_2020.json')
+__INPUT_FILEPATH = os.path.join(__location__, 'data', 'input_2021.json')
 __OUTPUT_FILEPATH = os.path.join(__location__, 'analyse_immo.log')
 
 
@@ -49,33 +50,33 @@ def main(argv):
     # Impot
     annee_achat = achat_data['annee']
     credit_duree = credit_data['duree_annee']
+    projection_duree = credit_duree + 5
 
     # IRPP + 2044
-    irpp_2044_list = list()
+    irpp_2044_projection = list()
 
-    for i_annee in range(credit_duree):
+    for i_annee in range(projection_duree):
         annee_revenu = annee_achat + i_annee
-        irpp = Factory.make_irpp(database, impot_data, annee_revenu)
+        irpp = Factory.make_irpp(database, impot_data, annee_revenu, i_annee, defaut_data)
 
         irpp.annexe_2044 = Factory.make_annexe_2044(database, bien_immo, credit, i_annee + 1)
-        irpp_2044_list.append(irpp)
+        irpp_2044_projection.append(irpp)
 
     # IRPP + Micro foncier
     irpp_micro_foncier_list = list()
 
     for i_annee in range(credit_duree):
         annee_revenu = annee_achat + i_annee
-        irpp = Factory.make_irpp(database, impot_data, annee_revenu)
+        irpp = Factory.make_irpp(database, impot_data, annee_revenu, i_annee, defaut_data)
 
         irpp.micro_foncier = Factory.make_micro_foncier(database, bien_immo)
         irpp_micro_foncier_list.append(irpp)
 
     # Rapport
-#     generate_rapport(bien_immo, credit, annee_achat, irpp_2044_list, irpp_micro_foncier_list, rendement)
-    rapport_duree = credit_duree + 5
     rapport_achat(bien_immo)
-    rapport_location(rapport_duree, bien_immo)
-    rapport_credit(rapport_duree, credit)
+    rapport_location(projection_duree, bien_immo, annee_achat)
+    rapport_credit(projection_duree, credit, annee_achat)
+    rapport_annexe_2044(annee_achat, irpp_2044_projection, bien_immo)
 
 
 def parse_args(argv):
