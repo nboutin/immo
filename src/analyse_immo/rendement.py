@@ -4,10 +4,10 @@
 
 class Rendement:
 
-    def __init__(self, bien_immo, credit=None):
-
+    def __init__(self, bien_immo, credit, irpp):
         self._bi = bien_immo
         self._credit = credit
+        self._irpp = irpp
 
     @property
     def rendement_brut(self):
@@ -59,3 +59,12 @@ class Rendement:
         b_month = e_month - 12 + 1
         return self._bi.loyer_nu_net_annuel(i_year) - self._credit.get_mensualite_avec_assurance(
             b_month, e_month) - self._bi.charges(i_year) - self._bi.provisions(i_year)
+
+    def cashflow_net_net_annuel(self, i_year):
+        '''
+        cashflow net après impot
+        '''
+        e_month = i_year * 12
+        b_month = e_month - 12 + 1
+        return self._bi.loyer_nu_net_annuel(i_year) - self._credit.get_mensualite_avec_assurance(
+            b_month, e_month) - self._bi.charges(i_year) - self._bi.provisions(i_year) - self._irpp[i_year - 1].impots_revenu_foncier

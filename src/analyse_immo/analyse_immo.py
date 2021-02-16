@@ -47,7 +47,6 @@ def main(argv):
 
     bien_immo = Factory.make_bien_immo(achat_data, lots_data, defaut)
     credit = Factory.make_credit(credit_data, bien_immo)
-    rendement = Rendement(bien_immo, credit)
 
     # Impot
     annee_achat = achat_data['annee']
@@ -74,6 +73,9 @@ def main(argv):
 
         irpp.micro_foncier = Factory.make_micro_foncier(database, bien_immo, i_annee + 1)
         irpp_micro_foncier_projection.append(irpp)
+
+    # Rendement
+    rendement = Rendement(bien_immo, credit, irpp_2044_projection)
 
     # Rapport
     rapport_achat(bien_immo)

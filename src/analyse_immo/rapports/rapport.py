@@ -116,7 +116,8 @@ def rapport_credit(duree, credit, annee_achat):
                     'Mensualite hors assurance',
                     'Mensualite assurance',
                     'Mensualite avec assurance',
-                    'Capital restant', ])
+                    'Capital restant'
+                    ])
 
     rotate = list(zip(*rapport[::-1]))
     logging.info(tabulate(rotate) + '\n')
@@ -136,7 +137,9 @@ def rapport_rendement(annee_achat, projection_duree, rendement):
             '{:.2f}'.format(rendement.rendement_net(i_year) * 100),
             '{:.2f}'.format(rendement.rendement_methode_larcher * 100),
             '{:.2f}'.format(rendement.cashflow_net_mensuel(i_year)),
-            '{:.2f}'.format(rendement.cashflow_net_annuel(i_year))]
+            '{:.2f}'.format(rendement.cashflow_net_annuel(i_year)),
+            '{:.2f}'.format(rendement.cashflow_net_net_annuel(i_year)),
+        ]
         rapport.insert(0, rapport_year)
 
     rapport.append([
@@ -144,8 +147,9 @@ def rapport_rendement(annee_achat, projection_duree, rendement):
         'Rendement Brut (%)',
         'Rendement Net (%)',
         'Rendement Larcher (%)',
-        'Différentiel Mensuel Net (€)',
-        'Différentiel Annuel Net (€)'])
+        'Différentiel Net mensuel(€)',
+        'Différentiel Net annuel(€)',
+        'Différentiel Net d"impots annuel(€)'])
 
     rotate = list(zip(*rapport[::-1]))
     logging.info('# Rendement')
