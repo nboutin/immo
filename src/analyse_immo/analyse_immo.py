@@ -9,7 +9,7 @@ import logging
 from analyse_immo.factory import Factory
 from analyse_immo.database import Database
 from analyse_immo.rendement import Rendement
-from analyse_immo.rapports.rapport import rapport_achat, rapport_location, rapport_credit
+from analyse_immo.rapports.rapport import rapport_achat, rapport_location, rapport_credit, rapport_rendement
 from analyse_immo.rapports.rapport_annexe_2044 import rapport_annexe_2044
 from analyse_immo.rapports.rapport_micro_foncier import rapport_micro_foncier
 from analyse_immo.rapports.rapport_irpp import rapport_irpp
@@ -82,6 +82,8 @@ def main(argv):
     rapport_annexe_2044(annee_achat, irpp_2044_projection, bien_immo)
     rapport_micro_foncier(annee_achat, irpp_micro_foncier_projection, bien_immo)
     rapport_irpp(annee_achat, salaire_taux, irpp_2044_projection, irpp_micro_foncier_projection)
+    rapport_rendement(annee_achat, projection_duree, rendement)
+#     rapport_overview(bien_immo, credit, irpp_2044_list[0])
 
 
 def parse_args(argv):

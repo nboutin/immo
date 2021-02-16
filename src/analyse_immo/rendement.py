@@ -12,7 +12,7 @@ class Rendement:
     @property
     def rendement_brut(self):
         try:
-            return self._bi.loyer_nu_brut_annuel / self.investissement_initial
+            return self._bi.loyer_nu_brut_annuel(1) / self.investissement_initial
         except ZeroDivisionError:
             return 0
 
@@ -24,15 +24,17 @@ class Rendement:
         Les charges sont évaluées à 25% soit 3 mois de loyer
         '''
         try:
-            return (self._bi.loyer_nu_brut_mensuel * 9) / self.investissement_initial
+            return (self._bi.loyer_nu_brut_mensuel(1) * 9) / self.investissement_initial
         except ZeroDivisionError:
             return 0
 
-    @property
-    def rendement_net(self):
+    def rendement_net(self, i_year):
+        '''
+        :param i_year: int start at 1
+        '''
         try:
-            return (self._bi.loyer_nu_net_annuel - self._bi.charges -
-                    self._bi.provisions) / self.investissement_initial
+            return (self._bi.loyer_nu_net_annuel(i_year) - self._bi.charges(i_year) -
+                    self._bi.provisions(i_year)) / self.investissement_initial
         except ZeroDivisionError:
             return 0
 
@@ -42,11 +44,18 @@ class Rendement:
             self._bi.budget_travaux - self._bi.apport
         return result
 
-    @property
-    def cashflow_net_mensuel(self):
-        return self.cashflow_net_annuel / 12
+    def cashflow_net_mensuel(self, i_year):
+        '''
+        moyenne du cashflow annuel rapporté sur un mois
+        :param i_year : int, start at 1
+        '''
+        return self.cashflow_net_annuel(i_year) / 12
 
-    @property
-    def cashflow_net_annuel(self):
-        return self._bi.loyer_nu_net_annuel - self._credit.get_mensualite_avec_assurance() * 12 - self._bi.charges - \
-            self._bi.provisions
+    def cashflow_net_annuel(self, i_year):
+        '''
+        :param i_year : int, start at 1
+        '''
+        e_month = i_year * 12
+        b_month = e_month - 12 + 1
+        return self._bi.loyer_nu_net_annuel(i_year) - self._credit.get_mensualite_avec_assurance(
+            b_month, e_month) - self._bi.charges(i_year) - self._bi.provisions(i_year)

@@ -5,20 +5,6 @@ import logging
 from tabulate import tabulate
 
 
-def generate_rapport(bien_immo, credit, annee_achat, irpp_2044_list, irpp_micro_foncier_list, rendement):
-
-    annee_achat -= 2000
-
-#     rapport_achat(bien_immo)
-#     rapport_location(bien_immo)
-#     rapport_credit(credit)
-#     rapport_annexe_2044(annee_achat, irpp_2044_list, bien_immo)
-#     rapport_micro_foncier(annee_achat, irpp_micro_foncier_list, bien_immo)
-#     rapport_irpp(annee_achat, irpp_2044_list, irpp_micro_foncier_list)
-    rapport_rendement(rendement)
-    rapport_overview(bien_immo, credit, irpp_2044_list[0])
-
-
 def rapport_achat(bien_immo):
 
     rapport = [
@@ -136,38 +122,53 @@ def rapport_credit(duree, credit, annee_achat):
     logging.info(tabulate(rotate) + '\n')
 
 
-def rapport_rendement(rendement):
-    rapport = [['{:.2f}'.format(rendement.rendement_brut * 100),
-                '{:.2f}'.format(rendement.rendement_net * 100),
-                '{:.2f}'.format(rendement.rendement_methode_larcher * 100),
-                '{:.2f}'.format(rendement.cashflow_net_mensuel),
-                '{:.2f}'.format(rendement.cashflow_net_annuel)],
-               ['Rendement Brut (%)',
-                'Rendement Net (%)',
-                'Rendement Larcher (%)',
-                'Différentiel Mensuel Net (€)',
-                'Différentiel Annuel Net (€)'],
-               ]
+def rapport_rendement(annee_achat, projection_duree, rendement):
+
+    rapport = list()
+
+    for i in range(projection_duree):
+
+        i_year = i + 1
+
+        rapport_year = [
+            annee_achat + i,
+            '{:.2f}'.format(rendement.rendement_brut * 100),
+            '{:.2f}'.format(rendement.rendement_net(i_year) * 100),
+            '{:.2f}'.format(rendement.rendement_methode_larcher * 100),
+            '{:.2f}'.format(rendement.cashflow_net_mensuel(i_year)),
+            '{:.2f}'.format(rendement.cashflow_net_annuel(i_year))]
+        rapport.insert(0, rapport_year)
+
+    rapport.append([
+        'Annee',
+        'Rendement Brut (%)',
+        'Rendement Net (%)',
+        'Rendement Larcher (%)',
+        'Différentiel Mensuel Net (€)',
+        'Différentiel Annuel Net (€)'])
+
     rotate = list(zip(*rapport[::-1]))
     logging.info('# Rendement')
     logging.info(tabulate(rotate) + '\n')
 
 
 def rapport_overview(bien_immo, credit, irpp):
-    rapport = [['{:.0f}'.format(bien_immo.financement_total),
-                bien_immo.loyer_nu_brut_annuel,
-                '{:.0f}/{:.0f}'.format(bien_immo.charges,
-                                       bien_immo.provisions),
-                '{:.0f}ans/{:.2f}%'.format(credit.duree_mois / 12, credit.taux * 100),
-                '{:.0f}'.format(irpp.impots_revenu_foncier),
-                None
-                ],
-               ['Financement Total',
-                'Loyer nu brut annuel',
-                'Charges/Provision',
-                'Credit durée/Taux',
-                'Impot foncier',
-                'Différentiel annuel net-net']]
+    rapport = [[
+        '{:.0f}'.format(bien_immo.financement_total),
+        bien_immo.loyer_nu_brut_annuel,
+        '{:.0f}/{:.0f}'.format(bien_immo.charges,
+                               bien_immo.provisions),
+        '{:.0f}ans/{:.2f}%'.format(credit.duree_mois / 12, credit.taux * 100),
+        '{:.0f}'.format(irpp.impots_revenu_foncier),
+        None
+    ],
+        ['Financement Total',
+         'Loyer nu brut annuel',
+         'Charges/Provision',
+         'Credit durée/Taux',
+         'Impot foncier',
+         'Différentiel annuel net-net']]
+
     rotate = list(zip(*rapport[::-1]))
     logging.info('# Overview')
     logging.info(tabulate(rotate) + '\n')
