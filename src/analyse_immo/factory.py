@@ -88,7 +88,7 @@ class Factory:
         return defaut
 
     @staticmethod
-    def make_irpp(database, impot_data, annee_revenu, i_annee, defaut_data):
+    def make_irpp(database, impot_data, annee_revenu, i_annee, salaire_taux):
         '''
         :param annee_revenu: int, current year
         :param i_annee: int, index annee
@@ -99,9 +99,8 @@ class Factory:
             impot = impot_data['2020']
 
         irpp = IRPP(database, annee_revenu, impot['parts_fiscales'], impot['enfants'])
-        salaires_taux = defaut_data['salaire_taux_annuel']
-        irpp.add_ligne(L1AJ_salaire, capital_compose(impot['salaires'][0], salaires_taux, i_annee))
-        irpp.add_ligne(L1BJ_salaire, capital_compose(impot['salaires'][1], salaires_taux, i_annee))
+        irpp.add_ligne(L1AJ_salaire, capital_compose(impot['salaires'][0], salaire_taux, i_annee))
+        irpp.add_ligne(L1BJ_salaire, capital_compose(impot['salaires'][1], salaire_taux, i_annee))
         irpp.add_ligne(L7UF_dons, impot['dons'])
         irpp.add_ligne(L7AE_syndicat, impot['syndicat'])
         return irpp
