@@ -135,15 +135,12 @@ class Factory:
         return an
 
     @staticmethod
-    def make_micro_foncier(database, bien_immo):
+    def make_micro_foncier(database, bien_immo, i_annee):
         try:
             mf = Micro_Foncier(database)
 
             # bien_immo loyer_nu_net = import loyer_nu_brut
-            mf.add_ligne(L4EB_recettes_brutes, bien_immo.loyer_nu_net_annuel)
+            mf.add_ligne(L4EB_recettes_brutes, bien_immo.loyer_nu_net_annuel(i_annee))
             return mf
         except Exception:
             return None
-
-#     @staticmethod
-#     def make_irpp_2044_projection(database, impot_data, annee_revenu):

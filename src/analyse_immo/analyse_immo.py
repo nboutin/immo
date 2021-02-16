@@ -11,6 +11,7 @@ from analyse_immo.database import Database
 from analyse_immo.rendement import Rendement
 from analyse_immo.rapports.rapport import rapport_achat, rapport_location, rapport_credit
 from analyse_immo.rapports.rapport_annexe_2044 import rapport_annexe_2044
+from analyse_immo.rapports.rapport_micro_foncier import rapport_micro_foncier
 
 __NAME = 'Analyse Immo'
 __VERSION = '2.1.0-dev'
@@ -63,20 +64,21 @@ def main(argv):
         irpp_2044_projection.append(irpp)
 
     # IRPP + Micro foncier
-    irpp_micro_foncier_list = list()
+    irpp_micro_foncier_projection = list()
 
-    for i_annee in range(credit_duree):
+    for i_annee in range(projection_duree):
         annee_revenu = annee_achat + i_annee
         irpp = Factory.make_irpp(database, impot_data, annee_revenu, i_annee, defaut_data)
 
-        irpp.micro_foncier = Factory.make_micro_foncier(database, bien_immo)
-        irpp_micro_foncier_list.append(irpp)
+        irpp.micro_foncier = Factory.make_micro_foncier(database, bien_immo, i_annee + 1)
+        irpp_micro_foncier_projection.append(irpp)
 
     # Rapport
     rapport_achat(bien_immo)
     rapport_location(projection_duree, bien_immo, annee_achat)
     rapport_credit(projection_duree, credit, annee_achat)
     rapport_annexe_2044(annee_achat, irpp_2044_projection, bien_immo)
+    rapport_micro_foncier(annee_achat, irpp_micro_foncier_projection, bien_immo)
 
 
 def parse_args(argv):

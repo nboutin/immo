@@ -4,8 +4,6 @@
 import logging
 from tabulate import tabulate
 
-from .rapport_annexe_2044 import rapport_annexe_2044
-from .rapport_micro_foncier import rapport_micro_foncier
 from .rapport_irpp import rapport_irpp
 
 
@@ -16,8 +14,8 @@ def generate_rapport(bien_immo, credit, annee_achat, irpp_2044_list, irpp_micro_
 #     rapport_achat(bien_immo)
 #     rapport_location(bien_immo)
 #     rapport_credit(credit)
-    rapport_annexe_2044(annee_achat, irpp_2044_list, bien_immo)
-    rapport_micro_foncier(annee_achat, irpp_micro_foncier_list, bien_immo)
+#     rapport_annexe_2044(annee_achat, irpp_2044_list, bien_immo)
+#     rapport_micro_foncier(annee_achat, irpp_micro_foncier_list, bien_immo)
     rapport_irpp(annee_achat, irpp_2044_list, irpp_micro_foncier_list)
     rapport_rendement(rendement)
     rapport_overview(bien_immo, credit, irpp_2044_list[0])
