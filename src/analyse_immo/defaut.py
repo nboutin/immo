@@ -4,16 +4,22 @@
 
 class Defaut:
 
-    def __init__(self, provision_travaux_taux,
+    def __init__(self, irl_taux_annuel,
+                 provision_travaux_taux,
                  vacance_locative_taux_T1,
                  vacance_locative_taux_T2,
                  gestion_agence_taux):
 
+        self._irl_taux_annuel = irl_taux_annuel
         self._provision_travaux_taux = provision_travaux_taux
         self._vacance_locative_taux = {}
         self._vacance_locative_taux['T1'] = vacance_locative_taux_T1
         self._vacance_locative_taux['T2'] = vacance_locative_taux_T2
         self._gestion_agence_taux = gestion_agence_taux
+
+    @property
+    def irl_taux_annuel(self):
+        return self._irl_taux_annuel
 
     @property
     def provision_travaux_taux(self):

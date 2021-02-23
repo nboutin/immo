@@ -4,7 +4,7 @@
 import logging
 from tabulate import tabulate
 
-from analyse_immo.charge import Charge
+from analyse_immo.bien_immo.charge import Charge
 from analyse_immo.impots.micro_foncier import L4EB_recettes_brutes
 
 
@@ -14,15 +14,17 @@ def rapport_micro_foncier(annee_achat, irpp_micro_foncier_list, bien_immo):
     separator = ''
 
     for i, irpp in enumerate(irpp_micro_foncier_list):
-        micro_foncier = irpp.micro_foncier
 
+        i_year = i + 1
+
+        micro_foncier = irpp.micro_foncier
         if not micro_foncier:
             continue
 
         rapport_annee = [
             annee_achat + i,
-            '{:.0f}'.format(bien_immo.loyer_nu_brut_annuel),
-            '{:.0f}'.format(bien_immo.get_charge(Charge.charge_e.vacance_locative)),
+            '{:.0f}'.format(bien_immo.loyer_nu_brut_annuel(i_year)),
+            '{:.0f}'.format(bien_immo.get_charge(Charge.charge_e.vacance_locative, i_year)),
             '{:.0f}'.format(micro_foncier.get_ligne(L4EB_recettes_brutes)),
             separator,
             '{:.0f}'.format(micro_foncier.revenu_foncier_taxable),

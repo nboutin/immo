@@ -8,6 +8,7 @@
     "apport" : 0
   },
   "defaut" : {
+    "irl_taux_annuel": 0.005,
     "provision_travaux_taux" : 0.01,
     "__comment" : "1/12=0.083, 1/24=0.042",
     "vacance_locative_taux_T1" : 0.083,
@@ -18,6 +19,7 @@
     "type" : "",
     "surface" : 0,
     "loyer_nu_mensuel" : 0,
+    "irl_taux_annuel": 0,
     "charges" : {
       "__comment" : "0: off, 1: default, autre: utilise",
       "provision_charge_mensuel" : 0,

@@ -4,27 +4,29 @@
 import logging
 from tabulate import tabulate
 
-from analyse_immo.charge import Charge
+from analyse_immo.bien_immo.charge import Charge
 from analyse_immo.impots.annexe_2044 import L211_loyer_brut, L221_frais_administration, L222_autre_frais_gestion, \
     L223_prime_assurance, L224_travaux, L227_taxe_fonciere, L229_copropriete_provision, L230_copropriete_regularisation, L250_interet_emprunt,\
     L250_assurance_emprunteur, L250_frais_dossier, L250_frais_garantie
 
 
-def rapport_annexe_2044(annee_achat, irpp_2044_list, bien_immo):
+def rapport_annexe_2044(annee_achat, irpp_2044_projection, bien_immo):
 
     rapport = list()
     separator = ''
 
-    for i, irpp in enumerate(irpp_2044_list):
-        annexe_2044 = irpp.annexe_2044
+    for i, irpp in enumerate(irpp_2044_projection):
 
+        i_year = i + 1
+
+        annexe_2044 = irpp.annexe_2044
         if not annexe_2044:
             continue
 
         rapport_annee = [
             annee_achat + i,
-            '{:.0f}'.format(bien_immo.loyer_nu_brut_annuel),
-            '{:.0f}'.format(bien_immo.get_charge(Charge.charge_e.vacance_locative)),
+            '{:.0f}'.format(bien_immo.loyer_nu_brut_annuel(i_year)),
+            '{:.0f}'.format(bien_immo.get_charge(Charge.charge_e.vacance_locative, i_year)),
             '{:.0f}'.format(annexe_2044.get_ligne(L211_loyer_brut)),
             '{:.0f}'.format(annexe_2044.total_recettes),
             separator,

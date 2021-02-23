@@ -43,10 +43,6 @@ class TestCredit01_Construction(unittest.TestCase):
 
 class TestCredit02_Static(unittest.TestCase):
 
-    def test01_TauxPeriodique(self):
-        self.assertAlmostEqual(Credit.taux_actuariel(0.04, 12), 0.00327, 5)
-        self.assertAlmostEqual(Credit.taux_actuariel(0.0234, 12), 0.00193, 5)
-
     def test02_MensualitePeriodique(self):
         self.assertAlmostEqual(Credit.mensualite_periodique(100000, 0.005, 240), 716.43, 2)
         self.assertAlmostEqual(Credit.mensualite_periodique(150000, 0.00193, 240), 781.48, 2)

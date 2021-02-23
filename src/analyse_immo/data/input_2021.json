@@ -1,6 +1,6 @@
 {
   "achat" : {
-    "annee" : 2020,
+    "annee" : 2021,
     "prix_net_vendeur" : 40000,
     "__commnent" : "montant ou taux",
     "frais_agence" : 0.07,
@@ -9,6 +9,7 @@
     "apport" : 0
   },
   "defaut" : {
+    "salaire_taux_annuel": 0.01,
     "irl_taux_annuel": 0.005,
     "provision_travaux_taux" : 0.01,
     "__comment" : "1/12=0.083, 1/24=0.042",
@@ -41,6 +42,13 @@
     "frais_garantie" : 0
   },
   "impot" : {
+    "2021" : {
+      "parts_fiscales" : 2.5,
+      "enfants" : 1,
+      "dons" : 0,
+      "syndicat" : 143,
+      "salaires" : [ 31500, 23100 ]
+    },
     "2020" : {
       "parts_fiscales" : 2.5,
       "enfants" : 1,

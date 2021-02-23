@@ -5,15 +5,16 @@ import logging
 from tabulate import tabulate
 
 
-def rapport_irpp(annee_achat, irpp_2044_list, irpp_mf_list):
+def rapport_irpp(annee_achat, salaire_taux_annuel, irpp_2044_projection, irpp_mf_projection):
 
     separator = ''
     rapport = list()
 
-    for i, irpp_2044 in enumerate(irpp_2044_list):
+    for i, irpp_2044 in enumerate(irpp_2044_projection):
         rapport_annee = [
             annee_achat + i,
-            irpp_2044.salaires,
+            '{:.0f}'.format(irpp_2044.salaires),
+            '{:.2f}%'.format(salaire_taux_annuel * 100),
             '{:.0f}'.format(irpp_2044.revenu_foncier),
             '{:.0f}'.format(irpp_2044.revenu_fiscale_reference),
             separator,
@@ -25,13 +26,14 @@ def rapport_irpp(annee_achat, irpp_2044_list, irpp_mf_list):
             separator,
             '{:.0f}'.format(irpp_2044.impots_salaires_net),
             '{:.0f}'.format(irpp_2044.impots_revenu_foncier),
-            '{:.0f}'.format(irpp_mf_list[i].impots_revenu_foncier),
+            '{:.0f}'.format(irpp_mf_projection[i].impots_revenu_foncier),
         ]
         rapport.insert(0, rapport_annee)
 
     rapport.append([
         'Année',
         'Salaires',
+        'Salaire taux annuel',
         'Revenu foncier',
         'Revenu fiscale reference',
         separator,

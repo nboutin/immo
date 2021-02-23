@@ -4,9 +4,9 @@
 import unittest
 
 from analyse_immo.database import Database
-from analyse_immo.bien_immo import Bien_Immo
-from analyse_immo.lot import Lot
-from analyse_immo.charge import Charge
+from analyse_immo.bien_immo.bien_immo import Bien_Immo
+from analyse_immo.bien_immo.lot import Lot
+from analyse_immo.bien_immo.charge import Charge
 from analyse_immo.credit import Credit
 from analyse_immo.impots.annexe_2044 import Annexe_2044
 

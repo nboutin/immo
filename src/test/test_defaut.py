@@ -6,6 +6,10 @@ from analyse_immo.factory import Factory
 
 class TestDefaut(TestCaseFileLoader):
 
+    def testIrlTauxAnnuel(self):
+        defaut = Factory.make_defaut(self.defaut_data)
+        self.assertEqual(defaut.irl_taux_annuel, 0.005)
+
     def testVacanceLocativeTaux(self):
         defaut = Factory.make_defaut(self.defaut_data)
         self.assertEqual(defaut.vacance_locative_taux('T1'), 0.083)
