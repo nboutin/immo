@@ -11,6 +11,7 @@ from analyse_immo.rendement import Rendement
 # from analyse_immo.impots.annexe_2044 import Annexe_2044
 
 
+@unittest.skip('')
 class TestSimulationA(unittest.TestCase):
     '''
     Source: rendementlocatif.com

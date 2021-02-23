@@ -1,5 +1,6 @@
 {
   "achat" : {
+    "annee" : 2021, 
     "prix_net_vendeur" : 0,
     "__commnent" : "montant ou taux",
     "frais_agence" : 0,
@@ -8,6 +9,7 @@
     "apport" : 0
   },
   "defaut" : {
+   "salaire_taux_annuel": 0.01,
     "irl_taux_annuel": 0.005,
     "provision_travaux_taux" : 0.01,
     "__comment" : "1/12=0.083, 1/24=0.042",
@@ -26,9 +28,9 @@
       "copropriete" : 0,
       "taxe_fonciere" : 0,
       "PNO" : 0,
+      "agence_immo" : 0,
       "travaux_provision_taux" : 0,
-      "vacance_locative_taux" : 0,
-      "agence_immo" : 0
+      "vacance_locative_taux" : 0
     }
   } ],
   "credit" : {
@@ -40,13 +42,12 @@
     "frais_garantie" : 0
   },
   "impot" : {
-    "2019" : {
+    "2021" : {
       "n_parts_fiscales" : 0,
       "n_demi_parts_fiscales" : 0,
       "dons" : 0,
       "syndicat" : 0,
-      "salaires" : [ 0 ],
-      "tmi" : 0
+      "salaires" : [ 0 ]
     }
   }
 }

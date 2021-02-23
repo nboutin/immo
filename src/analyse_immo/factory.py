@@ -106,6 +106,19 @@ class Factory:
         return irpp
 
     @staticmethod
+    def make_irpp_projection(duration, annee_achat, database, impot_data, salaire_taux, bien_immo, credit):
+
+        irpp_2044_projection = list()
+
+        for i_annee in range(duration):
+            annee_revenu = annee_achat + i_annee
+            irpp = Factory.make_irpp(database, impot_data, annee_revenu, i_annee, salaire_taux)
+
+            irpp.annexe_2044 = Factory.make_annexe_2044(database, bien_immo, credit, i_annee + 1)
+            irpp_2044_projection.append(irpp)
+        return irpp_2044_projection
+
+    @staticmethod
     def make_annexe_2044(database, bien_immo, credit, i_annee):
         '''
         :param i_annee: month_start at 1, annee n depuis l'achat du bien

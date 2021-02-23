@@ -55,14 +55,8 @@ def main(argv):
     salaire_taux = defaut_data['salaire_taux_annuel']
 
     # IRPP + 2044
-    irpp_2044_projection = list()
-
-    for i_annee in range(projection_duree):
-        annee_revenu = annee_achat + i_annee
-        irpp = Factory.make_irpp(database, impot_data, annee_revenu, i_annee, salaire_taux)
-
-        irpp.annexe_2044 = Factory.make_annexe_2044(database, bien_immo, credit, i_annee + 1)
-        irpp_2044_projection.append(irpp)
+    irpp_2044_projection = Factory.make_irpp_projection(
+        projection_duree, annee_achat, database, impot_data, salaire_taux, bien_immo, credit)
 
     # IRPP + Micro foncier
     irpp_micro_foncier_projection = list()
