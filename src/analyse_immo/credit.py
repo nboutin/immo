@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import math
+import logging
 from enum import unique, Enum, auto
 from analyse_immo.tools import finance
 
@@ -108,7 +109,10 @@ class Credit:
 
     # Mensualite
     def get_capital_restant(self, month=1):
-        return self._tam[month - 1]['capital']
+        try:
+            return self._tam[month - 1]['capital']
+        except IndexError:
+            return 0
 
     def get_amortissement(self, b_month=1, e_month=None):
         '''

@@ -98,15 +98,16 @@ def rapport_credit(duree, credit, annee_achat):
     rapport = list()
     for i in range(duree):
         year = i + 1
-        month = year * 12
+        b_month = i * 12 + 1
+        e_month = year * 12
         rapport_year = [
-            '{}/12'.format(annee_achat + i),
-            '{:.2f}'.format(credit.get_amortissement(month)),
-            '{:.2f}'.format(credit.get_interet(month)),
-            '{:.2f}'.format(credit.get_mensualite_hors_assurance(month)),
-            '{:.2f}'.format(credit.get_mensualite_assurance(month)),
-            '{:.2f}'.format(credit.get_mensualite_avec_assurance(month)),
-            '{:.2f}'.format(credit.get_capital_restant(month))
+            '{}'.format(annee_achat + i),
+            '{:.2f}'.format(credit.get_amortissement(b_month, e_month)),
+            '{:.2f}'.format(credit.get_interet(b_month, e_month)),
+            '{:.2f}'.format(credit.get_mensualite_hors_assurance(b_month, e_month)),
+            '{:.2f}'.format(credit.get_mensualite_assurance(b_month, e_month)),
+            '{:.2f}'.format(credit.get_mensualite_avec_assurance(b_month, e_month)),
+            '{:.2f}'.format(credit.get_capital_restant(e_month))
         ]
         rapport.insert(0, rapport_year)
 
