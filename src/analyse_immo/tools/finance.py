@@ -1,5 +1,5 @@
 '''
-@author:
+@author: nboutin
 '''
 import math
 
