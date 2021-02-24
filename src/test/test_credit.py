@@ -196,5 +196,26 @@ class TestCredit04_TableauAmortissement(unittest.TestCase):
         self.assertAlmostEqual(cred.get_mensualite_avec_assurance_total(), 93593.98, 2)
 
 
+class TestCredit05_annuel(unittest.TestCase):
+
+    def test01_getter(self):
+        credit = Credit(15000, 24, 0.01, Credit.taux_e.periodique, 0.003, Credit.mode_e.fixe_CI, 0, 0)
+
+        self.assertAlmostEqual(credit.get_amortissement(1, 12), 7462.514, 2)
+        self.assertAlmostEqual(credit.get_amortissement(13, 24), 7537.486, 2)
+
+        self.assertAlmostEqual(credit.get_interet(1, 12), 115.858, 2)
+        self.assertAlmostEqual(credit.get_interet(13, 24), 40.89, 2)
+
+        self.assertAlmostEqual(credit.get_mensualite_hors_assurance(1, 12), 631.53 * 12, 1)
+        self.assertAlmostEqual(credit.get_mensualite_hors_assurance(13, 24), 631.53 * 12, 1)
+
+        self.assertAlmostEqual(credit.get_mensualite_assurance(1, 12), 15000 * 0.003, 1)
+        self.assertAlmostEqual(credit.get_mensualite_assurance(13, 24), 15000 * 0.003, 1)
+
+        self.assertAlmostEqual(credit.get_mensualite_avec_assurance(1, 12), 631.53 * 12 + 15000 * 0.003, 1)
+        self.assertAlmostEqual(credit.get_mensualite_avec_assurance(13, 24), 631.53 * 12 + 15000 * 0.003, 1)
+
+
 if __name__ == '__main__':
     unittest.main()

@@ -107,10 +107,8 @@ class Credit:
             return 0
 
     # Mensualite
-    def get_capital_restant(self, b_month=1, e_month=None):
-        if not e_month:
-            e_month = b_month
-        return sum(item['capital'] for item in self._tam[b_month - 1:e_month])
+    def get_capital_restant(self, month=1):
+        return self._tam[month - 1]['capital']
 
     def get_amortissement(self, b_month=1, e_month=None):
         '''
