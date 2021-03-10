@@ -17,7 +17,9 @@ class TestLot(TestCaseFileLoader):
         self.defaut = Factory.make_defaut(self.defaut_data)
 
     def testInit(self):
-        _ = Lot('T1', 30, 350)
+        lot = Lot('T1', 30, 350)
+        self.assertEqual(lot.etat, Lot.etat_e.louable)
+        self.assertTrue(lot.travaux is not None)
 
     def testSurface(self):
         lot = Lot('T1', 45, 123)

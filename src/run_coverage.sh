@@ -1,6 +1,8 @@
 #!/bin/sh
 
 coverage erase
+coverage run -a --source=analyse_immo.bien_immo.travaux --branch -m unittest -v test.bien_immo.test_travaux
+coverage run -a --source=analyse_immo.bien_immo.commun --branch -m unittest -v test.bien_immo.test_commun
 coverage run -a --source=analyse_immo.bien_immo.lot --branch -m unittest -v test.bien_immo.test_lot
 coverage run -a --source=analyse_immo.bien_immo.charge --branch -m unittest -v test.bien_immo.test_charge
 coverage run -a --source=analyse_immo.bien_immo.bien_immo --branch -m unittest -v test.bien_immo.test_bien_immo

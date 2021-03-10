@@ -125,7 +125,7 @@ class Annexe_2044:
         else:
             plafond = 0
             if self._is_first_year:
-                plafond = self._database.micro_foncier_revenu_foncier_plafond
+                plafond = self._database.deficit_foncier_plafond_annuel
 
             deficit_foncier = min(revenu_foncier, plafond)
             self._deficit_reportable = self.total_frais_et_charges - self.total_charges_emprunt - deficit_foncier

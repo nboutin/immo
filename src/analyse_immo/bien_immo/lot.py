@@ -3,8 +3,9 @@
 
 from enum import unique, Enum, auto
 
-from .charge import Charge
 from analyse_immo.tools import finance
+from .charge import Charge
+from .travaux import Travaux
 
 
 class Lot:
@@ -30,7 +31,7 @@ class Lot:
             loyer_nu_mensuel,
             irl_taux_annuel=0,
             etat=etat_e.louable,
-            travaux=None):
+            travaux=Travaux()):
         '''
         @param type_: type du lot T1,T2,T3,T4
         @param surface: surface en m² du lot

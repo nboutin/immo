@@ -6,7 +6,7 @@
 
 class Travaux:
 
-    def __init__(self, montant, subvention=[], deficit_foncier=[]):
+    def __init__(self, montant=[], subvention=[], deficit_foncier=[]):
         '''
         :param montant list of int
         :param subvention list of int

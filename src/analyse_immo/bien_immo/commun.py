@@ -3,10 +3,12 @@
 @author: nboutin
 '''
 
+from .travaux import Travaux
+
 
 class Commun:
 
-    def __init__(self, travaux=None):
+    def __init__(self, travaux=Travaux()):
         self._travaux = travaux
 
     @property

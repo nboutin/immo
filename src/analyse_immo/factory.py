@@ -32,12 +32,13 @@ class Factory:
     @staticmethod
     def make_bien_immo(achat_data, commun_data, lots_data, defaut):
 
+        commun = Factory.make_commun(commun_data)
+
         bien_immo = Bien_Immo(achat_data['prix_net_vendeur'],
                               achat_data['frais_agence'],
                               achat_data['frais_notaire'],
-                              achat_data['apport'])
-
-        bien_immo.commun = Factory.make_commun(commun_data)
+                              achat_data['apport'],
+                              commun=commun)
 
         for lot_data in lots_data:
 
