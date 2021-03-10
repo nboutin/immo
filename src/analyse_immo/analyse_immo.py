@@ -38,6 +38,7 @@ def main(argv):
 
     achat_data = input_data['achat']
     defaut_data = input_data['defaut']
+    commun_data = input_data['commun']
     lots_data = input_data['lots']
     credit_data = input_data['credit']
     impot_data = input_data['impot']
@@ -45,7 +46,7 @@ def main(argv):
     database = Database()
     defaut = Factory.make_defaut(defaut_data)
 
-    bien_immo = Factory.make_bien_immo(achat_data, lots_data, defaut)
+    bien_immo = Factory.make_bien_immo(achat_data, commun_data, lots_data, defaut)
     credit = Factory.make_credit(credit_data, bien_immo)
 
     # Impot

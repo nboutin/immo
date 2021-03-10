@@ -22,6 +22,14 @@ class Bien_Immo:
         self.__set_notaire_taux_montant(frais_notaire)
         self.__set_agence_taux_montant(frais_agence)
 
+    @property
+    def commun(self):
+        return self._commun
+
+    @commun.setter
+    def commun(self, commun):
+        self._commun = commun
+
     def add_lot(self, lot):
         self._lots.append(lot)
 

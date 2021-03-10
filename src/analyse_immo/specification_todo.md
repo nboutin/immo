@@ -10,6 +10,13 @@
 
 # Specification
 
+## Travaux
+- list de montant de travaux
+- list montant de subvention
+- éligible au deficit foncier
+
+Séparation par lot et commun
+
 ## Etat d'un lot
 
 L'Etat d'un lot peu etre:

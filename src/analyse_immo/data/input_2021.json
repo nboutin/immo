@@ -18,6 +18,13 @@
     "vacance_locative_taux_T3" : 0.042,
     "gestion_agence_taux" : 0.08
   },
+  "commun": {
+    "travaux" : {
+        "__comment": "toiture, partie commune",
+        "montant": [29000, 5000],
+        "subvention": [0],
+        "deficit_foncier": true}
+  },
   "lots" : [ 
   {
     "type" : "Commerce",

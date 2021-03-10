@@ -5,6 +5,8 @@ from analyse_immo.defaut import Defaut
 from analyse_immo.bien_immo.bien_immo import Bien_Immo
 from analyse_immo.bien_immo.charge import Charge
 from analyse_immo.bien_immo.lot import Lot
+from analyse_immo.bien_immo.commun import Commun
+from analyse_immo.bien_immo.travaux import Travaux
 from analyse_immo.credit import Credit
 from analyse_immo.impots.irpp import IRPP, L1AJ_salaire, L1BJ_salaire, L7UF_dons, L7AE_syndicat
 from analyse_immo.impots.annexe_2044 import Annexe_2044, L211_loyer_brut, L221_frais_administration, L222_autre_frais_gestion, \
@@ -17,13 +19,26 @@ from analyse_immo.tools.finance import capital_compose
 class Factory:
 
     @staticmethod
-    def make_bien_immo(achat_data, lots_data, defaut):
+    def make_travaux(travaux_data):
+        return Travaux(montant=travaux_data['montant'],
+                       subvention=travaux_data['subvention'],
+                       is_deficit_foncier=travaux_data['deficit_foncier'])
+
+    @staticmethod
+    def make_commun(commun_data):
+        travaux = Factory.make_travaux(commun_data['travaux'])
+        return Commun(travaux=travaux)
+
+    @staticmethod
+    def make_bien_immo(achat_data, commun_data, lots_data, defaut):
 
         bien_immo = Bien_Immo(achat_data['prix_net_vendeur'],
                               achat_data['frais_agence'],
                               achat_data['frais_notaire'],
                               achat_data['budget_travaux'],
                               achat_data['apport'])
+
+        bien_immo.commun = Factory.make_commun(commun_data)
 
         for lot_data in lots_data:
 
