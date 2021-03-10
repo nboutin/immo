@@ -1,10 +1,10 @@
 {
   "achat" : {
     "annee" : 2021,
-    "prix_net_vendeur" : 40000,
+    "prix_net_vendeur" : 115000,
     "__commnent" : "montant ou taux",
     "frais_agence" : 0.07,
-    "frais_notaire" : 0.1,
+    "frais_notaire" : 0.08,
     "budget_travaux" : 0,
     "apport" : 0
   },
@@ -15,24 +15,58 @@
     "__comment" : "1/12=0.083, 1/24=0.042",
     "vacance_locative_taux_T1" : 0.083,
     "vacance_locative_taux_T2" : 0.042,
+    "vacance_locative_taux_T3" : 0.042,
     "gestion_agence_taux" : 0.08
   },
-  "lots" : [ {
-    "type" : "T2",
-    "surface" : 45,
-    "loyer_nu_mensuel" : 450,
-    "irl_taux_annuel": 1,
+  "lots" : [ 
+  {
+    "type" : "Commerce",
+    "etat": "louable",
+    "surface" : 64.85,
+    "loyer_nu_mensuel" : 550,
+    "irl_taux_annuel": 0,
     "charges" : {
       "__comment" : "0: off, 1: default, autre: utilise",
       "provision_charge_mensuel" : 40,
-      "copropriete" : 1000,
-      "taxe_fonciere" : 800,
+      "copropriete" : 0,
+      "taxe_fonciere" : 0,
       "PNO" : 100,
       "agence_immo" : 0,
-      "travaux_provision_taux" : 1,
-      "vacance_locative_taux" : 1
-    }
-  } ],
+      "travaux_provision_taux" : 0,
+      "vacance_locative_taux" : 0
+      }},
+  {
+    "type" : "T3",
+    "etat": "louable",
+    "surface" : 62,
+    "loyer_nu_mensuel" : 476,
+    "irl_taux_annuel": 0,
+    "charges" : {
+      "__comment" : "0: off, 1: default, autre: utilise",
+      "provision_charge_mensuel" : 40,
+      "copropriete" : 0,
+      "taxe_fonciere" : 0,
+      "PNO" : 100,
+      "agence_immo" : 0,
+      "travaux_provision_taux" : 0,
+      "vacance_locative_taux" : 0
+      }},
+  {
+    "type" : "T3",
+    "etat": "amenageable",
+    "surface" : 62,
+    "loyer_nu_mensuel" : 476,
+    "irl_taux_annuel": 0,
+    "charges" : {
+      "__comment" : "0: off, 1: default, autre: utilise",
+      "provision_charge_mensuel" : 40,
+      "copropriete" : 0,
+      "taxe_fonciere" : 0,
+      "PNO" : 100,
+      "agence_immo" : 0,
+      "travaux_provision_taux" : 0,
+      "vacance_locative_taux" : 0
+      }}],
   "credit" : {
     "duree_annee" : 20,
     "taux_interet" : 0.0115,

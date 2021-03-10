@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import statistics
+from .lot import Lot
 from .charge import Charge
 
 
@@ -62,13 +63,28 @@ class Bien_Immo:
             self._budget_travaux - self._apport
 
     @property
-    def surface_total(self):
+    def surface_total_louable(self):
+        return sum(lot.surface for lot in self._lots if lot.etat == Lot.etat_e.louable)
+
+    @property
+    def surface_total_amenageable(self):
+        return sum(lot.surface for lot in self._lots if lot.etat == Lot.etat_e.amenageable)
+
+    @property
+    def surface_total_final(self):
         return sum(lot.surface for lot in self._lots)
 
     @property
-    def rapport_surface_prix(self):
+    def rapport_surface_prix_louable(self):
         try:
-            return self._prix_net_vendeur / self.surface_total
+            return self._prix_net_vendeur / self.surface_total_louable
+        except ZeroDivisionError:
+            return 0
+
+    @property
+    def rapport_surface_prix_final(self):
+        try:
+            return self._prix_net_vendeur / self.surface_total_final
         except ZeroDivisionError:
             return 0
 

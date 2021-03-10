@@ -32,10 +32,14 @@ class Factory:
                 irl = defaut.irl_taux_annuel
                 print('use defaut {}'.format(irl))
 
+            etat = Lot.etat_e.louable if lot_data['etat'] == 'louable' else ''
+            etat = Lot.etat_e.amenageable if lot_data['etat'] == 'amenageable' else etat
+
             lot = Lot(lot_data['type'],
                       lot_data['surface'],
                       lot_data['loyer_nu_mensuel'],
-                      irl)
+                      irl,
+                      etat=etat)
 
             charges_data = lot_data['charges']
             charge = Charge(defaut, lot.type)
