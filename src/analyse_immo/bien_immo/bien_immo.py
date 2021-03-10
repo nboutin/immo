@@ -13,12 +13,12 @@ class Bien_Immo:
     Augmentation annuel des charges 2%
     '''
 
-    def __init__(self, prix_net_vendeur, frais_agence, frais_notaire, budget_travaux, apport):
+    def __init__(self, prix_net_vendeur, frais_agence, frais_notaire, apport):
 
-        self._prix_net_vendeur = prix_net_vendeur
-        self._budget_travaux = budget_travaux
-        self._apport = apport
+        self._commun = None
         self._lots = []
+        self._prix_net_vendeur = prix_net_vendeur
+        self._apport = apport
         self.__set_notaire_taux_montant(frais_notaire)
         self.__set_agence_taux_montant(frais_agence)
 
@@ -58,8 +58,13 @@ class Bien_Immo:
         return self._agence_montant
 
     @property
-    def budget_travaux(self):
-        return self._budget_travaux
+    def travaux_montant(self):
+        return self._commun.travaux.montant_total + sum([lot.travaux.montant_total for lot in self._lots])
+
+    @property
+    def subvention_montant(self):
+        return self._commun.travaux.subvention_total + \
+            sum([lot.travaux.subvention_total for lot in self._lots])
 
     @property
     def apport(self):
@@ -68,7 +73,7 @@ class Bien_Immo:
     @property
     def financement_total(self):
         return self._prix_net_vendeur + self._notaire_montant + self._agence_montant + \
-            self._budget_travaux - self._apport
+            self.travaux_montant - self._apport
 
     @property
     def surface_total_louable(self):

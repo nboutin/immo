@@ -22,7 +22,7 @@ class Factory:
     def make_travaux(travaux_data):
         return Travaux(montant=travaux_data['montant'],
                        subvention=travaux_data['subvention'],
-                       is_deficit_foncier=travaux_data['deficit_foncier'])
+                       deficit_foncier=travaux_data['deficit_foncier'])
 
     @staticmethod
     def make_commun(commun_data):
@@ -35,7 +35,6 @@ class Factory:
         bien_immo = Bien_Immo(achat_data['prix_net_vendeur'],
                               achat_data['frais_agence'],
                               achat_data['frais_notaire'],
-                              achat_data['budget_travaux'],
                               achat_data['apport'])
 
         bien_immo.commun = Factory.make_commun(commun_data)
@@ -50,11 +49,14 @@ class Factory:
             etat = Lot.etat_e.louable if lot_data['etat'] == 'louable' else ''
             etat = Lot.etat_e.amenageable if lot_data['etat'] == 'amenageable' else etat
 
+            travaux = Factory.make_travaux(lot_data['travaux'])
+
             lot = Lot(lot_data['type'],
                       lot_data['surface'],
                       lot_data['loyer_nu_mensuel'],
                       irl,
-                      etat=etat)
+                      etat=etat,
+                      travaux=travaux)
 
             charges_data = lot_data['charges']
             charge = Charge(defaut, lot.type)

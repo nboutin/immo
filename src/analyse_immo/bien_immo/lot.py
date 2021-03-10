@@ -23,7 +23,14 @@ class Lot:
         louable = auto()
         amenageable = auto()
 
-    def __init__(self, type_, surface, loyer_nu_mensuel, irl_taux_annuel=0, etat=etat_e.louable):
+    def __init__(
+            self,
+            type_,
+            surface,
+            loyer_nu_mensuel,
+            irl_taux_annuel=0,
+            etat=etat_e.louable,
+            travaux=None):
         '''
         @param type_: type du lot T1,T2,T3,T4
         @param surface: surface en m² du lot
@@ -36,6 +43,7 @@ class Lot:
         self._loyer_nu_brut_mensuel = loyer_nu_mensuel
         self._irl_taux_annuel = irl_taux_annuel
         self._charge = Charge(self, None)
+        self._travaux = travaux
 
     @property
     def type(self):
@@ -83,6 +91,10 @@ class Lot:
         '''
         vac_loc_taux = self.charge.get_taux(Charge.charge_e.vacance_locative)
         return self.loyer_nu_brut_annuel(i_year) * (1 - vac_loc_taux)
+
+    @property
+    def travaux(self):
+        return self._travaux
 
     @property
     def charge(self):

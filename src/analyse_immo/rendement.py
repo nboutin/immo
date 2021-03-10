@@ -41,7 +41,7 @@ class Rendement:
     @property
     def investissement_initial(self):
         result = self._bi.prix_net_vendeur + self._bi.notaire_montant + self._bi.agence_montant + \
-            self._bi.budget_travaux - self._bi.apport
+            self._bi.travaux_montant - self._bi.apport
         return result
 
     def cashflow_net_mensuel(self, i_year):

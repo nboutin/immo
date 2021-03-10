@@ -7,25 +7,27 @@ from tabulate import tabulate
 
 def rapport_achat(bien_immo):
 
-    rapport = [[bien_immo.prix_net_vendeur,
+    rapport = [['{}'.format(bien_immo.prix_net_vendeur),
                 '{:.0f} ({:.2f}%)'.format(bien_immo.notaire_montant,
                                           bien_immo.notaire_taux * 100),
                 '{:.0f} ({:.2f}%)'.format(bien_immo.agence_montant,
                                           bien_immo.agence_taux * 100),
-                '{:.0f}'.format(bien_immo.budget_travaux),
+                '{:.0f}'.format(bien_immo.travaux_montant),
+                '{:.0f}'.format(bien_immo.subvention_montant),
                 '{:.0f}'.format(bien_immo.apport),
                 '{:.0f}'.format(bien_immo.financement_total),
-                '{:.0f}'.format(bien_immo.rapport_surface_prix_louable),
-                '{:.0f}'.format(bien_immo.rapport_surface_prix_final),
+                '{:.0f}/{:.0f}'.format(bien_immo.rapport_surface_prix_louable,
+                                       bien_immo.rapport_surface_prix_final),
                 ],
                ['Prix net vendeur',
                 'Notaire',
                 'Agence',
                 'Travaux',
+                'Subvention',
                 'Apport',
                 'Financement total',
-                'Prix €/m² louable',
-                'Prix €/m² final'],
+                'Prix €/m² (louable/final)',
+                ],
                ]
     rotate = list(zip(*rapport[::-1]))
     logging.info('# Achat')

@@ -8,3 +8,7 @@ class Commun:
 
     def __init__(self, travaux=None):
         self._travaux = travaux
+
+    @property
+    def travaux(self):
+        return self._travaux

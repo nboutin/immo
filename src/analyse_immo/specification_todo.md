@@ -2,6 +2,7 @@
 
 # To be specified
 
+- [ ] Ajouter surface annexe dans lot
 - [ ] Prendre en compte travaux dans les Impots
 - [ ] Evaluer restauration de la tresorerie avec le différé d'amortissement
 - [ ] Capacité d'investissement 70% loyer >= credit

@@ -5,7 +5,6 @@
     "__commnent" : "montant ou taux",
     "frais_agence" : 0.07,
     "frais_notaire" : 0.08,
-    "budget_travaux" : 0,
     "apport" : 0
   },
   "defaut" : {
@@ -20,10 +19,11 @@
   },
   "commun": {
     "travaux" : {
-        "__comment": "toiture, partie commune",
-        "montant": [29000, 5000],
+        "__comment": "toiture, partie commune, soliha, jch, jch",
+        "montant": [29000, 5000, 1300, 150, 450],
         "subvention": [0],
-        "deficit_foncier": true}
+        "__comment2": "montant - subvention, ",
+        "deficit_foncier": []}
   },
   "lots" : [ 
   {
@@ -32,6 +32,11 @@
     "surface" : 64.85,
     "loyer_nu_mensuel" : 550,
     "irl_taux_annuel": 0,
+    "travaux" : {
+        "__comment": "rafraichissement",
+        "montant": [5000],
+        "subvention": [0],
+        "deficit_foncier": [5000]},
     "charges" : {
       "__comment" : "0: off, 1: default, autre: utilise",
       "provision_charge_mensuel" : 40,
@@ -48,6 +53,11 @@
     "surface" : 62,
     "loyer_nu_mensuel" : 476,
     "irl_taux_annuel": 0,
+    "travaux" : {
+        "__comment": "moyennement dégradé, (62+8)*750*25%=13125, habiter mieux=2000",
+        "montant": [25000],
+        "subvention": [13125, 2000],
+        "deficit_foncier": [9000]},
     "charges" : {
       "__comment" : "0: off, 1: default, autre: utilise",
       "provision_charge_mensuel" : 40,
@@ -64,6 +74,11 @@
     "surface" : 62,
     "loyer_nu_mensuel" : 476,
     "irl_taux_annuel": 0,
+    "travaux" : {
+        "__comment": "transformation d'usage, (62+8)*750*25%=13125",
+        "montant": [40000],
+        "subvention": [13125],
+        "deficit_foncier": [26000]},
     "charges" : {
       "__comment" : "0: off, 1: default, autre: utilise",
       "provision_charge_mensuel" : 40,
