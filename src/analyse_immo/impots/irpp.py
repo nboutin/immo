@@ -92,7 +92,13 @@ class IRPP:
             raise Exception()
 
         if self._annexe_2044:
-            return self._annexe_2044.revenu_foncier_taxable
+            if self._annexe_2044.resultat_foncier >= 0:
+                return self._annexe_2044.resultat_foncier
+            elif self._annexe_2044.deficit_imputable_revenu_global < 0:
+                return self._annexe_2044.deficit_imputable_revenu_global
+            elif self._annexe_2044.deficit_imputable_revenu_foncier:
+                return self._annexe_2044.deficit_imputable_revenu_foncier
+        
         elif self._micro_foncier:
             return self._micro_foncier.revenu_foncier_taxable
         else:

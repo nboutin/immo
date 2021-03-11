@@ -43,7 +43,7 @@ class TestIRPPDeficitFoncier(unittest.TestCase):
         irpp.annexe_2044 = annexe_2044
 
         self.assertAlmostEqual(annexe_2044.resultat_foncier, -31900, 0)
-        self.assertEqual(irpp.revenu_fiscale_reference, 19300)
+        self.assertAlmostEqual(irpp.revenu_fiscale_reference, 19300, 2) # 30K - 10700
 
         '''
         Annee 2

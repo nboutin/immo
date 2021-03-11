@@ -118,23 +118,22 @@ class Annexe_2044:
     @property
     def resultat_foncier(self):
         '''
-        Ligne 215 : Recettes brutes
-        Ligne 240 : Frais et charges déductibles
-        Ligne 250 : Intérêts d'emprunt déductibles
-        Ligne 261 : Resultat foncier = Ligne 215 - ligne 240 - ligne 250
+        Ligne 420: case D + case I
+        Si bénéfice, à reporter 4BA 2042
         '''
         return self.total_recettes - self.total_frais_et_charges - self.total_charges_emprunt
 
     @property
     def deficit_imputable_revenu_global(self):
+        '''
+        Si déficit foncier
+        Ligne 440: report ligne 420, limite 10700 ou 15300, a reporter 4BC 2042
+        '''
         if self.resultat_foncier >= 0:
             return 0
 
         plafond = self._database.deficit_foncier_plafond_annuel
-        if self.resultat_foncier >= plafond:
-            return plafond
-        else:
-            return self.resultat_foncier
+        return max(plafond, self.resultat_foncier)
 
     @property
     def deficit_imputable_revenu_foncier(self):
