@@ -7,6 +7,7 @@ from analyse_immo.bien_immo.bien_immo import Bien_Immo
 from analyse_immo.bien_immo.lot import Lot
 from analyse_immo.bien_immo.charge import Charge
 from analyse_immo.bien_immo.travaux import Travaux
+from analyse_immo.bien_immo.commun import Commun
 
 
 class TestBienImmo(unittest.TestCase):
@@ -152,9 +153,12 @@ class TestBienImmo(unittest.TestCase):
         self.assertEqual(bi.get_charge(Charge.charge_e.copropriete), 51 * 12)
         self.assertEqual(bi.charges() + bi.provisions(), 1002 + 500 * (1 - 1 / 12) * 12 * 0.01)
 
-    def testCommun(self):
+    def testSubventionMontant(self):
 
-        bi = Bien_Immo()
+        bi = Bien_Immo(commun=Commun(Travaux(montant=[5000], subvention=[100, 200])))
+        bi.add_lot(Lot("", 0, 0, travaux=Travaux(montant=[5000], subvention=[300, 400])))
+
+        self.assertEqual(bi.subvention_montant, 1000)
 
 
 if __name__ == '__main__':
