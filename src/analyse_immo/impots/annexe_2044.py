@@ -20,6 +20,7 @@ L250_frais_garantie = Ligne(250, "Frais de garantie")
 
 class Annexe_2044:
     '''
+    http://impotsurlerevenu.org/revenus-fonciers/781-la-declaration-de-revenus-fonciers-2044-notice-explicative.php
     https://www.corrigetonimpot.fr/impot-location-vide-appartement-proprietaire-calcul/
     Déficit foncier:
     https://www.journaldunet.fr/patrimoine/guide-des-finances-personnelles/1201987-deficit-foncier-2021-imputation-report-et-calcul/
@@ -56,8 +57,8 @@ class Annexe_2044:
 
     261 Revenu foncier taxable: +215-240-250
     262 Reintegration du supplément de deduction
-
     263 Benefice ou deficit: 261+262
+    Case I : Bénéfice ou déficit foncier global
 
     420 Resultat
     430-441 uniquement en cas de deficit
@@ -76,10 +77,9 @@ class Annexe_2044:
     441 Report de la ligne 420 : montant dépassant 10 700 €
     '''
 
-    def __init__(self, database, is_first_year=False):
+    def __init__(self, database):
         self._database = database
         self._lignes = list()
-        self._is_first_year = is_first_year
         self._deficit_reportable = None
 
     def add_ligne(self, type_, valeur):
@@ -116,20 +116,40 @@ class Annexe_2044:
         return 1 - (self.revenu_foncier_taxable / self.total_recettes)
 
     @property
-    def revenu_foncier_taxable(self):
-        '''Ligne 260'''
-        revenu_foncier = self.total_recettes - self.total_frais_et_charges - self.total_charges_emprunt
+    def resultat_foncier(self):
+        '''
+        Ligne 215 : Recettes brutes
+        Ligne 240 : Frais et charges déductibles
+        Ligne 250 : Intérêts d'emprunt déductibles
+        Ligne 261 : Resultat foncier = Ligne 215 - ligne 240 - ligne 250
+        '''
+        return self.total_recettes - self.total_frais_et_charges - self.total_charges_emprunt
 
-        if revenu_foncier > 0:
-            return revenu_foncier
+    @property
+    def deficit_imputable_revenu_global(self):
+        if self.resultat_foncier >= 0:
+            return 0
+
+        plafond = self._database.deficit_foncier_plafond_annuel
+        if self.resultat_foncier >= plafond:
+            return plafond
         else:
-            plafond = 0
-            if self._is_first_year:
-                plafond = self._database.deficit_foncier_plafond_annuel
+            return self.resultat_foncier
 
-            deficit_foncier = min(revenu_foncier, plafond)
-            self._deficit_reportable = self.total_frais_et_charges - self.total_charges_emprunt - deficit_foncier
-            return deficit_foncier
+    @property
+    def deficit_imputable_revenu_foncier(self):
+        pass
+
+        # if revenu_foncier > 0:
+        # return revenu_foncier
+        # else:
+        # plafond = 0
+        # if self._is_first_year:
+        # plafond = self._database.deficit_foncier_plafond_annuel
+        #
+        # deficit_foncier = max(revenu_foncier, plafond)
+        # self._deficit_reportable = self.total_frais_et_charges - self.total_charges_emprunt - deficit_foncier
+        # return deficit_foncier
 
     @property
     def prelevement_sociaux(self):

@@ -29,8 +29,8 @@ Travaux: 40000
 Annee 1
 Charges = 2300 + 1000 + 600
 Revenu foncier impossable = 12K - charges - travaux = -31900
-revenu impossable= 30K - min(10700, 31900) = 19300
-deficit reportable= 31900 - 10700 = 21200
+revenu impossable = 30K - min(10700, 31900) = 19300
+deficit reportable = 31900 - 10700 = 21200
 
 Annee 2
 Revenu foncier impossable = 12K - charges - deficit reportable = -13100
@@ -51,4 +51,7 @@ Annee 5
 Revenu foncier impossable = 12K - charges - deficit reportable = 8100
 revenu impossable = 30K + 8100
 deficit reportable= 0
+
+## Source 
+- [Annexe 2044](http://impotsurlerevenu.org/revenus-fonciers/781-la-declaration-de-revenus-fonciers-2044-notice-explicative.php)
 
