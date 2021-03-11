@@ -137,31 +137,18 @@ class Annexe_2044:
 
     @property
     def deficit_imputable_revenu_foncier(self):
-        pass
-
-        # if revenu_foncier > 0:
-        # return revenu_foncier
-        # else:
-        # plafond = 0
-        # if self._is_first_year:
-        # plafond = self._database.deficit_foncier_plafond_annuel
-        #
-        # deficit_foncier = max(revenu_foncier, plafond)
-        # self._deficit_reportable = self.total_frais_et_charges - self.total_charges_emprunt - deficit_foncier
-        # return deficit_foncier
+        '''
+        Si déficit foncier
+        Ligne 441: report ligne 420, dépassant 10700 ou 15300, a reporter 4BB 2024
+        '''
+        if self.resultat_foncier >= 0:
+            return 0
+        
+        plafond = self._database.deficit_foncier_plafond_annuel
+        return self.resultat_foncier - plafond
+        
 
     @property
     def prelevement_sociaux(self):
         return self.revenu_foncier_taxable * self._database.prelevement_sociaux_taux
 
-#     @property
-#     def deficit_reportable(self):
-#         '''
-#         @return None: first year, otherwise: value
-#         '''
-#         if self._is_first_year:
-#             return min(self._deficit_reportable, self.database.deficit_foncier_plafond_annuel)
-#
-#     @deficit_reportable.setter
-#     def deficit_reportable(self, value):
-#         self._deficit_reportable = value
