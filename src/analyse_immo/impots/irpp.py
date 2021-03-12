@@ -8,8 +8,13 @@ L1BJ_salaire = Ligne('1BJ', 'Salaires - Déclarant 2')
 L7UF_dons = Ligne('7UF', 'Dons aux oeuvres')
 L7AE_syndicat = Ligne('7AE', 'Cotisations syndicales - Déclarant 2')
 
+L4BA_benefice_foncier = Ligne('4BA', 'Resultat foncier positif')
+L4BB_deficit_foncier_imputable_revenu_foncier = Ligne('4BB', 'Deficit foncier imputable sur revenu foncier')
+L4BC_deficit_foncier_imputable_revenu_global = Ligne('4BB', 'Deficit foncier imputable sur revenu globale')
+L4BD_deficit_foncier_anterieur = Ligne('4BD', 'Deficit foncier antérieur')
+L4_revenus_ou_deficits_nets_fonciers = Ligne('4', 'Revenus ou Deficits nets fonciers')
+
 # 4BE Micro foncier - recettes brutes
-# 4BA Revenu foncier impossable
 
 
 class IRPP:
@@ -50,8 +55,51 @@ class IRPP:
         self._annexe_2044 = None
         self._micro_foncier = None
 
-    def add_ligne(self, type_, value):
-        self._lignes.append((type_, value))
+    def add_ligne(self, ligne, value):
+        ligne.value = value
+        self._lignes.append(ligne)
+
+    def update_ligne(self, ligne):
+        if ligne == L4_revenus_ou_deficits_nets_fonciers:
+            self._update_ligne_4()
+
+    def _update_ligne_4(self):
+
+        # self.add_ligne(L4BD_deficit_foncier_anterieur, 0)
+
+        L420 = self._annexe_2044.resultat_foncier
+        if L420 > 0:
+            self.add_ligne(L4BA_benefice_foncier, L420)
+        else:
+            L440 = self._annexe_2044.deficit_imputable_revenu_global
+            L441 = self._annexe_2044.deficit_imputable_revenu_foncier
+            self.add_ligne(L4BB_deficit_foncier_imputable_revenu_foncier, L441)
+            self.add_ligne(L4BC_deficit_foncier_imputable_revenu_global, L440)
+
+        L4BA = self.__lignes_sum(L4BA_benefice_foncier)
+        L4BB = self.__lignes_sum(L4BB_deficit_foncier_imputable_revenu_foncier)
+        L4BC = self.__lignes_sum(L4BC_deficit_foncier_imputable_revenu_global)
+        L4BD = self.__lignes_sum(L4BD_deficit_foncier_anterieur)
+
+        # Bénifice foncier
+        if L4BA > 0:
+            # Sans deficit antérieur
+            if L4BD == 0:
+                self.add_ligne(L4_revenus_ou_deficits_nets_fonciers, L4BD)
+            else:
+                reste_net = L4BA - L4BD
+                if reste_net > 0:
+                    self.add_ligne(L4_revenus_ou_deficits_nets_fonciers, reste_net)
+                else:
+                    self.add_ligne(L4_revenus_ou_deficits_nets_fonciers, 0)
+        # Deficit imputable sur revenu global
+        elif L4BC < 0:
+            self.add_ligne(L4_revenus_ou_deficits_nets_fonciers, L4BC)
+        # Deficit imputable sur revenu foncier
+        elif L4BB < 0:
+            self.add_ligne(L4_revenus_ou_deficits_nets_fonciers, 0)
+        else:
+            raise Exception('Ligne 4 not updated')
 
     @property
     def annexe_2044(self):
@@ -71,7 +119,7 @@ class IRPP:
 
     @property
     def salaires(self):
-        return self.__get_ligne(('1AJ', '1BJ'))
+        return self.__lignes_sum((L1AJ_salaire, L1BJ_salaire))
 
     @property
     def revenu_net_impossable(self):
@@ -82,8 +130,11 @@ class IRPP:
 
     @property
     def revenu_fiscale_reference(self):
+        '''
+        ligne 5: Revenu ou deficit brut global
+        '''
         rfr = self.revenu_net_impossable
-        rfr += self.revenu_foncier
+        rfr += self.__lignes_sum((L4_revenus_ou_deficits_nets_fonciers,))
         return rfr
 
     @property
@@ -92,13 +143,18 @@ class IRPP:
             raise Exception()
 
         if self._annexe_2044:
+            # Bénéfice foncier
             if self._annexe_2044.resultat_foncier >= 0:
                 return self._annexe_2044.resultat_foncier
+            # Revenu global
             elif self._annexe_2044.deficit_imputable_revenu_global < 0:
                 return self._annexe_2044.deficit_imputable_revenu_global
+            # Revenu foncier
             elif self._annexe_2044.deficit_imputable_revenu_foncier:
-                return self._annexe_2044.deficit_imputable_revenu_foncier
-        
+                result = self._annexe_2044.deficit_imputable_revenu_foncier
+                result += self.__lignes_sum((L4BD_deficit_foncier_anterieur))
+                return result
+
         elif self._micro_foncier:
             return self._micro_foncier.revenu_foncier_taxable
         else:
@@ -106,11 +162,11 @@ class IRPP:
 
     @property
     def total_reduction_impot(self):
-        return self.__get_ligne(('7UF'))
+        return self.__lignes_sum((L7UF_dons))
 
     @property
     def total_credit_impot(self):
-        return self.__get_ligne(('7AE'))
+        return self.__lignes_sum((L7AE_syndicat))
 
     @property
     def quotient_familial(self):
@@ -169,8 +225,14 @@ class IRPP:
 
     # Private
 
-    def __get_ligne(self, numero):
-        return sum(ligne[1] for ligne in self._lignes if ligne[0].numero in numero)
+    def __lignes_sum(self, lignes):
+        '''
+        :param lignes (list of Ligne)
+        '''
+        if not isinstance(lignes, (list, tuple)):
+            lignes = (lignes,)
+        intersection = set(self._lignes).intersection(lignes)
+        return sum(ligne.value for ligne in intersection)
 
     def __impots_brut_sans_enfant(self):
         import copy

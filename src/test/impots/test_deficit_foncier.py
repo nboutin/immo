@@ -4,7 +4,10 @@
 import unittest
 
 from analyse_immo.database import Database
-from analyse_immo.impots.irpp import IRPP, L1AJ_salaire, L1BJ_salaire
+from analyse_immo.impots.irpp import IRPP, L1AJ_salaire, L1BJ_salaire, L4BD_deficit_foncier_anterieur,\
+    L4BA_benefice_foncier, L4BB_deficit_foncier_imputable_revenu_foncier,\
+    L4BC_deficit_foncier_imputable_revenu_global,\
+    L4_revenus_ou_deficits_nets_fonciers
 from analyse_immo.impots.annexe_2044 import Annexe_2044, L211_loyer_brut, L250_interet_emprunt, \
     L227_taxe_fonciere, L223_prime_assurance, L224_travaux
 
@@ -29,9 +32,11 @@ class TestIRPPDeficitFoncier(unittest.TestCase):
         revenu impossable= 30K - 10700 = 19300
         deficit reportable= 31900-10700 = 21200
         '''
-        irpp = IRPP(self.database, 2020, 2, 0)
-        irpp.add_ligne(L1AJ_salaire, 15000 / .9)
-        irpp.add_ligne(L1BJ_salaire, 15000 / .9)
+        irpp = list()
+
+        irpp.append(IRPP(self.database, 2020, 2, 0))
+        irpp[0].add_ligne(L1AJ_salaire, 15000 / .9)
+        irpp[0].add_ligne(L1BJ_salaire, 15000 / .9)
 
         annexe_2044 = Annexe_2044(self.database)
         annexe_2044.add_ligne(L211_loyer_brut, 12000)
@@ -39,11 +44,11 @@ class TestIRPPDeficitFoncier(unittest.TestCase):
         annexe_2044.add_ligne(L227_taxe_fonciere, 1000)
         annexe_2044.add_ligne(L223_prime_assurance, 600)
         annexe_2044.add_ligne(L224_travaux, 40000)
-
-        irpp.annexe_2044 = annexe_2044
+        irpp[0].annexe_2044 = annexe_2044
+        irpp[0].update_ligne(L4_revenus_ou_deficits_nets_fonciers)
 
         self.assertAlmostEqual(annexe_2044.resultat_foncier, -31900, 0)
-        self.assertAlmostEqual(irpp.revenu_fiscale_reference, 19300, 2) # 30K - 10700
+        self.assertAlmostEqual(irpp[0].revenu_fiscale_reference, 19300, 2)  # 30K - 10700
         self.assertEqual(annexe_2044.deficit_imputable_revenu_foncier, -21200)
 
         '''
@@ -52,6 +57,20 @@ class TestIRPPDeficitFoncier(unittest.TestCase):
         revenu impossable = 30K
         deficit reportable= 13100
         '''
+        irpp.append(IRPP(self.database, 2020, 2, 0))
+        irpp[1].add_ligne(L1AJ_salaire, 15000 / .9)
+        irpp[1].add_ligne(L1BJ_salaire, 15000 / .9)
+
+        annexe_2044 = Annexe_2044(self.database)
+        annexe_2044.add_ligne(L211_loyer_brut, 12000)
+        annexe_2044.add_ligne(L250_interet_emprunt, 2300)
+        annexe_2044.add_ligne(L227_taxe_fonciere, 1000)
+        annexe_2044.add_ligne(L223_prime_assurance, 600)
+        irpp[1].annexe_2044 = annexe_2044
+
+        self.assertAlmostEqual(annexe_2044.resultat_foncier, 8100, 0)  # 12K - 3900
+        self.assertAlmostEqual(irpp[0].revenu_fiscale_reference, 19300, 2)  # 30K - 10700
+        self.assertEqual(annexe_2044.deficit_imputable_revenu_foncier, 0)
 
 
 if __name__ == '__main__':

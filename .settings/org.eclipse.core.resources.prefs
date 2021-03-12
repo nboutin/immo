@@ -28,6 +28,7 @@ encoding//src/test/credit/test_credit_lacentraledefinancement.py=utf-8
 encoding//src/test/impots/test_annexe_2044.py=utf-8
 encoding//src/test/impots/test_deficit_foncier.py=utf-8
 encoding//src/test/impots/test_irpp.py=utf-8
+encoding//src/test/impots/test_ligne.py=utf-8
 encoding//src/test/test_analyse_immo.py=utf-8
 encoding//src/test/test_database.py=utf-8
 encoding//src/test/test_irpp.py=utf-8
