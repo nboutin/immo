@@ -16,6 +16,7 @@ L250_interet_emprunt = Ligne(250, "interet d'emprunt")
 L250_assurance_emprunteur = Ligne(250, "assurance emprunteur")
 L250_frais_dossier = Ligne(250, "Frais de dossier")
 L250_frais_garantie = Ligne(250, "Frais de garantie")
+L451_deficit_foncier_anterieur = Ligne(451, 'Deficit foncier anterieur non encore imputés')
 
 
 class Annexe_2044:
@@ -143,12 +144,10 @@ class Annexe_2044:
         '''
         if self.resultat_foncier >= 0:
             return 0
-        
+
         plafond = self._database.deficit_foncier_plafond_annuel
         return self.resultat_foncier - plafond
-        
 
     @property
     def prelevement_sociaux(self):
         return self.revenu_foncier_taxable * self._database.prelevement_sociaux_taux
-
