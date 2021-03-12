@@ -83,8 +83,8 @@ class Annexe_2044:
         self._ligne_model = Ligne_Model()
         self._deficit_reportable = None
 
-    def add_ligne(self, ligne, value):
-        self._ligne_model.add(ligne, value)
+    def add_ligne(self, ligne, value, double=False):
+        self._ligne_model.add(ligne, value, double)
 
     def sum_ligne(self, lignes):
         return self._ligne_model.sum(lignes)

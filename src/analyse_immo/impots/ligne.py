@@ -46,11 +46,13 @@ class Ligne_Model():
     # def __next__(self):
         # return self._lignes.__next__()
 
-    def add(self, ligne, value):
-        if ligne in self._lignes:
+    def add(self, ligne, value, double=False):
+        import copy
+        if not double and ligne in self._lignes:
             raise Exception('Ligne already present {}'.format(ligne.code))
-        ligne.value = value
-        self._lignes.append(ligne)
+        ligne_copy = copy.deepcopy(ligne)
+        ligne_copy.value = value
+        self._lignes.append(ligne_copy)
 
     def remove(self, ligne):
         if ligne in self._lignes:

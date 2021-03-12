@@ -8,10 +8,10 @@ from analyse_immo.bien_immo.lot import Lot
 from analyse_immo.bien_immo.commun import Commun
 from analyse_immo.bien_immo.travaux import Travaux
 from analyse_immo.credit import Credit
-from analyse_immo.impots.irpp import IRPP, L1AJ_salaire, L1BJ_salaire, L7UF_dons, L7AE_syndicat
+from analyse_immo.impots.irpp import IRPP, L1AJ_salaire, L1BJ_salaire, L7UF_dons, L7AE_syndicat, L4BB_deficit_foncier_imputable_revenu_foncier
 from analyse_immo.impots.annexe_2044 import Annexe_2044, L211_loyer_brut, L221_frais_administration, L222_autre_frais_gestion, \
     L223_prime_assurance, L224_travaux, L227_taxe_fonciere, L229_copropriete_provision, L250_interet_emprunt, L250_assurance_emprunteur,\
-    L250_frais_dossier, L250_frais_garantie
+    L250_frais_dossier, L250_frais_garantie, L451_deficit_foncier_anterieur
 from analyse_immo.impots.micro_foncier import Micro_Foncier, L4EB_recettes_brutes
 from analyse_immo.tools.finance import capital_compose
 
@@ -110,6 +110,25 @@ class Factory:
         return defaut
 
     @staticmethod
+    def make_irpp_projection(duration, annee_achat, database, impot_data, salaire_taux, bien_immo, credit):
+
+        irpp_2044_projection = list()
+
+        for i_annee in range(duration):
+            annee_revenu = annee_achat + i_annee
+            irpp = Factory.make_irpp(database, impot_data, annee_revenu, i_annee, salaire_taux)
+
+            deficit_foncier_anterieur = 0
+            if i_annee > 0:
+                deficit_foncier_anterieur = irpp_2044_projection[i_annee - \
+                    1].sum_ligne(L4BB_deficit_foncier_imputable_revenu_foncier)
+
+            irpp.annexe_2044 = Factory.make_annexe_2044(
+                database, bien_immo, credit, i_annee + 1, deficit_foncier_anterieur)
+            irpp_2044_projection.append(irpp)
+        return irpp_2044_projection
+
+    @staticmethod
     def make_irpp(database, impot_data, annee_revenu, i_annee, salaire_taux):
         '''
         :param annee_revenu: int, current year
@@ -120,7 +139,7 @@ class Factory:
         except KeyError:
             impot = impot_data['2020']
 
-        irpp = IRPP(database, annee_revenu, impot['parts_fiscales'], impot['enfants'])
+        irpp = IRPP(database, annee_revenu, part_fiscale=impot['parts_fiscales'], n_enfant=impot['enfants'])
         irpp.add_ligne(L1AJ_salaire, capital_compose(impot['salaires'][0], salaire_taux, i_annee))
         irpp.add_ligne(L1BJ_salaire, capital_compose(impot['salaires'][1], salaire_taux, i_annee))
         irpp.add_ligne(L7UF_dons, impot['dons'])
@@ -128,23 +147,10 @@ class Factory:
         return irpp
 
     @staticmethod
-    def make_irpp_projection(duration, annee_achat, database, impot_data, salaire_taux, bien_immo, credit):
-
-        irpp_2044_projection = list()
-
-        for i_annee in range(duration):
-            annee_revenu = annee_achat + i_annee
-            irpp = Factory.make_irpp(database, impot_data, annee_revenu, i_annee, salaire_taux)
-
-            irpp.annexe_2044 = Factory.make_annexe_2044(database, bien_immo, credit, i_annee + 1)
-            irpp_2044_projection.append(irpp)
-        return irpp_2044_projection
-
-    @staticmethod
-    def make_annexe_2044(database, bien_immo, credit, i_annee):
+    def make_annexe_2044(database, bien_immo, credit, i_annee, deficit_foncier_anterieur):
         '''
-        :param i_annee: month_start at 1, annee n depuis l'achat du bien
-        :todo put 20 into database
+        :param i_annee: start at 1, annee n depuis l'achat du bien
+        :todo put 20€ pour frais de gestion dans la database
         '''
         an = Annexe_2044(database)
 
@@ -157,6 +163,9 @@ class Factory:
         an.add_ligne(L227_taxe_fonciere, bien_immo.get_charge(Charge.charge_e.taxe_fonciere, i_annee))
         an.add_ligne(L229_copropriete_provision, bien_immo.get_charge(Charge.charge_e.copropriete, i_annee))
 
+        if i_annee == 1:
+            an.add_ligne(L224_travaux, bien_immo.travaux_montant, double=True)
+
         month_stop = i_annee * 12
         month_start = month_stop - 11
         an.add_ligne(L250_interet_emprunt, credit.get_interet(month_start, month_stop))
@@ -165,6 +174,8 @@ class Factory:
         if i_annee == 1:
             an.add_ligne(L250_frais_dossier, credit.frais_dossier)
             an.add_ligne(L250_frais_garantie, credit.frais_garantie)
+
+        an.add_ligne(L451_deficit_foncier_anterieur, deficit_foncier_anterieur)
 
         return an
 
