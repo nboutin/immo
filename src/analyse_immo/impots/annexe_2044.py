@@ -4,19 +4,19 @@
 from .ligne import Ligne, Ligne_Model
 
 
-L211_loyer_brut = Ligne(211, "loyer brut")
-L221_frais_administration = Ligne(221, "frais d'administration")
-L222_autre_frais_gestion = Ligne(222, "autre frais de gestion")
-L223_prime_assurance = Ligne(223, "Prime d'assurance")
-L224_travaux = Ligne(224, "Travaux reparation, entretien, amelioration")
-L227_taxe_fonciere = Ligne(227, "Taxe fonciere")
-L229_copropriete_provision = Ligne(229, "copropriete: provision pour charge")
-L230_copropriete_regularisation = Ligne(230, "copropriete: regularisation des provision pour charges")
-L250_interet_emprunt = Ligne(250, "interet d'emprunt")
-L250_assurance_emprunteur = Ligne(250, "assurance emprunteur")
-L250_frais_dossier = Ligne(250, "Frais de dossier")
-L250_frais_garantie = Ligne(250, "Frais de garantie")
-L451_deficit_foncier_anterieur = Ligne(451, 'Deficit foncier anterieur non encore imputés')
+L211_loyer_brut = Ligne('211', "loyer brut")
+L221_frais_administration = Ligne('221', "frais d'administration")
+L222_autre_frais_gestion = Ligne('222', "autre frais de gestion")
+L223_prime_assurance = Ligne('223', "Prime d'assurance")
+L224_travaux = Ligne('224', "Travaux reparation, entretien, amelioration")
+L227_taxe_fonciere = Ligne('227', "Taxe fonciere")
+L229_copropriete_provision = Ligne('229', "copropriete: provision pour charge")
+L230_copropriete_regularisation = Ligne('230', "copropriete: regularisation des provision pour charges")
+L250_interet_emprunt = Ligne('250a', "interet d'emprunt")
+L250_assurance_emprunteur = Ligne('250b', "assurance emprunteur")
+L250_frais_dossier = Ligne('250c', "Frais de dossier")
+L250_frais_garantie = Ligne('250d', "Frais de garantie")
+L451_deficit_foncier_anterieur = Ligne('451', 'Deficit foncier anterieur non encore imputés')
 
 
 class Annexe_2044:
@@ -112,7 +112,7 @@ class Annexe_2044:
 
     @property
     def total_charges_taux(self):
-        return 1 - (self.revenu_foncier_taxable / self.total_recettes)
+        return 1 - (self.resultat_foncier / self.total_recettes)
 
     @property
     def resultat_foncier(self):
@@ -148,4 +148,7 @@ class Annexe_2044:
 
     @property
     def prelevement_sociaux(self):
-        return self.revenu_foncier_taxable * self._database.prelevement_sociaux_taux
+        if self.resultat_foncier > 0:
+            return self.resultat_foncier * self._database.prelevement_sociaux_taux
+        else:
+            return 0

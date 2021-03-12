@@ -87,7 +87,7 @@ class IRPP:
         if L4BA > 0:
             # Sans deficit antérieur
             if L4BD == 0:
-                self.add_ligne(L4_revenus_ou_deficits_nets_fonciers, L4BD)
+                self.add_ligne(L4_revenus_ou_deficits_nets_fonciers, L4BA)
             else:
                 reste_net = L4BA + L4BD
                 if reste_net > 0:
@@ -110,7 +110,8 @@ class IRPP:
     @annexe_2044.setter
     def annexe_2044(self, annexe_2044):
         self._annexe_2044 = annexe_2044
-        self._compute_ligne_4()
+        if self._annexe_2044:
+            self._compute_ligne_4()
 
     @property
     def micro_foncier(self):
@@ -210,6 +211,7 @@ class IRPP:
         import copy
         irpp = copy.deepcopy(self)
         irpp.annexe_2044 = None
+        irpp._ligne_model.remove(L4_revenus_ou_deficits_nets_fonciers)
         return irpp.impots_net
 
     @property

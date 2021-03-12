@@ -3,14 +3,14 @@
 
 
 class Ligne:
-    def __init__(self, code, nom, value=0):
+    def __init__(self, code, name, value=0):
         '''
         :param code (str)
-        :param nom (str)
+        :param name (str)
         :param value (int)
         '''
         self._code = code
-        self._nom = nom
+        self._name = name
         self._value = value
 
     @property
@@ -40,11 +40,27 @@ class Ligne_Model():
     def __init__(self):
         self._lignes = list()
 
+    # def __iter__(self):
+        # return self._lignes.__iter__()
+        #
+    # def __next__(self):
+        # return self._lignes.__next__()
+
     def add(self, ligne, value):
         if ligne in self._lignes:
             raise Exception('Ligne already present {}'.format(ligne.code))
         ligne.value = value
         self._lignes.append(ligne)
+
+    def remove(self, ligne):
+        if ligne in self._lignes:
+            self._lignes.remove(ligne)
+
+    def update(self, ligne, value):
+        if ligne in self._lignes:
+            self.remove(ligne)
+        else:
+            self.add(ligne, value)
 
     def sum(self, lignes):
         '''

@@ -78,11 +78,11 @@ class TestIRPPDeficitFoncier(unittest.TestCase):
         self.assertAlmostEqual(irpp[1].revenu_fiscale_reference, 30000, 2)
         self.assertEqual(annexe_2044.deficit_imputable_revenu_foncier, 0)
 
-        self.assertEqual(irpp[0].sum_ligne(L4_revenus_ou_deficits_nets_fonciers), 0)
-        self.assertEqual(irpp[0].sum_ligne(L4BA_benefice_foncier), 8100)
-        self.assertEqual(irpp[0].sum_ligne(L4BB_deficit_foncier_imputable_revenu_foncier), 0)
-        self.assertEqual(irpp[0].sum_ligne(L4BC_deficit_foncier_imputable_revenu_global), 0)
-        self.assertEqual(irpp[0].sum_ligne(L4BD_deficit_foncier_anterieur), 0)
+        self.assertEqual(irpp[1].sum_ligne(L4_revenus_ou_deficits_nets_fonciers), 0)
+        self.assertEqual(irpp[1].sum_ligne(L4BA_benefice_foncier), 8100)
+        self.assertEqual(irpp[1].sum_ligne(L4BB_deficit_foncier_imputable_revenu_foncier), 0)
+        self.assertEqual(irpp[1].sum_ligne(L4BC_deficit_foncier_imputable_revenu_global), 0)
+        self.assertEqual(irpp[1].sum_ligne(L4BD_deficit_foncier_anterieur), -21200)
 
 
 if __name__ == '__main__':

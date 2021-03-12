@@ -64,7 +64,7 @@ class TestAnnexe2044(TestCaseFileLoader):
         an.add_ligne(L250_frais_dossier, 150)
         an.add_ligne(L250_frais_garantie, 1000)
 
-        self.assertEqual(an.revenu_foncier_taxable, 1280)
+        self.assertEqual(an.resultat_foncier, 1280)
 
     def testTotalChargesTaux(self):
         '''
@@ -89,7 +89,7 @@ class TestAnnexe2044(TestCaseFileLoader):
         anB.add_ligne(L250_assurance_emprunteur, 300)
         anB.add_ligne(L250_frais_dossier, 150)
         anB.add_ligne(L250_frais_garantie, 1000)
-        self.assertEqual(anB.revenu_foncier_taxable, 1280)
+        self.assertEqual(anB.resultat_foncier, 1280)
         self.assertAlmostEqual(anB.total_charges_taux, 1 - (1280 / 6000), 2)
 
 
