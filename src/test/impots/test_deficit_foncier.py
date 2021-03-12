@@ -49,11 +49,11 @@ class TestIRPPDeficitFoncier(unittest.TestCase):
         self.assertAlmostEqual(annexe_2044.resultat_foncier, -31900, 0)
         self.assertAlmostEqual(irpp[0].revenu_fiscale_reference, 19300, 2)  # 30K - 10700
         self.assertEqual(annexe_2044.deficit_imputable_revenu_foncier, -21200)
-        self.assertEqual(irpp[0]._lignes_sum(L4_revenus_ou_deficits_nets_fonciers), -10700)
-        self.assertEqual(irpp[0]._lignes_sum(L4BA_benefice_foncier), 0)
-        self.assertEqual(irpp[0]._lignes_sum(L4BB_deficit_foncier_imputable_revenu_foncier), -21200)
-        self.assertEqual(irpp[0]._lignes_sum(L4BC_deficit_foncier_imputable_revenu_global), -10700)
-        self.assertEqual(irpp[0]._lignes_sum(L4BD_deficit_foncier_anterieur), 0)
+        self.assertEqual(irpp[0].sum_ligne(L4_revenus_ou_deficits_nets_fonciers), -10700)
+        self.assertEqual(irpp[0].sum_ligne(L4BA_benefice_foncier), 0)
+        self.assertEqual(irpp[0].sum_ligne(L4BB_deficit_foncier_imputable_revenu_foncier), -21200)
+        self.assertEqual(irpp[0].sum_ligne(L4BC_deficit_foncier_imputable_revenu_global), -10700)
+        self.assertEqual(irpp[0].sum_ligne(L4BD_deficit_foncier_anterieur), 0)
 
         '''
         Annee 2
@@ -71,18 +71,18 @@ class TestIRPPDeficitFoncier(unittest.TestCase):
         annexe_2044.add_ligne(L227_taxe_fonciere, 1000)
         annexe_2044.add_ligne(L223_prime_assurance, 600)
         annexe_2044.add_ligne(L451_deficit_foncier_anterieur,
-                              irpp[0]._lignes_sum(L4BB_deficit_foncier_imputable_revenu_foncier))
+                              irpp[0].sum_ligne(L4BB_deficit_foncier_imputable_revenu_foncier))
         irpp[1].annexe_2044 = annexe_2044
 
         self.assertAlmostEqual(annexe_2044.resultat_foncier, 8100, 0)  # 12K - 3900
         self.assertAlmostEqual(irpp[1].revenu_fiscale_reference, 30000, 2)
         self.assertEqual(annexe_2044.deficit_imputable_revenu_foncier, 0)
 
-        self.assertEqual(irpp[0]._lignes_sum(L4_revenus_ou_deficits_nets_fonciers), 0)
-        self.assertEqual(irpp[0]._lignes_sum(L4BA_benefice_foncier), 8100)
-        self.assertEqual(irpp[0]._lignes_sum(L4BB_deficit_foncier_imputable_revenu_foncier), 0)
-        self.assertEqual(irpp[0]._lignes_sum(L4BC_deficit_foncier_imputable_revenu_global), 0)
-        self.assertEqual(irpp[0]._lignes_sum(L4BD_deficit_foncier_anterieur), 0)
+        self.assertEqual(irpp[0].sum_ligne(L4_revenus_ou_deficits_nets_fonciers), 0)
+        self.assertEqual(irpp[0].sum_ligne(L4BA_benefice_foncier), 8100)
+        self.assertEqual(irpp[0].sum_ligne(L4BB_deficit_foncier_imputable_revenu_foncier), 0)
+        self.assertEqual(irpp[0].sum_ligne(L4BC_deficit_foncier_imputable_revenu_global), 0)
+        self.assertEqual(irpp[0].sum_ligne(L4BD_deficit_foncier_anterieur), 0)
 
 
 if __name__ == '__main__':

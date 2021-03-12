@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from .ligne import Ligne
+from .ligne import Ligne, Ligne_Model
 
 
 L211_loyer_brut = Ligne(211, "loyer brut")
@@ -80,36 +80,34 @@ class Annexe_2044:
 
     def __init__(self, database):
         self._database = database
-        self._lignes = list()
+        self._ligne_model = Ligne_Model()
         self._deficit_reportable = None
 
-    def add_ligne(self, type_, valeur):
-        self._lignes.append({'type': type_, 'valeur': valeur})
+    def add_ligne(self, ligne, value):
+        self._ligne_model.add(ligne, value)
 
-    def get_ligne(self, lignes):
-        if not isinstance(lignes, list):
-            lignes = [lignes]
-        return sum(ligne['valeur'] for ligne in self._lignes if ligne['type'] in lignes)
+    def sum_ligne(self, lignes):
+        return self._ligne_model.sum(lignes)
 
     @property
     def total_recettes(self):
         '''Ligne 215 = 211 à 214'''
-        return self.get_ligne(L211_loyer_brut)
+        return self.sum_ligne(L211_loyer_brut)
 
     @property
     def total_frais_et_charges(self):
         '''Ligne 240'''
-        return self.get_ligne([L221_frais_administration,
+        return self.sum_ligne([L221_frais_administration,
                                L222_autre_frais_gestion,
                                L223_prime_assurance,
                                L224_travaux,
                                L227_taxe_fonciere,
-                               L229_copropriete_provision]) - self.get_ligne(L230_copropriete_regularisation)
+                               L229_copropriete_provision]) - self.sum_ligne(L230_copropriete_regularisation)
 
     @property
     def total_charges_emprunt(self):
         '''Ligne 250'''
-        return self.get_ligne([L250_interet_emprunt, L250_assurance_emprunteur,
+        return self.sum_ligne([L250_interet_emprunt, L250_assurance_emprunteur,
                                L250_frais_dossier, L250_frais_garantie])
 
     @property

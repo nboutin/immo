@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from .ligne import Ligne
+from .ligne import Ligne, Ligne_Model
 from .annexe_2044 import L451_deficit_foncier_anterieur
 
 L1AJ_salaire = Ligne('1AJ', 'Salaires - Déclarant 1')
@@ -11,7 +11,7 @@ L7AE_syndicat = Ligne('7AE', 'Cotisations syndicales - Déclarant 2')
 
 L4BA_benefice_foncier = Ligne('4BA', 'Resultat foncier positif')
 L4BB_deficit_foncier_imputable_revenu_foncier = Ligne('4BB', 'Deficit foncier imputable sur revenu foncier')
-L4BC_deficit_foncier_imputable_revenu_global = Ligne('4BB', 'Deficit foncier imputable sur revenu globale')
+L4BC_deficit_foncier_imputable_revenu_global = Ligne('4BC', 'Deficit foncier imputable sur revenu globale')
 L4BD_deficit_foncier_anterieur = Ligne('4BD', 'Deficit foncier antérieur')
 L4_revenus_ou_deficits_nets_fonciers = Ligne('4', 'Revenus ou Deficits nets fonciers')
 
@@ -52,19 +52,17 @@ class IRPP:
         self._part_fiscale = part_fiscale
         self._n_enfant = n_enfant
 
-        self._lignes = list()
+        self._ligne_model = Ligne_Model()
         self._annexe_2044 = None
         self._micro_foncier = None
 
     def add_ligne(self, ligne, value):
-        ligne.value = value
-        self._lignes.append(ligne)
+        self._ligne_model.add(ligne, value)
 
-    def update_ligne(self, ligne):
-        if ligne == L4_revenus_ou_deficits_nets_fonciers:
-            self._update_ligne_4()
+    def sum_ligne(self, lignes):
+        return self._ligne_model.sum(lignes)
 
-    def _update_ligne_4(self):
+    def _compute_ligne_4(self):
 
         # Report depuis Annexe 2044
         L420 = self._annexe_2044.resultat_foncier
@@ -77,13 +75,13 @@ class IRPP:
             self.add_ligne(L4BC_deficit_foncier_imputable_revenu_global, L440)
 
         self.add_ligne(L4BD_deficit_foncier_anterieur,
-                       self._annexe_2044.get_ligne(L451_deficit_foncier_anterieur))
+                       self._annexe_2044.sum_ligne(L451_deficit_foncier_anterieur))
 
         # Calcul ligne 4
-        L4BA = self._lignes_sum(L4BA_benefice_foncier)
-        L4BB = self._lignes_sum(L4BB_deficit_foncier_imputable_revenu_foncier)
-        L4BC = self._lignes_sum(L4BC_deficit_foncier_imputable_revenu_global)
-        L4BD = self._lignes_sum(L4BD_deficit_foncier_anterieur)
+        L4BA = self.sum_ligne(L4BA_benefice_foncier)
+        L4BB = self.sum_ligne(L4BB_deficit_foncier_imputable_revenu_foncier)
+        L4BC = self.sum_ligne(L4BC_deficit_foncier_imputable_revenu_global)
+        L4BD = self.sum_ligne(L4BD_deficit_foncier_anterieur)
 
         # Bénifice foncier
         if L4BA > 0:
@@ -112,7 +110,7 @@ class IRPP:
     @annexe_2044.setter
     def annexe_2044(self, annexe_2044):
         self._annexe_2044 = annexe_2044
-        self.update_ligne(L4_revenus_ou_deficits_nets_fonciers)
+        self._compute_ligne_4()
 
     @property
     def micro_foncier(self):
@@ -124,7 +122,7 @@ class IRPP:
 
     @property
     def salaires(self):
-        return self._lignes_sum((L1AJ_salaire, L1BJ_salaire))
+        return self.sum_ligne((L1AJ_salaire, L1BJ_salaire))
 
     @property
     def revenu_net_impossable(self):
@@ -139,7 +137,7 @@ class IRPP:
         ligne 5: Revenu ou deficit brut global
         '''
         rfr = self.revenu_net_impossable
-        rfr += self._lignes_sum(L4_revenus_ou_deficits_nets_fonciers)
+        rfr += self.sum_ligne(L4_revenus_ou_deficits_nets_fonciers)
         return rfr
 
     @property
@@ -157,7 +155,7 @@ class IRPP:
             # Revenu foncier
             elif self._annexe_2044.deficit_imputable_revenu_foncier:
                 result = self._annexe_2044.deficit_imputable_revenu_foncier
-                result += self._lignes_sum((L4BD_deficit_foncier_anterieur))
+                result += self.sum_ligne((L4BD_deficit_foncier_anterieur))
                 return result
 
         elif self._micro_foncier:
@@ -167,11 +165,11 @@ class IRPP:
 
     @property
     def total_reduction_impot(self):
-        return self._lignes_sum((L7UF_dons))
+        return self.sum_ligne((L7UF_dons))
 
     @property
     def total_credit_impot(self):
-        return self._lignes_sum((L7AE_syndicat))
+        return self.sum_ligne((L7AE_syndicat))
 
     @property
     def quotient_familial(self):
@@ -229,15 +227,6 @@ class IRPP:
             return 0
 
     # Private
-
-    def _lignes_sum(self, lignes):
-        '''
-        :param lignes (list of Ligne)
-        '''
-        if not isinstance(lignes, (list, tuple)):
-            lignes = (lignes,)
-        intersection = set(self._lignes).intersection(lignes)
-        return sum(ligne.value for ligne in intersection)
 
     def __impots_brut_sans_enfant(self):
         import copy
