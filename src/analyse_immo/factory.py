@@ -17,6 +17,16 @@ from analyse_immo.tools.finance import capital_compose
 
 
 class Factory:
+    
+    @staticmethod
+    def make_defaut(defaut_data):
+
+        defaut = Defaut(defaut_data['irl_taux_annuel'],
+                        defaut_data['provision_travaux_taux'],
+                        defaut_data['vacance_locative_taux_T1'],
+                        defaut_data['vacance_locative_taux_T2'],
+                        defaut_data['gestion_agence_taux'],)
+        return defaut
 
     @staticmethod
     def make_travaux(travaux_data):
@@ -42,6 +52,28 @@ class Factory:
         charge.add(Charge.charge_e.provision_travaux, charges_data['travaux_provision_taux'])
         charge.add(Charge.charge_e.vacance_locative, charges_data['vacance_locative_taux'])
         return charge
+    
+    @staticmethod
+    def make_lot(lot_data, defaut):
+        irl = lot_data['irl_taux_annuel']
+        if irl == 1:
+            irl = defaut.irl_taux_annuel
+            print('use defaut {}'.format(irl))
+
+        etat = Lot.etat_e.louable if lot_data['etat'] == 'louable' else ''
+        etat = Lot.etat_e.amenageable if lot_data['etat'] == 'amenageable' else etat
+
+        travaux = Factory.make_travaux(lot_data['travaux'])
+
+        lot = Lot(lot_data['type'],
+                  lot_data['surface'],
+                  lot_data['loyer_nu_mensuel'],
+                  irl,
+                  etat=etat,
+                  travaux=travaux)
+
+        lot.charge = Factory.make_charges(lot_data['charges'])
+        return lot
 
     @staticmethod
     def make_bien_immo(achat_data, commun_data, lots_data, defaut):
@@ -55,26 +87,7 @@ class Factory:
                               commun=commun)
 
         for lot_data in lots_data:
-
-            irl = lot_data['irl_taux_annuel']
-            if irl == 1:
-                irl = defaut.irl_taux_annuel
-                print('use defaut {}'.format(irl))
-
-            etat = Lot.etat_e.louable if lot_data['etat'] == 'louable' else ''
-            etat = Lot.etat_e.amenageable if lot_data['etat'] == 'amenageable' else etat
-
-            travaux = Factory.make_travaux(lot_data['travaux'])
-
-            lot = Lot(lot_data['type'],
-                      lot_data['surface'],
-                      lot_data['loyer_nu_mensuel'],
-                      irl,
-                      etat=etat,
-                      travaux=travaux)
-
-            lot.charge = Factory.make_charges(lot_data['charges'])
-
+            lot = Factory.make_lot(lot_data, defaut)
             bien_immo.add_lot(lot)
 
         return bien_immo
@@ -100,17 +113,6 @@ class Factory:
                         credit_data['frais_dossier'],
                         credit_data['frais_garantie'])
         return credit
-
-    @staticmethod
-    def make_defaut(defaut_data):
-
-        defaut = Defaut(defaut_data['irl_taux_annuel'],
-                        defaut_data['provision_travaux_taux'],
-                        defaut_data['vacance_locative_taux_T1'],
-                        defaut_data['vacance_locative_taux_T2'],
-                        defaut_data['gestion_agence_taux'],)
-
-        return defaut
 
     @staticmethod
     def make_irpp_projection(duration, annee_achat, database, impot_data, salaire_taux, bien_immo, credit):
