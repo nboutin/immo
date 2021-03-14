@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 
 from analyse_immo.defaut import Defaut
+from analyse_immo.database import Database
+from analyse_immo.rendement import Rendement
 from analyse_immo.bien_immo.bien_immo import Bien_Immo
 from analyse_immo.bien_immo.charge import Charge
 from analyse_immo.bien_immo.lot import Lot
@@ -14,6 +16,7 @@ from analyse_immo.impots.annexe_2044 import Annexe_2044, L211_loyer_brut, L221_f
     L250_frais_dossier, L250_frais_garantie, L451_deficit_foncier_anterieur
 from analyse_immo.impots.micro_foncier import Micro_Foncier, L4EB_recettes_brutes
 from analyse_immo.tools.finance import capital_compose
+from analyse_immo.analyse_immo import Analyse_Immo
 
 
 class Factory:
@@ -72,7 +75,7 @@ class Factory:
                   etat=etat,
                   travaux=travaux)
 
-        lot.charge = Factory.make_charges(lot_data['charges'])
+        lot.charge = Factory.make_charges(lot_data['charges'], defaut, lot.type)
         return lot
 
     @staticmethod
@@ -194,3 +197,51 @@ class Factory:
             return mf
         except Exception:
             return None
+        
+    @staticmethod
+    def make_analyse(input_data):
+        
+        achat_data = input_data['achat']
+        defaut_data = input_data['defaut']
+        commun_data = input_data['commun']
+        lots_data = input_data['lots']
+        credit_data = input_data['credit']
+        impot_data = input_data['impot']
+        
+        database = Database()
+        defaut = Factory.make_defaut(defaut_data)
+    
+        bien_immo = Factory.make_bien_immo(achat_data, commun_data, lots_data, defaut)
+        credit = Factory.make_credit(credit_data, bien_immo)
+        
+        # Impot
+        annee_achat = achat_data['annee']
+        credit_duree = credit_data['duree_annee']
+        projection_duree = credit_duree + 5
+        salaire_taux = defaut_data['salaire_taux_annuel']
+    
+        # IRPP + 2044
+        irpp_2044_projection = Factory.make_irpp_projection(
+            projection_duree, annee_achat, database, impot_data, salaire_taux, bien_immo, credit)
+
+        # IRPP + Micro foncier
+        irpp_micro_foncier_projection = list()
+    
+        for i_annee in range(projection_duree):
+            annee_revenu = annee_achat + i_annee
+            irpp = Factory.make_irpp(database, impot_data, annee_revenu, i_annee, salaire_taux)
+    
+            irpp.micro_foncier = Factory.make_micro_foncier(database, bien_immo, i_annee + 1)
+            irpp_micro_foncier_projection.append(irpp)
+
+        # Rendement
+        rendement = Rendement(bien_immo, credit, irpp_2044_projection)
+        
+        return Analyse_Immo(bien_immo=bien_immo, 
+                            annee_achat=annee_achat, 
+                            credit=credit, 
+                            projection_duree=projection_duree, 
+                            irpp_2044_projection=irpp_2044_projection, 
+                            irpp_micro_foncier_projection=irpp_micro_foncier_projection, 
+                            rendement=rendement) 
+    

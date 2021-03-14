@@ -32,6 +32,7 @@ encoding//src/test/impots/test_ligne.py=utf-8
 encoding//src/test/test_analyse_immo.py=utf-8
 encoding//src/test/test_database.py=utf-8
 encoding//src/test/test_factory.py=utf-8
+encoding//src/test/test_im_mir_130.py=utf-8
 encoding//src/test/test_irpp.py=utf-8
 encoding//src/test/test_rendement.py=utf-8
 encoding//src/test/test_simulation_a.py=utf-8

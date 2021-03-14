@@ -54,7 +54,7 @@
     "loyer_nu_mensuel" : 476,
     "irl_taux_annuel": 0,
     "travaux" : {
-        "__comment": "moyennement degrade, (62+8)*750*25%=13125, habiter mieux=2000",
+        "__comment": "moyennement dégradé, (62+8)*750*25%=13125, habiter mieux=2000",
         "montant": [25000],
         "subvention": [13125, 2000],
         "deficit_foncier": [9000]},
