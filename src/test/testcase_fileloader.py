@@ -6,19 +6,19 @@ import json
 
 class TestCaseFileLoader(unittest.TestCase):
 
-    def __init__(self, input_filename=None):
-        if not input_filename:
-            self.input_filename = 'input_test.json'
+    def __init__(self):
+        __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
+        
+        if not input_pathname:
+            self.input_pathname = os.path.join(__location__, 'data', 'input_test.json')
         else:
-            self.input_filename = input_filename
+            self.input_pathname = input_pathname
 
     def setUp(self):
-        __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
-
-        __INPUT_TEST_PATHNAME = os.path.join(__location__, 'data', self.input_filename)
-        with open(__INPUT_TEST_PATHNAME, 'r') as file:
+        with open(self.input_pathname, 'r') as file:
             input_data = json.load(file)
 
+        self.input_data = input_data
         self.achat_data = input_data['achat']
         self.lots_data = input_data['lots']
         self.credit_data = input_data['credit']
@@ -26,5 +26,4 @@ class TestCaseFileLoader(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    #import sys;sys.argv = ['', 'Test.testName']
     unittest.main()
