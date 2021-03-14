@@ -28,6 +28,20 @@ class Factory:
     def make_commun(commun_data):
         travaux = Factory.make_travaux(commun_data['travaux'])
         return Commun(travaux=travaux)
+    
+    @staticmethod
+    def make_charges(charges_data, defaut, lot_type):
+        charge = Charge(defaut, lot_type)
+        charge.add(Charge.charge_e.charge_locative, charges_data['provision_charge_mensuel'])
+        
+        charge.add(Charge.charge_e.copropriete, charges_data['copropriete'])
+        charge.add(Charge.charge_e.taxe_fonciere, charges_data['taxe_fonciere'])
+        charge.add(Charge.charge_e.prime_assurance, charges_data['PNO'])
+        charge.add(Charge.charge_e.agence_immo, charges_data['agence_immo'])
+        
+        charge.add(Charge.charge_e.provision_travaux, charges_data['travaux_provision_taux'])
+        charge.add(Charge.charge_e.vacance_locative, charges_data['vacance_locative_taux'])
+        return charge
 
     @staticmethod
     def make_bien_immo(achat_data, commun_data, lots_data, defaut):
@@ -59,18 +73,7 @@ class Factory:
                       etat=etat,
                       travaux=travaux)
 
-            charges_data = lot_data['charges']
-            charge = Charge(defaut, lot.type)
-            charge.add(Charge.charge_e.charge_locative, charges_data['provision_charge_mensuel'])
-
-            charge.add(Charge.charge_e.copropriete, charges_data['copropriete'])
-            charge.add(Charge.charge_e.taxe_fonciere, charges_data['taxe_fonciere'])
-            charge.add(Charge.charge_e.prime_assurance, charges_data['PNO'])
-            charge.add(Charge.charge_e.agence_immo, charges_data['agence_immo'])
-
-            charge.add(Charge.charge_e.provision_travaux, charges_data['travaux_provision_taux'])
-            charge.add(Charge.charge_e.vacance_locative, charges_data['vacance_locative_taux'])
-            lot.charge = charge
+            lot.charge = Factory.make_charges(lot_data['charges'])
 
             bien_immo.add_lot(lot)
 
