@@ -32,7 +32,7 @@ class TestDatabase(unittest.TestCase):
 
     def testDeficitFoncierPlafondAnnuel(self):
         database = Database()
-        self.assertEqual(database.deficit_foncier_plafond_annuel, 10700)
+        self.assertEqual(database.deficit_foncier_plafond_annuel, -10700)
 
 
 if __name__ == '__main__':

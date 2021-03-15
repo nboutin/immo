@@ -21,31 +21,31 @@ class TestRendement(unittest.TestCase):
         self.database = Database()
 
     def test1_RendementBrut(self):
-        bi = Bien_Immo(50000, 0, 0, 0, 0)
+        bi = Bien_Immo(50000)
         bi.add_lot(Lot("T2", 50, 500))
         rdt = Rendement(bi, self.credit, self.irpp_2044_proj)
         self.assertEqual(rdt.rendement_brut, 0.12)
 
-        bi = Bien_Immo(0, 0, 0, 0, 0)
+        bi = Bien_Immo()
         rdt = Rendement(bi, self.credit, self.irpp_2044_proj)
         self.assertEqual(rdt.rendement_brut, 0)
 
     def test2_RendementMethodeLarcher(self):
-        bi = Bien_Immo(50000, 0, 0, 0, 0)
+        bi = Bien_Immo(50000)
         bi.add_lot(Lot("T2", 50, 500))
         rdt = Rendement(bi, self.credit, self.irpp_2044_proj)
         self.assertEqual(rdt.rendement_methode_larcher, 0.09)
 
-        bi = Bien_Immo(0, 0, 0, 0, 0)
+        bi = Bien_Immo()
         rdt = Rendement(bi, self.credit, self.irpp_2044_proj)
         self.assertEqual(rdt.rendement_methode_larcher, 0)
 
     def test3_RendementNet(self):
-        bi = Bien_Immo(0, 0, 0, 0, 0)
+        bi = Bien_Immo()
         rdt = Rendement(bi, self.credit, self.irpp_2044_proj)
         self.assertEqual(rdt.rendement_net(1), 0)
 
-        bi = Bien_Immo(50000, 0, 0, 0, 0)
+        bi = Bien_Immo(50000)
         bi.add_lot(Lot("T2", 50, 500))
         rdt = Rendement(bi, self.credit, self.irpp_2044_proj)
         self.assertEqual(rdt.rendement_net(1), 0.12)

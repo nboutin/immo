@@ -52,6 +52,7 @@ class TestLigneModel(unittest.TestCase):
         L3 = Ligne('3', '333')
 
         lm = Ligne_Model()
+        lm.remove(L1)
         lm.add(L1, 1)
         lm.remove(L1)
         lm.add(L1, 2)
