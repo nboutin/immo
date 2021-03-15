@@ -4,6 +4,31 @@
 import logging
 from tabulate import tabulate
 
+from analyse_immo.rapports.rapport_annexe_2044 import rapport_annexe_2044
+from analyse_immo.rapports.rapport_micro_foncier import rapport_micro_foncier
+from analyse_immo.rapports.rapport_irpp import rapport_irpp
+
+
+def rapport(analyse):
+    rapport_achat(analyse.bien_immo)
+    rapport_location(analyse.projection_duree, analyse.bien_immo, analyse.annee_achat)
+    rapport_credit(analyse.projection_duree, analyse.credit, analyse.annee_achat)
+    rapport_annexe_2044(analyse.annee_achat, analyse.irpp_2044_projection, analyse.bien_immo)
+    rapport_micro_foncier(analyse.annee_achat, analyse.irpp_micro_foncier_projection, analyse.bien_immo)
+    rapport_irpp(
+        analyse.annee_achat,
+        analyse.defaut.salaire_taux,
+        analyse.irpp_2044_projection,
+        analyse.irpp_micro_foncier_projection)
+    rapport_rendement(analyse.annee_achat, analyse.projection_duree, analyse.rendement)
+    rapport_overview(
+        analyse.annee_achat,
+        analyse.projection_duree,
+        analyse.bien_immo,
+        analyse.credit,
+        analyse.irpp_2044_projection,
+        analyse.rendement)
+
 
 def rapport_achat(bien_immo):
 
