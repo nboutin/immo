@@ -11,6 +11,7 @@ from analyse_immo.rapports.rapport_irpp import rapport_irpp
 
 def rapport(analyse):
     rapport_achat(analyse.bien_immo)
+    rapport_bien_immo(analyse.bien_immo)
     rapport_location(analyse.projection_duree, analyse.bien_immo, analyse.annee_achat)
     rapport_credit(analyse.projection_duree, analyse.credit, analyse.annee_achat)
     rapport_annexe_2044(analyse.annee_achat, analyse.irpp_2044_projection, analyse.bien_immo)
@@ -56,6 +57,29 @@ def rapport_achat(bien_immo):
                ]
     rotate = list(zip(*rapport[::-1]))
     logging.info('# Achat')
+    logging.info(tabulate(rotate) + '\n')
+
+
+def rapport_bien_immo(bien_immo):
+
+    rapport = list()
+
+    for lot in bien_immo.lots:
+        rapport.insert(0,
+                       [lot.type,
+                        lot.etat,
+                        lot.surface,
+                        lot.loyer_nu_brut_mensuel()
+                        ])
+
+    rapport.append([
+        'Type',
+        'Etat',
+        'Surface',
+        'Loyer mensuel'
+    ])
+    rotate = list(zip(*rapport[::-1]))
+    logging.info('# Bien Immo')
     logging.info(tabulate(rotate) + '\n')
 
 

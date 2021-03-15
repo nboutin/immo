@@ -38,6 +38,10 @@ class Bien_Immo:
         self._lots.append(lot)
 
     @property
+    def lots(self):
+        return self._lots
+
+    @property
     def lot_count(self):
         return len(self._lots)
 
