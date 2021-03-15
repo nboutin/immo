@@ -20,7 +20,7 @@ from analyse_immo.analyse_immo import Analyse_Immo
 
 
 class Factory:
-    
+
     @staticmethod
     def make_defaut(defaut_data):
 
@@ -28,7 +28,8 @@ class Factory:
                         defaut_data['provision_travaux_taux'],
                         defaut_data['vacance_locative_taux_T1'],
                         defaut_data['vacance_locative_taux_T2'],
-                        defaut_data['gestion_agence_taux'],)
+                        defaut_data['gestion_agence_taux'],
+                        salaire_taux=defaut_data['salaire_taux_annuel'])
         return defaut
 
     @staticmethod
@@ -41,21 +42,21 @@ class Factory:
     def make_commun(commun_data):
         travaux = Factory.make_travaux(commun_data['travaux'])
         return Commun(travaux=travaux)
-    
+
     @staticmethod
     def make_charges(charges_data, defaut, lot_type):
         charge = Charge(defaut, lot_type)
         charge.add(Charge.charge_e.charge_locative, charges_data['provision_charge_mensuel'])
-        
+
         charge.add(Charge.charge_e.copropriete, charges_data['copropriete'])
         charge.add(Charge.charge_e.taxe_fonciere, charges_data['taxe_fonciere'])
         charge.add(Charge.charge_e.prime_assurance, charges_data['PNO'])
         charge.add(Charge.charge_e.agence_immo, charges_data['agence_immo'])
-        
+
         charge.add(Charge.charge_e.provision_travaux, charges_data['travaux_provision_taux'])
         charge.add(Charge.charge_e.vacance_locative, charges_data['vacance_locative_taux'])
         return charge
-    
+
     @staticmethod
     def make_lot(lot_data, defaut):
         irl = lot_data['irl_taux_annuel']
@@ -197,51 +198,52 @@ class Factory:
             return mf
         except Exception:
             return None
-        
+
     @staticmethod
     def make_analyse(input_data):
-        
+
         achat_data = input_data['achat']
         defaut_data = input_data['defaut']
         commun_data = input_data['commun']
         lots_data = input_data['lots']
         credit_data = input_data['credit']
         impot_data = input_data['impot']
-        
+
         database = Database()
         defaut = Factory.make_defaut(defaut_data)
-    
+
         bien_immo = Factory.make_bien_immo(achat_data, commun_data, lots_data, defaut)
         credit = Factory.make_credit(credit_data, bien_immo)
-        
+
         # Impot
         annee_achat = achat_data['annee']
         credit_duree = credit_data['duree_annee']
         projection_duree = credit_duree + 5
-        salaire_taux = defaut_data['salaire_taux_annuel']
-    
+        salaire_taux = defaut.salaire_taux
+
         # IRPP + 2044
         irpp_2044_projection = Factory.make_irpp_projection(
             projection_duree, annee_achat, database, impot_data, salaire_taux, bien_immo, credit)
 
         # IRPP + Micro foncier
         irpp_micro_foncier_projection = list()
-    
+
         for i_annee in range(projection_duree):
             annee_revenu = annee_achat + i_annee
             irpp = Factory.make_irpp(database, impot_data, annee_revenu, i_annee, salaire_taux)
-    
+
             irpp.micro_foncier = Factory.make_micro_foncier(database, bien_immo, i_annee + 1)
             irpp_micro_foncier_projection.append(irpp)
 
         # Rendement
         rendement = Rendement(bien_immo, credit, irpp_2044_projection)
-        
-        return Analyse_Immo(bien_immo=bien_immo, 
-                            annee_achat=annee_achat, 
-                            credit=credit, 
-                            projection_duree=projection_duree, 
-                            irpp_2044_projection=irpp_2044_projection, 
-                            irpp_micro_foncier_projection=irpp_micro_foncier_projection, 
-                            rendement=rendement) 
-    
+
+        return Analyse_Immo(
+            defaut=defaut,
+            bien_immo=bien_immo,
+            annee_achat=annee_achat,
+            credit=credit,
+            projection_duree=projection_duree,
+            irpp_2044_projection=irpp_2044_projection,
+            irpp_micro_foncier_projection=irpp_micro_foncier_projection,
+            rendement=rendement)

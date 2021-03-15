@@ -18,6 +18,10 @@ class Ligne:
         return self._code
 
     @property
+    def name(self):
+        return self._name
+
+    @property
     def value(self):
         return self._value
 
@@ -33,6 +37,9 @@ class Ligne:
 
     def __ne__(self, other):
         return not self.__eq__(other)
+
+    def __repr__(self):
+        return '{}, {}, {}'.format(self.code, self.name, self.value)
 
 
 class Ligne_Model():
@@ -58,11 +65,11 @@ class Ligne_Model():
         if ligne in self._lignes:
             self._lignes.remove(ligne)
 
-    def update(self, ligne, value):
-        if ligne in self._lignes:
-            self.remove(ligne)
-        else:
-            self.add(ligne, value)
+    # def update(self, ligne, value):
+        # if ligne in self._lignes:
+            # self.remove(ligne)
+        # else:
+            # self.add(ligne, value)
 
     def sum(self, lignes):
         '''
@@ -70,5 +77,5 @@ class Ligne_Model():
         '''
         if not isinstance(lignes, (list, tuple)):
             lignes = (lignes,)
-        intersection = set(self._lignes).intersection(lignes)
+        intersection = set(lignes).intersection(self._lignes)
         return sum(ligne.value for ligne in intersection)

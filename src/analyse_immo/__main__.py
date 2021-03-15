@@ -24,6 +24,7 @@ __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file
 __INPUT_FILEPATH = os.path.join(__location__, 'data', 'input_2021.json')
 __OUTPUT_FILEPATH = os.path.join(__location__, 'analyse_immo.log')
 
+
 def main(argv):
     configure_logger()
 
@@ -60,17 +61,17 @@ def main(argv):
     #
     # # IRPP + 2044
     # irpp_2044_projection = Factory.make_irpp_projection(
-        # projection_duree, annee_achat, database, impot_data, salaire_taux, bien_immo, credit)
-        #
+    # projection_duree, annee_achat, database, impot_data, salaire_taux, bien_immo, credit)
+    #
     # # IRPP + Micro foncier
     # irpp_micro_foncier_projection = list()
     #
     # for i_annee in range(projection_duree):
-        # annee_revenu = annee_achat + i_annee
-        # irpp = Factory.make_irpp(database, impot_data, annee_revenu, i_annee, salaire_taux)
-        #
-        # irpp.micro_foncier = Factory.make_micro_foncier(database, bien_immo, i_annee + 1)
-        # irpp_micro_foncier_projection.append(irpp)
+    # annee_revenu = annee_achat + i_annee
+    # irpp = Factory.make_irpp(database, impot_data, annee_revenu, i_annee, salaire_taux)
+    #
+    # irpp.micro_foncier = Factory.make_micro_foncier(database, bien_immo, i_annee + 1)
+    # irpp_micro_foncier_projection.append(irpp)
 
     # # Rendement
     # rendement = Rendement(bien_immo, credit, irpp_2044_projection)
@@ -81,9 +82,19 @@ def main(argv):
     rapport_credit(analyse.projection_duree, analyse.credit, analyse.annee_achat)
     rapport_annexe_2044(analyse.annee_achat, analyse.irpp_2044_projection, analyse.bien_immo)
     rapport_micro_foncier(analyse.annee_achat, analyse.irpp_micro_foncier_projection, analyse.bien_immo)
-    rapport_irpp(analyse.annee_achat, analyse.salaire_taux, analyse.irpp_2044_projection, analyse.irpp_micro_foncier_projection)
+    rapport_irpp(
+        analyse.annee_achat,
+        analyse.defaut.salaire_taux,
+        analyse.irpp_2044_projection,
+        analyse.irpp_micro_foncier_projection)
     rapport_rendement(analyse.annee_achat, analyse.projection_duree, analyse.rendement)
-    rapport_overview(analyse.annee_achat, analyse.projection_duree, analyse.bien_immo, analyse.credit, analyse.irpp_2044_projection, analyse.rendement)
+    rapport_overview(
+        analyse.annee_achat,
+        analyse.projection_duree,
+        analyse.bien_immo,
+        analyse.credit,
+        analyse.irpp_2044_projection,
+        analyse.rendement)
 
 
 def parse_args(argv):
