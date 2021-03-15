@@ -77,5 +77,12 @@ class Ligne_Model():
         '''
         if not isinstance(lignes, (list, tuple)):
             lignes = (lignes,)
-        intersection = set(lignes).intersection(self._lignes)
-        return sum(ligne.value for ligne in intersection)
+        # intersection = set(lignes).intersection(self._lignes)
+        # return sum(ligne.value for ligne in intersection)
+
+        # result = 0
+        # for ligne in self._lignes:
+            # if ligne in lignes:
+            # result += ligne.value
+        # return result
+        return sum(ligne.value for ligne in self._lignes if ligne in lignes)

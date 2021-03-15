@@ -143,26 +143,30 @@ class IRPP:
 
     @property
     def revenu_foncier(self):
-        if self._annexe_2044 and self._micro_foncier:
-            raise Exception()
+        return self.sum_ligne(L4_revenus_ou_deficits_nets_fonciers)
 
-        if self._annexe_2044:
-            # Bénéfice foncier
-            if self._annexe_2044.resultat_foncier >= 0:
-                return self._annexe_2044.resultat_foncier
-            # Revenu global
-            elif self._annexe_2044.deficit_imputable_revenu_global < 0:
-                return self._annexe_2044.deficit_imputable_revenu_global
-            # Revenu foncier
-            elif self._annexe_2044.deficit_imputable_revenu_foncier:
-                result = self._annexe_2044.deficit_imputable_revenu_foncier
-                result += self.sum_ligne((L4BD_deficit_foncier_anterieur))
-                return result
-
-        elif self._micro_foncier:
-            return self._micro_foncier.revenu_foncier_taxable
-        else:
-            return 0
+    # @property
+    # def revenu_foncier(self):
+        # if self._annexe_2044 and self._micro_foncier:
+        # raise Exception()
+        #
+        # if self._annexe_2044:
+        # # Bénéfice foncier
+        # if self._annexe_2044.resultat_foncier >= 0:
+        # return self._annexe_2044.resultat_foncier
+        # # Revenu global
+        # elif self._annexe_2044.deficit_imputable_revenu_global < 0:
+        # return self._annexe_2044.deficit_imputable_revenu_global
+        # # Revenu foncier
+        # elif self._annexe_2044.deficit_imputable_revenu_foncier:
+        # result = self._annexe_2044.deficit_imputable_revenu_foncier
+        # result += self.sum_ligne((L4BD_deficit_foncier_anterieur))
+        # return result
+        #
+        # elif self._micro_foncier:
+        # return self._micro_foncier.revenu_foncier_taxable
+        # else:
+        # return 0
 
     @property
     def total_reduction_impot(self):
