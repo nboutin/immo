@@ -65,11 +65,12 @@ class Ligne_Model():
         if ligne in self._lignes:
             self._lignes.remove(ligne)
 
-    # def update(self, ligne, value):
-        # if ligne in self._lignes:
-            # self.remove(ligne)
-        # else:
-            # self.add(ligne, value)
+    def update(self, ligne, value):
+        '''
+        @todo manage case multiple ligne were added
+        '''
+        self.remove(ligne)
+        self.add(ligne, value)
 
     def sum(self, lignes):
         '''

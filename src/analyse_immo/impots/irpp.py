@@ -3,6 +3,8 @@
 
 from .ligne import Ligne, Ligne_Model
 from .annexe_2044 import L451_deficit_foncier_anterieur
+from analyse_immo.impots.annexe_2044 import L420_resultat_foncier, L440, L441,\
+    L440_report_420, L441_report_420
 
 L1AJ_salaire = Ligne('1AJ', 'Salaires - Déclarant 1')
 L1BJ_salaire = Ligne('1BJ', 'Salaires - Déclarant 2')
@@ -65,12 +67,12 @@ class IRPP:
     def _compute_ligne_4(self):
 
         # Report depuis Annexe 2044
-        L420 = self._annexe_2044.resultat_foncier
+        L420 = self._annexe_2044.sum_ligne(L420_resultat_foncier)
         if L420 > 0:
             self.add_ligne(L4BA_benefice_foncier, L420)
         else:
-            L440 = self._annexe_2044.deficit_imputable_revenu_global
-            L441 = self._annexe_2044.deficit_imputable_revenu_foncier
+            L440 = self._annexe_2044.sum_ligne(L440_report_420)
+            L441 = self._annexe_2044.sum_ligne(L441_report_420)
             self.add_ligne(L4BB_deficit_foncier_imputable_revenu_foncier, L441)
             self.add_ligne(L4BC_deficit_foncier_imputable_revenu_global, L440)
 

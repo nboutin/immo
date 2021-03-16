@@ -5,7 +5,7 @@ import logging
 from tabulate import tabulate
 
 from analyse_immo.rapports.rapport_annexe_2044 import rapport_annexe_2044
-from analyse_immo.rapports.rapport_micro_foncier import rapport_micro_foncier
+# from analyse_immo.rapports.rapport_micro_foncier import rapport_micro_foncier
 from analyse_immo.rapports.rapport_irpp import rapport_irpp
 
 
@@ -15,7 +15,7 @@ def rapport(analyse):
     rapport_location(analyse.projection_duree, analyse.bien_immo, analyse.annee_achat)
     rapport_credit(analyse.projection_duree, analyse.credit, analyse.annee_achat)
     rapport_annexe_2044(analyse.annee_achat, analyse.irpp_2044_projection, analyse.bien_immo)
-    rapport_micro_foncier(analyse.annee_achat, analyse.irpp_micro_foncier_projection, analyse.bien_immo)
+    # rapport_micro_foncier(analyse.annee_achat, analyse.irpp_micro_foncier_projection, analyse.bien_immo)
     rapport_irpp(
         analyse.annee_achat,
         analyse.defaut.salaire_taux,
@@ -69,14 +69,22 @@ def rapport_bien_immo(bien_immo):
                        [lot.type,
                         lot.etat,
                         lot.surface,
-                        lot.loyer_nu_brut_mensuel()
+                        0,
+                        lot.loyer_nu_brut_mensuel(),
+                        0,
+                        0,
+                        0
                         ])
 
     rapport.append([
         'Type',
         'Etat',
         'Surface',
-        'Loyer mensuel'
+        'Niveau',
+        'Loyer hc',
+        'charges',
+        'evolution',
+        'locataire'
     ])
     rotate = list(zip(*rapport[::-1]))
     logging.info('# Bien Immo')

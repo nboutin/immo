@@ -29,6 +29,8 @@ class TestImMir130(unittest.TestCase):
         self.assertNotEqual(an2044_0.sum_ligne(L224_travaux), 0)
         self.assertNotEqual(irpp_0.revenu_foncier, 0)
         self.assertEqual(irpp_0.revenu_foncier, -10700)
+        self.assertEqual(irpp_0.revenu_fiscale_reference, 0)
+        self.assertEqual(irpp_0.impots_net, 0)
 
         # an2044.sum_ligne(L4BA_benefice_foncier)
         # an2044.sum_ligne(L4BB_deficit_foncier_imputable_revenu_foncier)
