@@ -47,15 +47,9 @@ class Ligne_Model():
     def __init__(self):
         self._lignes = list()
 
-    # def __iter__(self):
-        # return self._lignes.__iter__()
-        #
-    # def __next__(self):
-        # return self._lignes.__next__()
-
-    def add(self, ligne, value, double=False):
+    def add(self, ligne, value):
         import copy
-        if not double and ligne in self._lignes:
+        if ligne in self._lignes:
             raise Exception('Ligne already present {}'.format(ligne.code))
         ligne_copy = copy.deepcopy(ligne)
         ligne_copy.value = value
@@ -78,12 +72,4 @@ class Ligne_Model():
         '''
         if not isinstance(lignes, (list, tuple)):
             lignes = (lignes,)
-        # intersection = set(lignes).intersection(self._lignes)
-        # return sum(ligne.value for ligne in intersection)
-
-        # result = 0
-        # for ligne in self._lignes:
-            # if ligne in lignes:
-            # result += ligne.value
-        # return result
         return sum(ligne.value for ligne in self._lignes if ligne in lignes)

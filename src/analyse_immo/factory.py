@@ -10,10 +10,9 @@ from analyse_immo.bien_immo.lot import Lot
 from analyse_immo.bien_immo.commun import Commun
 from analyse_immo.bien_immo.travaux import Travaux
 from analyse_immo.credit import Credit
-from analyse_immo.impots.irpp import IRPP, L1AJ_salaire, L1BJ_salaire, L7UF_dons, L7AE_syndicat, L4BB_deficit_foncier_imputable_revenu_foncier
-from analyse_immo.impots.annexe_2044 import Annexe_2044, L211_loyer_brut, L221_frais_administration, L222_autre_frais_gestion, \
-    L223_prime_assurance, L224_travaux, L227_taxe_fonciere, L229_copropriete_provision, L250_interet_emprunt, L250_assurance_emprunteur,\
-    L250_frais_dossier, L250_frais_garantie, L451_deficit_foncier_anterieur
+from analyse_immo.impots.irpp import IRPP
+from analyse_immo.impots.annexe_2044 import Annexe_2044
+from analyse_immo.impots.ligne_definition import *
 from analyse_immo.impots.micro_foncier import Micro_Foncier, L4EB_recettes_brutes
 from analyse_immo.tools.finance import capital_compose
 from analyse_immo.analyse_immo import Analyse_Immo
@@ -168,12 +167,12 @@ class Factory:
         an.add_ligne(L221_frais_administration, bien_immo.get_charge(Charge.charge_e.agence_immo, i_annee))
         an.add_ligne(L222_autre_frais_gestion, 20 * bien_immo.lot_count)
         an.add_ligne(L223_prime_assurance, bien_immo.get_charge(Charge.charge_e.prime_assurance, i_annee))
-        an.add_ligne(L224_travaux, bien_immo.get_charge(Charge.charge_e.provision_travaux, i_annee))
+        an.add_ligne(L224_travaux_provision, bien_immo.get_charge(Charge.charge_e.provision_travaux, i_annee))
         an.add_ligne(L227_taxe_fonciere, bien_immo.get_charge(Charge.charge_e.taxe_fonciere, i_annee))
         an.add_ligne(L229_copropriete_provision, bien_immo.get_charge(Charge.charge_e.copropriete, i_annee))
 
         if i_annee == 1:
-            an.add_ligne(L224_travaux, bien_immo.travaux_montant, double=True)
+            an.add_ligne(L224_travaux_renovation, bien_immo.travaux_montant)
 
         month_stop = i_annee * 12
         month_start = month_stop - 11

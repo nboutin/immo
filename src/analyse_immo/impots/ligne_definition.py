@@ -36,7 +36,9 @@ L215_total_des_recettes = Ligne('215', 'Total des recettes 211 � 214')
 L221_frais_administration = Ligne('221', "frais d'administration")
 L222_autre_frais_gestion = Ligne('222', "autre frais de gestion")
 L223_prime_assurance = Ligne('223', "Prime d'assurance")
-L224_travaux = Ligne('224', "Travaux reparation, entretien, amelioration")
+L224_travaux_provision = Ligne('224a', 'Provision sur travaux')
+L224_travaux_renovation = Ligne('224b', 'Travaux de renovation')
+L224_total_travaux = Ligne('224', "Travaux reparation, entretien, amelioration")
 L225_charges_recuperable = Ligne('225', 'Charges recuperables non recuperees au depart du locataire')
 L226_indemnites_eviction = Ligne('226', 'Indemnites d eviction, frais de relogement')
 L227_taxe_fonciere = Ligne('227', "Taxe fonciere")
@@ -50,10 +52,11 @@ L229bis_deduction_travaux = Ligne('229b', 'Deduction de 50% du montant des trava
 L230_regularisation_des_provisions = Ligne('230', "copropriete: regularisation des provision pour charges")
 L240_total_frais_et_charges = Ligne('240', 'Total des frais et charges')
 
-L250_interet_emprunt = Ligne('250', "interet d'emprunt")
-L250_assurance_emprunteur = Ligne('250', "assurance emprunteur")
-L250_frais_dossier = Ligne('250', "Frais de dossier")
-L250_frais_garantie = Ligne('250', "Frais de garantie")
+L250_interet_emprunt = Ligne('250a', "interet d'emprunt")
+L250_assurance_emprunteur = Ligne('250b', "assurance emprunteur")
+L250_frais_dossier = Ligne('250c', "Frais de dossier")
+L250_frais_garantie = Ligne('250d', "Frais de garantie")
+L250_total_emprunt = Ligne('250', 'Total interet emprunt, assurance et frais')
 
 # 260 Revenu foncier taxable
 L261_revenus_foncier_taxable = Ligne('261', 'Revenus foncier taxable')
@@ -80,8 +83,8 @@ LA_revenus_bruts = Ligne('A', 'Revenus bruts')  # Add L111
 LB_frais_et_charges = Ligne('B', 'Frais et charges sauf interets d emprunt')  # Add L112
 LC_interets_emprunt = Ligne('C', 'Interets d emprunts')  # Add L113
 LD_benefice_deficit = Ligne('D', 'Benefice ou deficit')  # Add L114
-CaseE = Ligne('E', '')
-CaseF = Ligne('F', '')
+CaseE_total_recettes = Ligne('E', 'Total des recettes')
+CaseF_total_frais_charges = Ligne('F', 'Total frais et charges')
 CaseG = Ligne('G', '')
 CaseH = Ligne('H', '')
 CaseI = Ligne('I', '')

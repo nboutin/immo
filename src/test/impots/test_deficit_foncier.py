@@ -40,7 +40,7 @@ class TestIRPPDeficitFoncier(unittest.TestCase):
         annexe_2044.add_ligne(L250_interet_emprunt, 2300)
         annexe_2044.add_ligne(L227_taxe_fonciere, 1000)
         annexe_2044.add_ligne(L223_prime_assurance, 600)
-        annexe_2044.add_ligne(L224_travaux, 40000)
+        annexe_2044.add_ligne(L224_travaux_renovation, 40000)
         irpp[0].annexe_2044 = annexe_2044
 
         self.assertAlmostEqual(annexe_2044.sum_ligne(L420_resultat_foncier), -31900, 0)
