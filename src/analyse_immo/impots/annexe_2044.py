@@ -21,12 +21,12 @@ class Annexe_2044:
 
     def add_ligne(self, ligne, value, double=False):
         self._ligne_model.add(ligne, value, double)
-        self.update()
+        self.compute()
 
     def sum_ligne(self, lignes):
         return self._ligne_model.sum(lignes)
 
-    def update(self):
+    def compute(self):
         # Ligne 215 = 211 à 214
         self._ligne_model.update(L215_total_des_recettes,
                                  self.sum_ligne(
@@ -88,45 +88,49 @@ class Annexe_2044:
             self._ligne_model.update(L4BA_benefice_foncier, L420)
         else:
             # L431 = A + E + H
-            self.update(L431_total_revenus_bruts,
-                        self.sum_ligne([CaseE, CaseH]))
+            self._ligne_model.update(L431_total_revenus_bruts,
+                                     self.sum_ligne([CaseE, CaseH]))
             # L432 = C + G
-            self.update(L432_total_interets_emprunts, self.sum_ligne([CaseG]))
+            self._ligne_model.update(L432_total_interets_emprunts, self.sum_ligne([CaseG]))
             # L433 = B + F
-            self.update(L433_total_autres_frais_et_charges, self.sum_ligne([CaseF]))
+            self._ligne_model.update(L433_total_autres_frais_et_charges, self.sum_ligne([CaseF]))
 
-            self.update(L435_report_433, 0)
-            self.update(L436_report_433, 0)
-            self.update(L437_report_difference, 0)
-            self.update(L438_total, 0)
-            self.update(L440_report_420, 0)
-            self.update(L441_report_420, 0)
+            self._ligne_model.update(L435_report_433, 0)
+            self._ligne_model.update(L436_report_433, 0)
+            self._ligne_model.update(L437_report_difference, 0)
+            self._ligne_model.update(L438_total, 0)
+            self._ligne_model.update(L440_report_420, 0)
+            self._ligne_model.update(L441_report_420, 0)
 
             if self.sum_ligne(L432_total_interets_emprunts) > self.sum_ligne(L431_total_revenus_bruts):
                 L433 = self.sum_ligne(L433_total_autres_frais_et_charges)
-                self.update(L435_report_433, min(10700, L433))
-                self.update(L436_report_433, max(0, L433 - 10700))
-                self.update(L437_report_difference, self.sum_ligne(L432_total_interets_emprunts)
-                            - self.sum_ligne(L431_total_revenus_bruts))
-                self.update(L438_total, self.sum_ligne([L436_report_433, L437_report_difference]))
+                self._ligne_model.update(L435_report_433, min(10700, L433))
+                self._ligne_model.update(L436_report_433, max(0, L433 - 10700))
+                self._ligne_model.update(L437_report_difference, self.sum_ligne(L432_total_interets_emprunts)
+                                         - self.sum_ligne(L431_total_revenus_bruts))
+                self._ligne_model.update(L438_total, self.sum_ligne([L436_report_433, L437_report_difference]))
 
-                self.update(L4BC_deficit_foncier_imputable_revenu_global, self.sum_ligne(L435_report_433))
-                self.update(L4BB_deficit_foncier_imputable_revenu_foncier, self.sum_ligne(L438_total))
+                self._ligne_model.update(L4BC_deficit_foncier_imputable_revenu_global, self.sum_ligne(L435_report_433))
+                self._ligne_model.update(L4BB_deficit_foncier_imputable_revenu_foncier, self.sum_ligne(L438_total))
             else:
                 L420 = self.sum_ligne(L420_resultat_foncier)
-                self.update(L440_report_420, min(10700, L420))
-                self.update(L441_report_420, max(0, L420 - 10700))
-                self.update(L4BC_deficit_foncier_imputable_revenu_global, self.sum_ligne(L440_report_420))
-                self.update(L4BB_deficit_foncier_imputable_revenu_foncier, self.sum_ligne(L441_report_420))
+                self._ligne_model.update(L440_report_420, min(10700, L420))
+                self._ligne_model.update(L441_report_420, max(0, L420 - 10700))
+                self._ligne_model.update(L4BC_deficit_foncier_imputable_revenu_global, self.sum_ligne(L440_report_420))
+                self._ligne_model.update(L4BB_deficit_foncier_imputable_revenu_foncier, self.sum_ligne(L441_report_420))
 
     @property
     def total_charges_taux(self):
-        return 1 - (self.sum_ligne(L420_resultat_foncier) / self.sum_ligne(CaseE))
+        return 1 - (self.sum_ligne(L240_total_frais_et_charges) / self.sum_ligne(CaseE))
 
     @property
     def prelevement_sociaux(self):
-        if self.resultat_foncier > 0:
-            return self.resultat_foncier * self._database.prelevement_sociaux_taux
+        '''
+        @todo should not be here but in IRPP
+        '''
+        resultat_foncier = self.sum_ligne(L420_resultat_foncier)
+        if resultat_foncier > 0:
+            return resultat_foncier * self._database.prelevement_sociaux_taux
         else:
             return 0
 

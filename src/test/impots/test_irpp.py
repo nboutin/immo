@@ -4,16 +4,9 @@
 import unittest
 
 from analyse_immo.database import Database
-from analyse_immo.impots.ligne import Ligne
-from analyse_immo.impots.irpp import IRPP, L1AJ_salaire, L1BJ_salaire, L7UF_dons, L7AE_syndicat
-from analyse_immo.impots.annexe_2044 import Annexe_2044, L211_loyer_brut
-
-
-class TestLigne(unittest.TestCase):
-
-    def testEqual(self):
-        ligne = Ligne(100, 'nom')
-        self.assertEqual(ligne, ligne)
+from analyse_immo.impots.irpp import IRPP
+from analyse_immo.impots.annexe_2044 import Annexe_2044
+from analyse_immo.impots.ligne_definition import *
 
 
 class TestIRPP(unittest.TestCase):
@@ -184,7 +177,7 @@ class TestIRPP(unittest.TestCase):
         self.assertAlmostEqual(irpp.quotient_familial, 33420, 0)
         self.assertAlmostEqual(irpp.impots_net, 4227, 0)
 
-    @unittest.skip('')
+    @unittest.skip('to be fixed')
     def testExemple7(self):
         '''
         http://impotsurlerevenu.org/exemple/125-couple-marie-sans-enfant-revenus-eleves.php

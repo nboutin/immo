@@ -4,12 +4,9 @@
 import unittest
 
 from analyse_immo.database import Database
-from analyse_immo.impots.irpp import IRPP, L1AJ_salaire, L1BJ_salaire, L4BD_deficit_foncier_anterieur,\
-    L4BA_benefice_foncier, L4BB_deficit_foncier_imputable_revenu_foncier,\
-    L4BC_deficit_foncier_imputable_revenu_global,\
-    L4_revenus_ou_deficits_nets_fonciers
-from analyse_immo.impots.annexe_2044 import Annexe_2044, L211_loyer_brut, L250_interet_emprunt, \
-    L227_taxe_fonciere, L223_prime_assurance, L224_travaux, L451_deficit_foncier_anterieur
+from analyse_immo.impots.irpp import IRPP
+from analyse_immo.impots.annexe_2044 import Annexe_2044
+from analyse_immo.impots.ligne_definition import *
 
 
 class TestIRPPDeficitFoncier(unittest.TestCase):
@@ -46,7 +43,7 @@ class TestIRPPDeficitFoncier(unittest.TestCase):
         annexe_2044.add_ligne(L224_travaux, 40000)
         irpp[0].annexe_2044 = annexe_2044
 
-        self.assertAlmostEqual(annexe_2044.resultat_foncier, -31900, 0)
+        self.assertAlmostEqual(annexe_2044.sum_ligne(L420_resultat_foncier), -31900, 0)
         self.assertAlmostEqual(irpp[0].revenu_fiscale_reference, 19300, 2)  # 30K - 10700
         self.assertEqual(annexe_2044.deficit_imputable_revenu_foncier, -21200)
         self.assertEqual(irpp[0].sum_ligne(L4_revenus_ou_deficits_nets_fonciers), -10700)
