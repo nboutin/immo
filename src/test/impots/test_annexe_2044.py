@@ -5,9 +5,8 @@ import unittest
 
 from test.testcase_fileloader import TestCaseFileLoader
 from analyse_immo.factory import Factory
-from analyse_immo.impots.annexe_2044 import Annexe_2044, L211_loyer_brut, L221_frais_administration, L222_autre_frais_gestion, \
-    L223_prime_assurance, L224_travaux, L227_taxe_fonciere, L250_interet_emprunt,\
-    L250_assurance_emprunteur, L250_frais_dossier, L250_frais_garantie
+from analyse_immo.impots.annexe_2044 import Annexe_2044
+from analyse_immo.impots.ligne_definition import *
 
 
 class TestAnnexe2044(TestCaseFileLoader):
@@ -23,7 +22,7 @@ class TestAnnexe2044(TestCaseFileLoader):
         an = Annexe_2044(self.defaut)
         an.add_ligne(L211_loyer_brut, 6000)
 
-        self.assertEqual(an.total_recettes, 6000)
+        self.assertEqual(an.sum_ligne(L420_resultat_foncier), 6000)
 
     def testTotalFraisCharges(self):
         an = Annexe_2044(self.defaut)
@@ -34,7 +33,7 @@ class TestAnnexe2044(TestCaseFileLoader):
         an.add_ligne(L224_travaux, 500)
         an.add_ligne(L227_taxe_fonciere, 650)
 
-        self.assertEqual(an.total_frais_et_charges, 1270)
+        self.assertEqual(an.sum_ligne(L240_total_frais_et_charges), 1270)
 
     def testTotalChargesEmprunt(self):
         an = Annexe_2044(self.defaut)
@@ -45,11 +44,11 @@ class TestAnnexe2044(TestCaseFileLoader):
         an.add_ligne(L224_travaux, 500)
         an.add_ligne(L227_taxe_fonciere, 650)
         an.add_ligne(L250_interet_emprunt, 2000)
-        an.add_ligne(L250_assurance_emprunteur, 300)
-        an.add_ligne(L250_frais_dossier, 150)
-        an.add_ligne(L250_frais_garantie, 1000)
+        an.add_ligne(L250_assurance_emprunteur, 300, double=True)
+        an.add_ligne(L250_frais_dossier, 150, double=True)
+        an.add_ligne(L250_frais_garantie, 1000, double=True)
 
-        self.assertEqual(an.total_charges_emprunt, 3450)
+        self.assertEqual(an.sum_ligne(CaseG), 3450)
 
     def testRevenuFoncierTaxable(self):
         an = Annexe_2044(self.defaut)
@@ -60,11 +59,11 @@ class TestAnnexe2044(TestCaseFileLoader):
         an.add_ligne(L224_travaux, 500)
         an.add_ligne(L227_taxe_fonciere, 650)
         an.add_ligne(L250_interet_emprunt, 2000)
-        an.add_ligne(L250_assurance_emprunteur, 300)
-        an.add_ligne(L250_frais_dossier, 150)
-        an.add_ligne(L250_frais_garantie, 1000)
+        an.add_ligne(L250_assurance_emprunteur, 300, double=True)
+        an.add_ligne(L250_frais_dossier, 150, double=True)
+        an.add_ligne(L250_frais_garantie, 1000, double=True)
 
-        self.assertEqual(an.resultat_foncier, 1280)
+        self.assertEqual(an.sum_ligne(L420_resultat_foncier), 1280)
 
     def testTotalChargesTaux(self):
         '''
@@ -86,10 +85,10 @@ class TestAnnexe2044(TestCaseFileLoader):
         anB.add_ligne(L224_travaux, 500)
         anB.add_ligne(L227_taxe_fonciere, 650)
         anB.add_ligne(L250_interet_emprunt, 2000)
-        anB.add_ligne(L250_assurance_emprunteur, 300)
-        anB.add_ligne(L250_frais_dossier, 150)
-        anB.add_ligne(L250_frais_garantie, 1000)
-        self.assertEqual(anB.resultat_foncier, 1280)
+        anB.add_ligne(L250_assurance_emprunteur, 300, double=True)
+        anB.add_ligne(L250_frais_dossier, 150, double=True)
+        anB.add_ligne(L250_frais_garantie, 1000, double=True)
+        self.assertEqual(anB.sum_ligne(L420_resultat_foncier), 1280)
         self.assertAlmostEqual(anB.total_charges_taux, 1 - (1280 / 6000), 2)
 
 

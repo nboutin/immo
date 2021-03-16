@@ -30,6 +30,12 @@ Run Unittest
     
     coverage erase
 
+# Developpement
+
+PEP8 confiuration:
+
+    -a -a --max-line-length 120
+
 # Dependencies
 
 - tabulate 0.8.7

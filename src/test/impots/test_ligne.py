@@ -54,6 +54,17 @@ class TestLigneModel(unittest.TestCase):
         lm.add(L1, 20, double=True)
         self.assertEqual(lm.sum(L1), 30)
 
+    def testAddIdenticalCode(self):
+        L10_a = Ligne('10', 'a')
+        L10_b = Ligne('10', 'b')
+
+        lm = Ligne_Model()
+        lm.add(L10_a, 10)
+        lm.add(L10_b, 20, double=True)
+        self.assertEqual(lm.sum(L10_a), 30)
+        self.assertEqual(lm.sum(L10_b), 30)
+        self.assertEqual(lm.sum([L10_a, L10_b]), 30)
+
     def testRemove(self):
         L1 = Ligne('1', '111')
         L2 = Ligne('2', '222')

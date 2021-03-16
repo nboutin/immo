@@ -1,23 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from .ligne import Ligne, Ligne_Model
-from .annexe_2044 import L451_deficit_foncier_anterieur
-from analyse_immo.impots.annexe_2044 import L420_resultat_foncier, L440, L441,\
-    L440_report_420, L441_report_420
-
-L1AJ_salaire = Ligne('1AJ', 'Salaires - Déclarant 1')
-L1BJ_salaire = Ligne('1BJ', 'Salaires - Déclarant 2')
-L7UF_dons = Ligne('7UF', 'Dons aux oeuvres')
-L7AE_syndicat = Ligne('7AE', 'Cotisations syndicales - Déclarant 2')
-
-L4BA_benefice_foncier = Ligne('4BA', 'Resultat foncier positif')
-L4BB_deficit_foncier_imputable_revenu_foncier = Ligne('4BB', 'Deficit foncier imputable sur revenu foncier')
-L4BC_deficit_foncier_imputable_revenu_global = Ligne('4BC', 'Deficit foncier imputable sur revenu globale')
-L4BD_deficit_foncier_anterieur = Ligne('4BD', 'Deficit foncier antérieur')
-L4_revenus_ou_deficits_nets_fonciers = Ligne('4', 'Revenus ou Deficits nets fonciers')
-
-# 4BE Micro foncier - recettes brutes
+from .ligne import Ligne_Model
+from .ligne_definition import *
 
 
 class IRPP:
@@ -66,16 +51,12 @@ class IRPP:
 
     def _compute_ligne_4(self):
 
-        # Report depuis Annexe 2044
-        L420 = self._annexe_2044.sum_ligne(L420_resultat_foncier)
-        if L420 > 0:
-            self.add_ligne(L4BA_benefice_foncier, L420)
-        else:
-            L440 = self._annexe_2044.sum_ligne(L440_report_420)
-            L441 = self._annexe_2044.sum_ligne(L441_report_420)
-            self.add_ligne(L4BB_deficit_foncier_imputable_revenu_foncier, L441)
-            self.add_ligne(L4BC_deficit_foncier_imputable_revenu_global, L440)
-
+        # Report from Annexe 2044
+        self.add_ligne(L4BA_benefice_foncier, self.annexe_2044.sum_ligne(L4BA_benefice_foncier))
+        self.add_ligne(L4BB_deficit_foncier_imputable_revenu_foncier,
+                       self.annexe_2044.sum_ligne(L4BB_deficit_foncier_imputable_revenu_foncier))
+        self.add_ligne(L4BC_deficit_foncier_imputable_revenu_global,
+                       self.annexe_2044.sum_ligne(L4BC_deficit_foncier_imputable_revenu_global))
         self.add_ligne(L4BD_deficit_foncier_anterieur,
                        self._annexe_2044.sum_ligne(L451_deficit_foncier_anterieur))
 
