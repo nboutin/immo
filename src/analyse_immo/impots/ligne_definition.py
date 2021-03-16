@@ -12,6 +12,19 @@ from .ligne import Ligne
 
 L1AJ_salaire = Ligne('1AJ', 'Salaires - Declarant 1')
 L1BJ_salaire = Ligne('1BJ', 'Salaires - Declarant 2')
+L1_1_traitements_salaires_pensions = Ligne('1', 'Total des traitements, salaires pensions net')
+L1_5_revenu_brut_global = Ligne('5', 'Revenu ou deficit brut global')
+
+L2_6_total_charges_deductibles = Ligne('6','Total des charges deductibles')
+L3_7_revenu_net_global = Ligne('7', 'Revenu net global')
+L3_8_abatements_speciaux = Ligne('8','Total des abattements spéciaux')
+LR_revenu_net_impossable = Ligne('R', 'Revenu net impossable')
+
+L4_personne_a_charge = Ligne('2042_4', 'Personne a charge')
+LN_nombre_de_part = Ligne('N', 'Nombre de part')
+LQ_quotient_familial = Ligne('Q', 'Quotient familial')
+LI_impot = Ligne('I', 'Impot: bareme de calcul')
+
 L7UF_dons = Ligne('7UF', 'Dons aux oeuvres')
 L7AE_syndicat = Ligne('7AE', 'Cotisations syndicales - Declarant 2')
 

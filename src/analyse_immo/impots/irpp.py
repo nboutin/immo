@@ -3,6 +3,7 @@
 
 from .ligne import Ligne_Model
 from .ligne_definition import *
+from analyse_immo.impots.ligne_definition import L1BJ_salaire
 
 
 class IRPP:
@@ -13,31 +14,16 @@ class IRPP:
     Source:
     https://www.service-public.fr/particuliers/vosdroits/F34328
     https://www.tacotax.fr/guides/impot-sur-le-revenu
-
-    Revenu
-        Salaire & deduction
-        revenu foncier
-        Total = Revenu fiscale de reference
-
-        salaires = auto()
-        investissement = auto()  # Action, assurance vie, PEA, PER, ...
-        revenu_foncier = auto()
-        plus_value_immobiliere = auto()
-        bic = auto() # benefice commerciaux et industrielle
-        ba = auto() # benefice commerciaux agricoles
-        retraite = auto()
-        indemnite = auto()
-        primes = auto()
     '''
 
-    def __init__(self, database, annee_revenu, part_fiscale, n_enfant):
+    def __init__(self, database, annee_revenu):
         '''
         :param annee_revenu(int): annee_revenu + 1 = annee_imposition
         '''
         self._database = database
         self._annee_revenu = annee_revenu
-        self._part_fiscale = part_fiscale
-        self._n_enfant = n_enfant
+        # self._part_fiscale = part_fiscale
+        # self._n_enfant = n_enfant
 
         self._ligne_model = Ligne_Model()
         self._annexe_2044 = None
@@ -45,10 +31,33 @@ class IRPP:
 
     def add_ligne(self, ligne, value):
         self._ligne_model.add(ligne, value)
+        self.compute()
 
     def sum_ligne(self, lignes):
         return self._ligne_model.sum(lignes)
 
+    def compute(self):
+        # Ligne 1
+        L1a = self.sum_ligne([L1AJ_salaire, L1BJ_salaire])
+        L1b = L1a * 0.1
+        L1c = L1a-L1b
+        self._ligne_model.update(L1_1_traitements_salaires_pensions, L1c)
+        
+        # Ligne 5: Total 1 a 4
+        self._ligne_model.update(L1_5_revenu_brut_global, self.sum_ligne(L1_1_traitements_salaires_pensions))
+        
+        # Ligne 7: 5-6
+        self._ligne_model.update(L3_7_revenu_net_global, self.sum_ligne(L1_5_revenu_brut_global))
+        
+        # Ligne R: 7-8
+        self._ligne_model.update(LR_revenu_net_impossable, self.sum_ligne(L3_7_revenu_net_global))
+        
+        # Ligne Q
+        self._ligne_model.update(LQ_quotient_familial, 
+                                self.sum_ligne(LR_revenu_net_impossable) / self.sum_ligne(LN_nombre_de_part))
+        # Ligne I: Impot
+        
+                                 
     def _compute_ligne_4(self):
 
         # Report from Annexe 2044
@@ -85,6 +94,8 @@ class IRPP:
             self.add_ligne(L4_revenus_ou_deficits_nets_fonciers, 0)
         else:
             raise Exception('Ligne 4 not updated')
+        
+        self.compute()
 
     @property
     def annexe_2044(self):
@@ -104,29 +115,29 @@ class IRPP:
     def micro_foncier(self, micro_foncier):
         self._micro_foncier = micro_foncier
 
-    @property
-    def salaires(self):
-        return self.sum_ligne((L1AJ_salaire, L1BJ_salaire))
+    # @property
+    # def salaires(self):
+        # return self.sum_ligne((L1AJ_salaire, L1BJ_salaire))
 
-    @property
-    def revenu_net_impossable(self):
-        '''
-        sommes des salaires retrancher de 10% moins les charges déductibles et abattements
-        '''
-        return self.salaires * (1 - self._database.salaire_abattement)
+    # @property
+    # def revenu_net_impossable(self):
+        # '''
+        # sommes des salaires retrancher de 10% moins les charges déductibles et abattements
+        # '''
+        # return self.salaires * (1 - self._database.salaire_abattement)
 
-    @property
-    def revenu_fiscale_reference(self):
-        '''
-        ligne 5: Revenu ou deficit brut global
-        '''
-        rfr = self.revenu_net_impossable
-        rfr += self.sum_ligne(L4_revenus_ou_deficits_nets_fonciers)
-        return rfr
+    # @property
+    # def revenu_fiscale_reference(self):
+        # '''
+        # ligne 5: Revenu ou deficit brut global
+        # '''
+        # rfr = self.revenu_net_impossable
+        # rfr += self.sum_ligne(L4_revenus_ou_deficits_nets_fonciers)
+        # return rfr
 
-    @property
-    def revenu_foncier(self):
-        return self.sum_ligne(L4_revenus_ou_deficits_nets_fonciers)
+    # @property
+    # def revenu_foncier(self):
+        # return self.sum_ligne(L4_revenus_ou_deficits_nets_fonciers)
 
     # @property
     # def revenu_foncier(self):
@@ -159,9 +170,10 @@ class IRPP:
     def total_credit_impot(self):
         return self.sum_ligne((L7AE_syndicat))
 
-    @property
-    def quotient_familial(self):
-        return self.revenu_fiscale_reference / self._part_fiscale
+    # @property
+    # def quotient_familial(self):
+        # # return self.revenu_fiscale_reference / self._part_fiscale
+        # return self.sum_ligne(LR_revenu_net_impossable) / self.sum_ligne(LN_nombre_de_part)
 
     @property
     def impots_brut(self):

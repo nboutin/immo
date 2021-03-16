@@ -2,11 +2,12 @@
 
 # To be specified
 
+- [ ] Ajouter indicateur ratio locatif 70% : mensualitÃ© credit = 70% loyer mensuel HC
 - [ ] Ajouter surface annexe dans lot
 - [ ] Prendre en compte travaux dans les Impots
-- [ ] Evaluer restauration de la tresorerie avec le différé d'amortissement
-- [ ] Capacité d'investissement 70% loyer >= credit
-- [ ] Cout copropriete au m/€
+- [ ] Evaluer restauration de la tresorerie avec le diffï¿½rï¿½ d'amortissement
+- [ ] CapacitÃ© d'investissement 70% loyer >= credit
+- [ ] Cout copropriete au m/â‚¬
 - [ ] Indicateur global Go/NoGo
 
 # Specification
@@ -14,21 +15,21 @@
 ## Travaux
 - list de montant de travaux
 - list montant de subvention
-- éligible au deficit foncier
+- ï¿½ligible au deficit foncier
 
-Séparation par lot et commun
+Sï¿½paration par lot et commun
 
 ## Etat d'un lot
 
 L'Etat d'un lot peu etre:
 - louable
-- aménageable
+- amï¿½nageable
 
-## Prix au m²
+## Prix au mï¿½
 
-Calculer le prix de financement total au m².
+Calculer le prix de financement total au mï¿½.
 Financement total / surface total avant travaux
-Financement total / surface total après travaux
+Financement total / surface total aprï¿½s travaux
 
 Avant travaux: tous les lots louable
-Après travaxu: tous les lots louable et aménageable
+Aprï¿½s travaxu: tous les lots louable et amï¿½nageable
