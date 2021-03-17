@@ -55,6 +55,57 @@ class IRPP:
         self._ligne_model.update(LQ_quotient_familial,
                                  self.sum_ligne(LR_revenu_net_impossable) / self.sum_ligne(LN_nombre_de_part))
         # Ligne I: Impot
+        quotient_familial = self.sum_ligne(LQ_quotient_familial)
+        n_part_fiscale = self.sum_ligne(LN_nombre_de_part)
+        LI = self._ligne_model.update(LI_impot, self.__impots_brut_part_fiscale(quotient_familial, n_part_fiscale))
+
+        # Ligne 6A
+        n_personne_a_charge = self.sum_ligne(L4_personne_a_charge)
+        L6A = self._ligne_model.update(L6A_plafonnement_quotient_familial,
+                                       self.__impots_brut_part_fiscale(
+                                           quotient_familial,
+                                           n_part_fiscale - n_personne_a_charge / 2))
+        # Ligne 6B
+        L6B = self._ligne_model.update(
+            L6B_plafonnement_quotient_familial,
+            self._database.plafond_quotient_familial(
+                self._annee_revenu + 1) * n_personne_a_charge)
+
+        # Ligne 6C
+        L6C = self._ligne_model.update(L6C_plafonnement_quotient_familial, L6A - L6B)
+
+        # Check plafonnement
+        if L6C <= LI:  # Sans plafonnement
+            LI1 = self._ligne_model.update(LI1_impot, LI)
+            if n_part_fiscale == 1 and LI1 < 1611:
+                raise ("todo: Appliquer decote, voir L7 diminution de l'impot")
+            elif n_part_fiscale == 2 and LI1 < 2653:
+                raise ("todo: Appliquer decote, voir L7 diminution de l'impot")
+        else:
+            LI1 = self._ligne_model.update(LI1_impot, L6C)
+
+        # Ligne 7E Impot avant reductions d'impots
+        L7E = self._ligne_model.update(L7E_impot_avant_reduction_impot, LI1)
+
+        # Ligne 8 Reductions d'impots
+        dons = self.sum_ligne(L7UF_dons) * self._database.reduction_dons
+        L8g = self._ligne_model.update(L8g_dons_et_cotisations_aux_partis_politiques, dons)
+
+        L8F = self._ligne_model.update(L8F_total_reductions_impots, L8g)
+
+        # Ligne 8G = 7E - 8F
+        L8G = self._ligne_model.update(L8G_impot_apres_reductions_impots, L7E - L8F)
+
+        # Ligne 9H Impot apres corrections
+        L9H = self._ligne_model.update(L9H_impot_apres_corrections, L8G)
+
+        # Ligne 9I Imputations
+        cotisations = self.sum_ligne(L7AE_syndicat) * self._database.reduction_syndicat
+        L9u = self._ligne_model.update(L9u_cotisations_syndicales, cotisations)
+        L9I = self._ligne_model.update(L9I_total_imputations, L9u)
+
+        # Ligne 9 Impot du: H - I
+        self._ligne_model.update(L9_impot_du, L9H - L9I)
 
     def _compute_ligne_4(self):
 
@@ -160,85 +211,95 @@ class IRPP:
         # else:
         # return 0
 
-    @property
-    def total_reduction_impot(self):
-        return self.sum_ligne((L7UF_dons))
-
-    @property
-    def total_credit_impot(self):
-        return self.sum_ligne((L7AE_syndicat))
+    # @property
+    # def total_reduction_impot(self):
+        # return self.sum_ligne((L7UF_dons))
+        #
+    # @property
+    # def total_credit_impot(self):
+        # return self.sum_ligne((L7AE_syndicat))
 
     # @property
     # def quotient_familial(self):
         # # return self.revenu_fiscale_reference / self._part_fiscale
         # return self.sum_ligne(LR_revenu_net_impossable) / self.sum_ligne(LN_nombre_de_part)
 
-    @property
-    def impots_brut(self):
-        '''
-        impot sur le revenu sousmis au bareme
-        '''
-        impot_brut = self.__impots_brut_part_fiscale()
+    # @property
+    # def impots_brut(self):
+        # '''
+        # impot sur le revenu sousmis au bareme
+        # '''
+        # n_part_fiscale = self.sum_ligne(LN_nombre_de_part)
+        # n_personne_a_charge = self.sum_ligne(L4_personne_a_charge)
+        #
+        # impot_brut = self.__impots_brut_part_fiscale(n_part_fiscale)
+        #
+        # # Controler dépassement d'abattement enfant
+        # # impot_brut_sans_enfant = self.__impots_brut_sans_enfant()
+        # impot_brut_sans_enfant = self.self.__impots_brut_part_fiscale(n_part_fiscale - n_personne_a_charge / 2)
+        #
+        # reduction_enfants = impot_brut_sans_enfant - impot_brut
+        # plafond_quotient_familial = self._database.plafond_quotient_familial(
+        # self._annee_revenu + 1) * self._n_enfant
+        #
+        # if reduction_enfants > plafond_quotient_familial:
+        # impot_brut += reduction_enfants - plafond_quotient_familial
+        #
+        # return impot_brut
 
-        # Controler dépassement d'abattement enfant
-        impot_brut_sans_enfant = self.__impots_brut_sans_enfant()
+    # @property
+    # def impots_net(self):
+        # net = self.impots_brut
+        # net += self.prelevement_sociaux_foncier
+        # net -= self._database.reduction_dons * self.total_reduction_impot
+        # net -= self._database.reduction_syndicat * self.total_credit_impot
+        # return net
 
-        reduction_enfants = impot_brut_sans_enfant - impot_brut
-        plafond_quotient_familial = self._database.plafond_quotient_familial(
-            self._annee_revenu + 1) * self._n_enfant
+    # @property
+    # def impots_salaires_net(self):
+        # '''
+        # :return impot net en considérant uniquement les salaires
+        # '''
+        # import copy
+        # irpp = copy.deepcopy(self)
+        # irpp.annexe_2044 = None
+        # irpp._ligne_model.remove(L4_revenus_ou_deficits_nets_fonciers)
+        # return irpp.impots_net
 
-        if reduction_enfants > plafond_quotient_familial:
-            impot_brut += reduction_enfants - plafond_quotient_familial
+    # @property
+    # def impots_revenu_foncier(self):
+        # ''' revenu foncier taxable et prelevement sociaux foncier'''
+        # return self.impots_net - self.impots_salaires_net
 
-        return impot_brut
-
-    @property
-    def impots_net(self):
-        net = self.impots_brut
-        net += self.prelevement_sociaux_foncier
-        net -= self._database.reduction_dons * self.total_reduction_impot
-        net -= self._database.reduction_syndicat * self.total_credit_impot
-        return net
-
-    @property
-    def impots_salaires_net(self):
-        '''
-        :return impot net en considérant uniquement les salaires
-        '''
-        import copy
-        irpp = copy.deepcopy(self)
-        irpp.annexe_2044 = None
-        irpp._ligne_model.remove(L4_revenus_ou_deficits_nets_fonciers)
-        return irpp.impots_net
-
-    @property
-    def impots_revenu_foncier(self):
-        ''' revenu foncier taxable et prelevement sociaux foncier'''
-        return self.impots_net - self.impots_salaires_net
-
-    @property
-    def prelevement_sociaux_foncier(self):
-        if self.annexe_2044:
-            return self.annexe_2044.prelevement_sociaux
-        elif self.micro_foncier:
-            return self.micro_foncier.prelevement_sociaux
-        else:
-            return 0
+    # @property
+    # def prelevement_sociaux_foncier(self):
+        # if self.annexe_2044:
+        # return self.annexe_2044.prelevement_sociaux
+        # elif self.micro_foncier:
+        # return self.micro_foncier.prelevement_sociaux
+        # else:
+        # return 0
 
     # Private
 
-    def __impots_brut_sans_enfant(self):
-        import copy
-        part = self._part_fiscale - self._n_enfant / 2
-        irpp_sans_enfant = copy.deepcopy(self)
-        irpp_sans_enfant._part_fiscale = part
-        irpp_sans_enfant._n_enfant = 0
-        return irpp_sans_enfant.__impots_brut_part_fiscale()
+    # def __impots_brut_sans_enfant(self):
+        # import copy
+        # part = self._part_fiscale - self._n_enfant / 2
+        # irpp_sans_enfant = copy.deepcopy(self)
+        # irpp_sans_enfant._part_fiscale = part
+        # irpp_sans_enfant._n_enfant = 0
+        # return irpp_sans_enfant.__impots_brut_part_fiscale()
 
-    def __impots_brut_part_fiscale(self):
+    # def __impots_brut_part_fiscale(self):
+        # bareme = self._database.irpp_bareme(str(self._annee_revenu + 1))
+        # impot_brut = self._impots_brut(bareme, self.quotient_familial)
+        # impot_brut *= self._part_fiscale
+        # return impot_brut
+
+    def __impots_brut_part_fiscale(self, quotient_familial, n_part_fiscale):
         bareme = self._database.irpp_bareme(str(self._annee_revenu + 1))
-        impot_brut = self._impots_brut(bareme, self.quotient_familial)
-        impot_brut *= self._part_fiscale
+        impot_brut = self._impots_brut(bareme, quotient_familial)
+        impot_brut *= n_part_fiscale
         return impot_brut
 
     def _impots_brut(self, bareme, quotient_familial):

@@ -114,13 +114,16 @@ class TestIRPP(unittest.TestCase):
         '''
         https://www.service-public.fr/particuliers/actualites/A14556?xtor=EPR-141
         '''
-        irpp = IRPP(self.database, 2020, 3, 2)
+        # irpp = IRPP(self.database, 2020, 3, 2)
+        irpp = IRPP(self.database, 2020)
+        irpp.add_ligne(LN_nombre_de_part, 3)
+        irpp.add_ligne(L4_personne_a_charge, 2)
         irpp.add_ligne(L1AJ_salaire, 55950 / 0.9)
 
-        self.assertEqual(irpp.revenu_net_impossable, 55950)
-        self.assertEqual(irpp.quotient_familial, 18650)
-        self.assertAlmostEqual(irpp.impots_net, 2826.45, 2)
-        self.assertAlmostEqual(irpp.impots_net, 2826, 0)
+        self.assertEqual(irpp.sum_ligne(L1_5_revenu_brut_global), 55950)
+        self.assertEqual(irpp.sum_ligne(LQ_quotient_familial), 18650)
+        self.assertAlmostEqual(irpp.sum_ligne(LI_impot), 2826.45, 2)
+        self.assertAlmostEqual(irpp.sum_ligne(L9_impot_du), 2826.45, 2)
 
     def testExemple2(self):
         '''

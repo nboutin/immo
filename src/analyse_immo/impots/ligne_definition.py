@@ -24,9 +24,23 @@ L4_personne_a_charge = Ligne('2042_4', 'Personne a charge')
 LN_nombre_de_part = Ligne('N', 'Nombre de part')
 LQ_quotient_familial = Ligne('Q', 'Quotient familial')
 LI_impot = Ligne('I', 'Impot: bareme de calcul')
+L6A_plafonnement_quotient_familial = Ligne('6A', 'Plafonnement du quotient familial')
+L6B_plafonnement_quotient_familial = Ligne('6B', 'Plafonnement du quotient familial')
+L6C_plafonnement_quotient_familial = Ligne('6C', 'Plafonnement du quotient familial')
+LI1_impot = Ligne('I1', 'Impot bareme apres plafonnement')
 
 L7UF_dons = Ligne('7UF', 'Dons aux oeuvres')
 L7AE_syndicat = Ligne('7AE', 'Cotisations syndicales - Declarant 2')
+L7E_impot_avant_reduction_impot = Ligne('7E', 'Impot avant reductions d impots')
+
+L8g_dons_et_cotisations_aux_partis_politiques = Ligne('8g', 'Dons et cotisations verses aux partis politiques')
+L8F_total_reductions_impots = Ligne('8F', 'Total reductions impots')
+L8G_impot_apres_reductions_impots = Ligne('L8G', 'Impot apres imputation des reductions d impots')
+
+L9u_cotisations_syndicales = Ligne('9u', 'Imputations: cotisations syndicales')
+L9H_impot_apres_corrections = Ligne('9H', 'Impot apres corrections')
+L9I_total_imputations = Ligne('9I', 'Total imputations')
+L9_impot_du = Ligne('9', 'Impot du')
 
 L4BA_benefice_foncier = Ligne('4BA', 'Resultat foncier positif')
 L4BB_deficit_foncier_imputable_revenu_foncier = Ligne('4BB', 'Deficit foncier imputable sur revenu foncier')
