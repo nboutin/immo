@@ -3,7 +3,6 @@
 
 from .ligne import Ligne_Model
 from .ligne_definition import *
-from analyse_immo.impots.ligne_definition import L1BJ_salaire
 
 
 class IRPP:
@@ -40,24 +39,23 @@ class IRPP:
         # Ligne 1
         L1a = self.sum_ligne([L1AJ_salaire, L1BJ_salaire])
         L1b = L1a * 0.1
-        L1c = L1a-L1b
+        L1c = L1a - L1b
         self._ligne_model.update(L1_1_traitements_salaires_pensions, L1c)
-        
+
         # Ligne 5: Total 1 a 4
         self._ligne_model.update(L1_5_revenu_brut_global, self.sum_ligne(L1_1_traitements_salaires_pensions))
-        
+
         # Ligne 7: 5-6
         self._ligne_model.update(L3_7_revenu_net_global, self.sum_ligne(L1_5_revenu_brut_global))
-        
+
         # Ligne R: 7-8
         self._ligne_model.update(LR_revenu_net_impossable, self.sum_ligne(L3_7_revenu_net_global))
-        
+
         # Ligne Q
-        self._ligne_model.update(LQ_quotient_familial, 
-                                self.sum_ligne(LR_revenu_net_impossable) / self.sum_ligne(LN_nombre_de_part))
+        self._ligne_model.update(LQ_quotient_familial,
+                                 self.sum_ligne(LR_revenu_net_impossable) / self.sum_ligne(LN_nombre_de_part))
         # Ligne I: Impot
-        
-                                 
+
     def _compute_ligne_4(self):
 
         # Report from Annexe 2044
@@ -94,7 +92,7 @@ class IRPP:
             self.add_ligne(L4_revenus_ou_deficits_nets_fonciers, 0)
         else:
             raise Exception('Ligne 4 not updated')
-        
+
         self.compute()
 
     @property

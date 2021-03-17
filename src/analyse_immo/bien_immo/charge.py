@@ -70,8 +70,8 @@ class Charge:
         :param charge_type_list: list of charge type
         '''
         if not isinstance(charge_type_list, (list, tuple)):
-            charge_type_list = [charge_type_list] # Convert to list
-            
+            charge_type_list = [charge_type_list]  # Convert to list
+
         return sum(charge['value'] for charge in self._charges if charge['charge'] in charge_type_list)
 
     def get_taux(self, charge_type):
