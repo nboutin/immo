@@ -14,18 +14,19 @@ class TestIRPP(unittest.TestCase):
     def setUp(self):
         self.database = Database()
 
-    def testInit(self):
-        _ = IRPP(None, 0, 0, 0)
+    def test0_Init(self):
+        _ = IRPP(None, 0)
 
-    def testRevenuFiscaleReference(self):
+    def test1_RevenuFiscaleReference(self):
 
-        irpp = IRPP(self.database, 0, 0, 0)
+        irpp = IRPP(self.database, 0)
+        irpp.add_ligne(LN_nombre_de_part, 1)
         irpp.add_ligne(L1AJ_salaire, 31407)
         irpp.add_ligne(L1BJ_salaire, 23055)
-        self.assertEqual(irpp.revenu_fiscale_reference, 49015.80, 2)
+        self.assertEqual(irpp.sum_ligne(L1_5_revenu_brut_global), 49015.80, 2)
 
-    def testImpotBrutInternal(self):
-        irpp = IRPP(self.database, 0, 0, 0)
+    def test2_ImpotBrutInternal(self):
+        irpp = IRPP(self.database, 0)
         tmi = [[10084, 0], [25710, 0.11], [73516, 0.30], [158122, 0.41]]
 
         ibrut = irpp._impots_brut(tmi, 5000)
@@ -55,40 +56,50 @@ class TestIRPP(unittest.TestCase):
         ibrut = irpp._impots_brut(tmi, 80000)
         self.assertAlmostEqual(ibrut, 18718.28, 2)
 
-    def testImpotBrut(self):
-        irpp = IRPP(self.database, 2019, 2.5, 1)
+    def test3_ImpotBrut(self):
+        irpp = IRPP(self.database, 2019)
+        irpp.add_ligne(LN_nombre_de_part, 2.5)
+        irpp.add_ligne(L4_personne_a_charge, 1)
         irpp.add_ligne(L1AJ_salaire, 31407)
         irpp.add_ligne(L1BJ_salaire, 23055)
-        self.assertAlmostEqual(irpp.impots_brut, 3339, 0)
-        self.assertAlmostEqual(irpp.impots_brut, 3339.46, 2)
+        self.assertAlmostEqual(irpp.sum_ligne(LI_impot), 3339.46, 2)
+        self.assertAlmostEqual(irpp.sum_ligne(L9_impot_du), 3339.46, 2)
 
-    def testImpotNet(self):
-        irpp = IRPP(self.database, 2019, 2.5, 1)
+    def test4_ImpotNet(self):
+        irpp = IRPP(self.database, 2019)
+        irpp.add_ligne(LN_nombre_de_part, 2.5)
+        irpp.add_ligne(L4_personne_a_charge, 1)
         irpp.add_ligne(L1AJ_salaire, 31407)
         irpp.add_ligne(L1BJ_salaire, 23055)
         irpp.add_ligne(L7UF_dons, 200)
         irpp.add_ligne(L7AE_syndicat, 143)
 
-        self.assertAlmostEqual(irpp.impots_net, 3113, 0)
-        self.assertAlmostEqual(irpp.impots_net, 3113.08, 2)
+        self.assertAlmostEqual(irpp.sum_ligne(LI_impot), 3339.46, 2)
+        self.assertAlmostEqual(irpp.sum_ligne(L9_impot_du), 3113.08, 2)
 
-    def testImpotSalaireNetA(self):
-        irpp = IRPP(self.database, 2019, 2, 0)
+    def test5_ImpotSansRevenuFoncierA(self):
+        irpp = IRPP(self.database, 2019)
+        irpp.add_ligne(LN_nombre_de_part, 2)
         irpp.add_ligne(L1AJ_salaire, 30000)
         irpp.add_ligne(L1BJ_salaire, 20000)
 
-        self.assertAlmostEqual(irpp.impots_net, 3482, 0)
-        self.assertAlmostEqual(irpp.impots_salaires_net, 3482, 0)
+        self.assertAlmostEqual(irpp.sum_ligne(L9_impot_du), 3482, 0)
+        self.assertAlmostEqual(irpp.impot_sans_revenu_foncier, 3482, 0)
 
         annexe_2044 = Annexe_2044(self.database)
         annexe_2044.add_ligne(L211_loyer_brut, 5000)
         irpp.annexe_2044 = annexe_2044
 
-        self.assertAlmostEqual(annexe_2044.prelevement_sociaux, 5000 * .172, 2)
-        self.assertEqual(irpp.revenu_fiscale_reference, 50000 * .9 + 5000)
-        self.assertEqual(irpp.quotient_familial, (50000 * .9 + 5000) / 2)
-        self.assertAlmostEqual(irpp.impots_net, 4182 + 5000 * .172, 0)
-        self.assertAlmostEqual(irpp.impots_salaires_net, 3482, 0)
+        self.assertAlmostEqual(annexe_2044.prelevement_sociaux, 5000 * .172, 2)  # =860
+        self.assertEqual(irpp.sum_ligne(L4_revenus_ou_deficits_nets_fonciers), 5000)
+        self.assertEqual(irpp.sum_ligne(L1_5_revenu_brut_global), 50000 * .9 + 5000)
+        self.assertEqual(irpp.sum_ligne(LQ_quotient_familial), (50000 * .9 + 5000) / 2)
+        self.assertAlmostEqual(irpp.sum_ligne(L9_impot_du), 4182 + 5000 * .172, 0)
+        self.assertAlmostEqual(irpp.impot_sans_revenu_foncier, 3482, 0)
+        # self.assertEqual(irpp.revenu_fiscale_reference, 50000 * .9 + 5000)
+        # self.assertEqual(irpp.quotient_familial, (50000 * .9 + 5000) / 2)
+        # self.assertAlmostEqual(irpp.impots_net, 4182 + 5000 * .172, 0)
+        # self.assertAlmostEqual(irpp.impots_salaires_net, 3482, 0)
 
     def testImpotSalaireNetB(self):
         irpp = IRPP(self.database, 2020, 2.5, 1)
@@ -129,13 +140,14 @@ class TestIRPP(unittest.TestCase):
         '''
         https://www.service-public.fr/particuliers/vosdroits/F1419
         '''
-        irpp = IRPP(self.database, 2020, 1, 0)
+        irpp = IRPP(self.database, 2020)
+        irpp.add_ligne(LN_nombre_de_part, 1)
+        irpp.add_ligne(L4_personne_a_charge, 0)
         irpp.add_ligne(L1AJ_salaire, 30000 / 0.9)
 
-        self.assertAlmostEqual(irpp.revenu_net_impossable, 30000, 0)
-        self.assertAlmostEqual(irpp.quotient_familial, 30000, 0)
-        self.assertAlmostEqual(irpp.impots_net, 3005.45, 2)
-        self.assertAlmostEqual(irpp.impots_net, 3005, 0)
+        self.assertAlmostEqual(irpp.sum_ligne(L1_5_revenu_brut_global), 30000, 0)
+        self.assertAlmostEqual(irpp.sum_ligne(LQ_quotient_familial), 30000, 0)
+        self.assertAlmostEqual(irpp.sum_ligne(L9_impot_du), 3005.45, 2)
 
     def testExemple3(self):
         '''

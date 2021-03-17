@@ -21,8 +21,6 @@ class IRPP:
         '''
         self._database = database
         self._annee_revenu = annee_revenu
-        # self._part_fiscale = part_fiscale
-        # self._n_enfant = n_enfant
 
         self._ligne_model = Ligne_Model()
         self._annexe_2044 = None
@@ -43,7 +41,9 @@ class IRPP:
         self._ligne_model.update(L1_1_traitements_salaires_pensions, L1c)
 
         # Ligne 5: Total 1 a 4
-        self._ligne_model.update(L1_5_revenu_brut_global, self.sum_ligne(L1_1_traitements_salaires_pensions))
+        self._ligne_model.update(L1_5_revenu_brut_global,
+                                 self.sum_ligne([L1_1_traitements_salaires_pensions,
+                                                 L4_revenus_ou_deficits_nets_fonciers]))
 
         # Ligne 7: 5-6
         self._ligne_model.update(L3_7_revenu_net_global, self.sum_ligne(L1_5_revenu_brut_global))
@@ -77,10 +77,10 @@ class IRPP:
         # Check plafonnement
         if L6C <= LI:  # Sans plafonnement
             LI1 = self._ligne_model.update(LI1_impot, LI)
-            if n_part_fiscale == 1 and LI1 < 1611:
-                raise ("todo: Appliquer decote, voir L7 diminution de l'impot")
-            elif n_part_fiscale == 2 and LI1 < 2653:
-                raise ("todo: Appliquer decote, voir L7 diminution de l'impot")
+            # if n_part_fiscale == 1 and LI1 < 1611:
+            # raise Exception("todo: Appliquer decote, voir L7 diminution de l'impot {}".format(LI1))
+            # elif n_part_fiscale == 2 and LI1 < 2653:
+            # raise Exception("todo: Appliquer decote, voir L7 diminution de l'impot {}".format(LI1))
         else:
             LI1 = self._ligne_model.update(LI1_impot, L6C)
 
@@ -163,6 +163,37 @@ class IRPP:
     @micro_foncier.setter
     def micro_foncier(self, micro_foncier):
         self._micro_foncier = micro_foncier
+
+    @property
+    def impot_sans_revenu_foncier(self):
+        '''
+        :return impot net en considérant uniquement les salaires
+        '''
+        import copy
+        irpp = copy.deepcopy(self)
+        irpp.annexe_2044 = None
+        irpp._ligne_model.remove(L4_revenus_ou_deficits_nets_fonciers)
+        irpp.compute()
+        return irpp.sum_ligne(L9_impot_du)
+
+    def __impots_brut_part_fiscale(self, quotient_familial, n_part_fiscale):
+        bareme = self._database.irpp_bareme(str(self._annee_revenu + 1))
+        impot_brut = self._impots_brut(bareme, quotient_familial)
+        impot_brut *= n_part_fiscale
+        return impot_brut
+
+    def _impots_brut(self, bareme, quotient_familial):
+
+        impots_brut = 0
+        tranche_p = 0
+
+        for tranche, taux in bareme:
+            tranche_restant = min(tranche - tranche_p, quotient_familial - tranche_p)
+            tranche_restant = max(tranche_restant, 0)
+            impots_brut += tranche_restant * taux
+            tranche_p = tranche + 1
+
+        return impots_brut
 
     # @property
     # def salaires(self):
@@ -256,17 +287,6 @@ class IRPP:
         # return net
 
     # @property
-    # def impots_salaires_net(self):
-        # '''
-        # :return impot net en considérant uniquement les salaires
-        # '''
-        # import copy
-        # irpp = copy.deepcopy(self)
-        # irpp.annexe_2044 = None
-        # irpp._ligne_model.remove(L4_revenus_ou_deficits_nets_fonciers)
-        # return irpp.impots_net
-
-    # @property
     # def impots_revenu_foncier(self):
         # ''' revenu foncier taxable et prelevement sociaux foncier'''
         # return self.impots_net - self.impots_salaires_net
@@ -295,22 +315,3 @@ class IRPP:
         # impot_brut = self._impots_brut(bareme, self.quotient_familial)
         # impot_brut *= self._part_fiscale
         # return impot_brut
-
-    def __impots_brut_part_fiscale(self, quotient_familial, n_part_fiscale):
-        bareme = self._database.irpp_bareme(str(self._annee_revenu + 1))
-        impot_brut = self._impots_brut(bareme, quotient_familial)
-        impot_brut *= n_part_fiscale
-        return impot_brut
-
-    def _impots_brut(self, bareme, quotient_familial):
-
-        impots_brut = 0
-        tranche_p = 0
-
-        for tranche, taux in bareme:
-            tranche_restant = min(tranche - tranche_p, quotient_familial - tranche_p)
-            tranche_restant = max(tranche_restant, 0)
-            impots_brut += tranche_restant * taux
-            tranche_p = tranche + 1
-
-        return impots_brut
