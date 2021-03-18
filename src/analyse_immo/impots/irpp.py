@@ -96,8 +96,13 @@ class IRPP:
         # Ligne 8G = 7E - 8F
         L8G = self._ligne_model.update(L8G_impot_apres_reductions_impots, L7E - L8F)
 
+        # Ligne 9PS Prelevement sociaux
+        L9PS = self._ligne_model.update(L9PS_prelevement_sociaux,
+                                        self.sum_ligne(L4_revenus_ou_deficits_nets_fonciers)
+                                        * self._database.prelevement_sociaux_taux)
+
         # Ligne 9H Impot apres corrections
-        L9H = self._ligne_model.update(L9H_impot_apres_corrections, L8G)
+        L9H = self._ligne_model.update(L9H_impot_apres_corrections, L8G + L9PS)
 
         # Ligne 9I Imputations
         cotisations = self.sum_ligne(L7AE_syndicat) * self._database.reduction_syndicat
@@ -175,6 +180,12 @@ class IRPP:
         irpp._ligne_model.remove(L4_revenus_ou_deficits_nets_fonciers)
         irpp.compute()
         return irpp.sum_ligne(L9_impot_du)
+
+    @property
+    def impots_revenu_foncier(self):
+        ''' revenu foncier taxable et prelevement sociaux foncier'''
+        # return self.impots_net - self.impots_salaires_net
+        return self.sum_ligne(L9_impot_du) - self.impot_sans_revenu_foncier
 
     def __impots_brut_part_fiscale(self, quotient_familial, n_part_fiscale):
         bareme = self._database.irpp_bareme(str(self._annee_revenu + 1))
@@ -285,11 +296,6 @@ class IRPP:
         # net -= self._database.reduction_dons * self.total_reduction_impot
         # net -= self._database.reduction_syndicat * self.total_credit_impot
         # return net
-
-    # @property
-    # def impots_revenu_foncier(self):
-        # ''' revenu foncier taxable et prelevement sociaux foncier'''
-        # return self.impots_net - self.impots_salaires_net
 
     # @property
     # def prelevement_sociaux_foncier(self):

@@ -40,6 +40,7 @@ L8G_impot_apres_reductions_impots = Ligne('L8G', 'Impot apres imputation des red
 L9u_cotisations_syndicales = Ligne('9u', 'Imputations: cotisations syndicales')
 L9H_impot_apres_corrections = Ligne('9H', 'Impot apres corrections')
 L9I_total_imputations = Ligne('9I', 'Total imputations')
+L9PS_prelevement_sociaux = Ligne('9PS', 'Prelevement sociaux (non officiel)')
 L9_impot_du = Ligne('9', 'Impot du')
 
 L4BA_benefice_foncier = Ligne('4BA', 'Resultat foncier positif')

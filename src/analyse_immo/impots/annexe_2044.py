@@ -130,16 +130,16 @@ class Annexe_2044:
     def total_charges_taux(self):
         return 1 - (self.sum_ligne(L420_resultat_foncier) / self.sum_ligne(CaseE_total_recettes))
 
-    @property
-    def prelevement_sociaux(self):
-        '''
-        @todo should not be here but in IRPP
-        '''
-        resultat_foncier = self.sum_ligne(L420_resultat_foncier)
-        if resultat_foncier > 0:
-            return resultat_foncier * self._database.prelevement_sociaux_taux
-        else:
-            return 0
+    # @property
+    # def prelevement_sociaux(self):
+        # '''
+        # @todo should not be here but in IRPP
+        # '''
+        # resultat_foncier = self.sum_ligne(L420_resultat_foncier)
+        # if resultat_foncier > 0:
+        # return resultat_foncier * self._database.prelevement_sociaux_taux
+        # else:
+        # return 0
 
     # @property
     # def L215_total_des_recettes(self):
@@ -153,7 +153,7 @@ class Annexe_2044:
     # def total_charges_emprunt(self):
         # '''Ligne 250'''
         # return self.sum_ligne([L250_interet_emprunt, L250_assurance_emprunteur,
-            # L250_frais_dossier, L250_frais_garantie])
+        # L250_frais_dossier, L250_frais_garantie])
 
     # @property
     # def resultat_foncier(self):
@@ -170,8 +170,8 @@ class Annexe_2044:
         # Ligne 440: report ligne 420, limite 10700 ou 15300, a reporter 4BC 2042
         # '''
         # if self.resultat_foncier >= 0:
-            # return 0
-            #
+        # return 0
+        #
         # plafond = self._database.deficit_foncier_plafond_annuel
         # return max(plafond, self.resultat_foncier)
 
@@ -182,7 +182,7 @@ class Annexe_2044:
         # Ligne 441: report ligne 420, dépassant 10700 ou 15300, a reporter 4BB 2024
         # '''
         # if self.resultat_foncier >= 0:
-            # return 0
-            #
+        # return 0
+        #
         # plafond = self._database.deficit_foncier_plafond_annuel
         # return self.resultat_foncier - plafond
