@@ -147,7 +147,9 @@ class Factory:
         except KeyError:
             impot = impot_data['2020']
 
-        irpp = IRPP(database, annee_revenu, part_fiscale=impot['parts_fiscales'], n_enfant=impot['enfants'])
+        irpp = IRPP(database, annee_revenu)
+        irpp.add_ligne(LN_nombre_de_part, impot['parts_fiscales'])
+        irpp.add_ligne(L4_personne_a_charge, impot['enfants'])
         irpp.add_ligne(L1AJ_salaire, capital_compose(impot['salaires'][0], salaire_taux, i_annee))
         irpp.add_ligne(L1BJ_salaire, capital_compose(impot['salaires'][1], salaire_taux, i_annee))
         irpp.add_ligne(L7UF_dons, impot['dons'])
