@@ -14,7 +14,7 @@ class TestIRPPDeficitFoncier(unittest.TestCase):
     def setUp(self):
         self.database = Database()
 
-    def testExample1(self):
+    def test01_Example1(self):
         '''
         Salaire 30K/an
         Revenuf foncier: 12K/an
@@ -31,7 +31,9 @@ class TestIRPPDeficitFoncier(unittest.TestCase):
         '''
         irpp = list()
 
-        irpp.append(IRPP(self.database, 2020, 2, 0))
+        irpp.append(IRPP(self.database, 2020))
+        irpp[0].add_ligne(LN_nombre_de_part, 2)
+        irpp[0].add_ligne(L4_personne_a_charge, 0)
         irpp[0].add_ligne(L1AJ_salaire, 15000 / .9)
         irpp[0].add_ligne(L1BJ_salaire, 15000 / .9)
 
@@ -44,8 +46,15 @@ class TestIRPPDeficitFoncier(unittest.TestCase):
         irpp[0].annexe_2044 = annexe_2044
 
         self.assertAlmostEqual(annexe_2044.sum_ligne(L420_resultat_foncier), -31900, 0)
-        self.assertAlmostEqual(irpp[0].revenu_fiscale_reference, 19300, 2)  # 30K - 10700
-        self.assertEqual(annexe_2044.deficit_imputable_revenu_foncier, -21200)
+        self.assertAlmostEqual(annexe_2044.sum_ligne(L4BA_benefice_foncier), 0, 0)
+        self.assertAlmostEqual(annexe_2044.sum_ligne(L4BB_deficit_foncier_imputable_revenu_foncier), -31900 + 10700, 0)
+        self.assertAlmostEqual(annexe_2044.sum_ligne(L4BC_deficit_foncier_imputable_revenu_global), -10700, 0)
+        self.assertAlmostEqual(annexe_2044.sum_ligne(L4BD_deficit_foncier_anterieur), 0, 0)
+
+        self.assertAlmostEqual(irpp[0].sum_ligne(L4_revenus_ou_deficits_nets_fonciers), -10700, 0)
+        self.assertAlmostEqual(irpp[0].sum_ligne(L1_1_traitements_salaires_pensions), 30000, 2)
+        self.assertAlmostEqual(irpp[0].sum_ligne(L1_5_revenu_brut_global), 19300, 2)  # 30K - 10700
+
         self.assertEqual(irpp[0].sum_ligne(L4_revenus_ou_deficits_nets_fonciers), -10700)
         self.assertEqual(irpp[0].sum_ligne(L4BA_benefice_foncier), 0)
         self.assertEqual(irpp[0].sum_ligne(L4BB_deficit_foncier_imputable_revenu_foncier), -21200)
@@ -58,7 +67,9 @@ class TestIRPPDeficitFoncier(unittest.TestCase):
         revenu impossable = 30K
         deficit reportable= 13100
         '''
-        irpp.append(IRPP(self.database, 2020, 2, 0))
+        irpp.append(IRPP(self.database, 2020))
+        irpp[1].add_ligne(LN_nombre_de_part, 2)
+        irpp[1].add_ligne(L4_personne_a_charge, 0)
         irpp[1].add_ligne(L1AJ_salaire, 15000 / .9)
         irpp[1].add_ligne(L1BJ_salaire, 15000 / .9)
 
@@ -71,9 +82,9 @@ class TestIRPPDeficitFoncier(unittest.TestCase):
                               irpp[0].sum_ligne(L4BB_deficit_foncier_imputable_revenu_foncier))
         irpp[1].annexe_2044 = annexe_2044
 
-        self.assertAlmostEqual(annexe_2044.resultat_foncier, 8100, 0)  # 12K - 3900
-        self.assertAlmostEqual(irpp[1].revenu_fiscale_reference, 30000, 2)
-        self.assertEqual(annexe_2044.deficit_imputable_revenu_foncier, 0)
+        self.assertAlmostEqual(annexe_2044.sum_ligne(L420_resultat_foncier), 8100, 0)  # 12K - 3900
+        self.assertAlmostEqual(irpp[1].sum_ligne(L4BD_deficit_foncier_anterieur), -31900 + 10700, 0)
+        self.assertAlmostEqual(irpp[1].sum_ligne(L1_5_revenu_brut_global), 30000, 2)
 
         self.assertEqual(irpp[1].sum_ligne(L4_revenus_ou_deficits_nets_fonciers), 0)
         self.assertEqual(irpp[1].sum_ligne(L4BA_benefice_foncier), 8100)

@@ -14,8 +14,10 @@ coverage run -a --source=analyse_immo.defaut --branch -m unittest -v test.test_d
 
 coverage run -a --source=analyse_immo.impots.ligne --branch -m unittest -v test.impots.test_ligne
 coverage run -a --source=analyse_immo.impots.irpp --branch -m unittest -v test.impots.test_irpp
+coverage run -a --source=analyse_immo.impots.irpp --branch -m unittest -v test.impots.test_deficit_foncier
 coverage run -a --source=analyse_immo.impots.annexe_2044 --branch -m unittest -v test.impots.test_annexe_2044
 coverage run -a --source=analyse_immo.impots.micro_foncier --branch -m unittest -v test.impots.test_micro_foncier
+
 coverage run -a --source=analyse_immo.tools.finance --branch -m unittest -v test.tools.test_finance
 
 coverage report --skip-empty -m

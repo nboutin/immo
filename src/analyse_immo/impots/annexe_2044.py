@@ -109,6 +109,7 @@ class Annexe_2044:
             self._ligne_model.update(L440_report_420, 0)
             self._ligne_model.update(L441_report_420, 0)
 
+            plafond = -10700
             if self.sum_ligne(L432_total_interets_emprunts) > self.sum_ligne(L431_total_revenus_bruts):
                 L433 = self.sum_ligne(L433_total_autres_frais_et_charges)
                 self._ligne_model.update(L435_report_433, min(10700, L433))
@@ -120,9 +121,8 @@ class Annexe_2044:
                 self._ligne_model.update(L4BC_deficit_foncier_imputable_revenu_global, self.sum_ligne(L435_report_433))
                 self._ligne_model.update(L4BB_deficit_foncier_imputable_revenu_foncier, self.sum_ligne(L438_total))
             else:
-                L420 = self.sum_ligne(L420_resultat_foncier)
-                self._ligne_model.update(L440_report_420, min(10700, L420))
-                self._ligne_model.update(L441_report_420, max(0, L420 - 10700))
+                self._ligne_model.update(L440_report_420, max(plafond, L420))
+                self._ligne_model.update(L441_report_420, min(0, L420 - plafond))
                 self._ligne_model.update(L4BC_deficit_foncier_imputable_revenu_global, self.sum_ligne(L440_report_420))
                 self._ligne_model.update(L4BB_deficit_foncier_imputable_revenu_foncier, self.sum_ligne(L441_report_420))
 
