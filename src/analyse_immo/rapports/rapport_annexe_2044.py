@@ -45,7 +45,6 @@ def rapport_annexe_2044(annee_achat, irpp_2044_projection, bien_immo):
             separator,
             '{:.1f}'.format(annexe_2044.total_charges_taux * 100),
             '{:.0f}'.format(annexe_2044.sum_ligne(L420_resultat_foncier)),
-            '{:.0f}'.format(annexe_2044.prelevement_sociaux),
             '{:.0f}'.format(irpp.impots_revenu_foncier),
         ]
 
@@ -75,7 +74,6 @@ def rapport_annexe_2044(annee_achat, irpp_2044_projection, bien_immo):
         separator,
         'Total charges (%)',
         'Revenu foncier taxable',
-        'Prelevement sociaux',
         'Impot revenu foncier',
     ])
 
