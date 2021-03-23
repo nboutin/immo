@@ -95,8 +95,8 @@ class IRPP:
 
         # Ligne 9PS Prelevement sociaux
         L9PS = self._ligne_model.update(L9PS_prelevement_sociaux,
-                                        self.sum_ligne(L4_revenus_ou_deficits_nets_fonciers)
-                                        * self._database.prelevement_sociaux_taux)
+                                        max(0, self.sum_ligne(L4_revenus_ou_deficits_nets_fonciers)
+                                            * self._database.prelevement_sociaux_taux))
 
         # Ligne 9H Impot apres corrections
         L9H = self._ligne_model.update(L9H_impot_apres_corrections, L8G + L9PS)

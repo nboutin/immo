@@ -35,8 +35,12 @@ class TestImMir130(unittest.TestCase):
 
         revenu_brut = (54600 * .9) - 10700
         quotient_familial = revenu_brut / 2.5
+        impot = (quotient_familial - 10084) * .11 * 2.5
         self.assertEqual(irpp_0.sum_ligne(LQ_quotient_familial), quotient_familial)
-        self.assertEqual(irpp_0.sum_ligne(L9_impot_du), (quotient_familial - 10084) * .11 * 2.5)
+        self.assertAlmostEqual(irpp_0.sum_ligne(L7E_impot_avant_reduction_impot), impot, 0)  # 1455.025
+        self.assertEqual(irpp_0.sum_ligne(L9I_total_imputations), 143 * .66)
+        self.assertEqual(irpp_0.sum_ligne(L9PS_prelevement_sociaux), 0)
+        self.assertAlmostEqual(irpp_0.sum_ligne(L9_impot_du), impot - 143 * .66, 0)
 
         # an2044.sum_ligne(L4BA_benefice_foncier)
         # an2044.sum_ligne(L4BB_deficit_foncier_imputable_revenu_foncier)
