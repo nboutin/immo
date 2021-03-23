@@ -191,13 +191,13 @@ class IRPP:
 
     def _impots_brut(self, bareme, quotient_familial):
 
-        impots_brut = 0
-        tranche_p = 0
+        impots_brut = 0.0
+        tranche_p = 0.0
 
         for tranche, taux in bareme:
             tranche_restant = min(tranche - tranche_p, quotient_familial - tranche_p)
-            tranche_restant = max(tranche_restant, 0)
+            tranche_restant = max(tranche_restant, 0.0)
             impots_brut += tranche_restant * taux
-            tranche_p = tranche + 1
+            tranche_p = tranche + 1.0
 
         return impots_brut
