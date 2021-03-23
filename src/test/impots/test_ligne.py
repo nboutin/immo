@@ -17,12 +17,31 @@ class TestLigne(unittest.TestCase):
         ligne = Ligne('abc123', 'name_abc123')
         self.assertEqual(ligne.code, 'abc123')
         self.assertEqual(ligne.value, 0)
+        self.assertEqual(ligne.name, 'name_abc123')
 
     def testSetter(self):
         ligne = Ligne('abc123', 'name_abc123', 123)
         self.assertEqual(ligne.value, 123)
         ligne.value = 456
         self.assertEqual(ligne.value, 456)
+
+    def test__repr__(self):
+        ligne = Ligne('abc123', 'name_abc123', 123)
+        self.assertEqual(ligne.__repr__(), 'abc123, name_abc123, 123')
+
+    def testEquality(self):
+        LA1 = Ligne('A1', 'nameA1')
+        LA1bis = Ligne('A1', 'nameA1bis')
+        LA2 = Ligne('A2', 'nameA2')
+
+        self.assertTrue(LA1 == LA1bis)
+        self.assertFalse(LA1 == LA2)
+        self.assertTrue(LA1 != LA2)
+
+    def testDict(self):
+        LA1 = Ligne('A1', 'nameA1')
+        d = dict()
+        d[LA1] = 'A1'
 
 
 class TestLigneModel(unittest.TestCase):
@@ -100,6 +119,16 @@ class TestLigneModel(unittest.TestCase):
         lm.add(L3, 789)
         self.assertEqual(lm.sum(L3), 789)
         self.assertEqual(lm.sum((L1, L2, L3)), 123 + 456 + 789)
+
+    def testUpdate(self):
+        L1 = Ligne('1', '111')
+
+        lm = Ligne_Model()
+        lm.update(L1, 111)
+        self.assertEqual(lm.sum(L1), 111)
+
+        lm.update(L1, 333)
+        self.assertEqual(lm.sum(L1), 333)
 
 
 if __name__ == '__main__':

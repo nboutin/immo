@@ -73,6 +73,21 @@ class TestBienImmo(unittest.TestCase):
         bi.add_lot(Lot("T2", 51, 0))
         self.assertEqual(bi.surface_total_final, 116)
 
+    def testSurfaceLouable(self):
+
+        bi = Bien_Immo(0)
+        bi.add_lot(Lot("T2", 65, 0))
+        bi.add_lot(Lot("T2", 51, 0))
+        self.assertEqual(bi.surface_total_louable, 116)
+
+    def testSurfaceAmenageable(self):
+
+        bi = Bien_Immo(0)
+        bi.add_lot(Lot("T2", 65, 0))
+        bi.add_lot(Lot("T2", 51, 0, etat=Lot.etat_e.amenageable))
+        self.assertEqual(bi.surface_total_louable, 65)
+        self.assertEqual(bi.surface_total_amenageable, 51)
+
     def testSurfacePrix(self):
         bi = Bien_Immo(130000)
         bi.add_lot(Lot("T2", 65, 0))
@@ -81,6 +96,17 @@ class TestBienImmo(unittest.TestCase):
         bi = Bien_Immo(130000)
         bi.add_lot(Lot("T2", 0, 0))
         self.assertEqual(bi.rapport_surface_prix_final, 0)
+
+    def testSurfacePrixLouable(self):
+        bi = Bien_Immo(130000)
+        bi.add_lot(Lot("T2", 10, 0))
+        bi.add_lot(Lot("T2", 20, 0, etat=Lot.etat_e.amenageable))
+        bi.add_lot(Lot("T2", 30, 0))
+        bi.add_lot(Lot("T2", 40, 0, etat=Lot.etat_e.amenageable))
+        self.assertEqual(bi.rapport_surface_prix_louable, 130000 / (10 + 30))
+
+        bi = Bien_Immo(50000)
+        self.assertEqual(bi.rapport_surface_prix_louable, 0)
 
     def testIrlTauxAnnuel(self):
         bi = Bien_Immo(130000)
@@ -121,6 +147,14 @@ class TestBienImmo(unittest.TestCase):
         bi.add_lot(Lot("T1", 30, 0))
         bi.add_lot(Lot("T2", 50, 0))
         self.assertEqual(bi.lot_count, 3)
+
+    def testLot(self):
+        bi = Bien_Immo(50000)
+        bi.add_lot(Lot("T2", 50, 0))
+        bi.add_lot(Lot("T2", 50, 0))
+        bi.add_lot(Lot("T2", 50, 0))
+
+        self.assertEqual(len(bi.lots), 3)
 
     def testCharges(self):
 
