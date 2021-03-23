@@ -123,7 +123,6 @@ class TestIRPP(unittest.TestCase):
         '''
         https://www.service-public.fr/particuliers/actualites/A14556?xtor=EPR-141
         '''
-        # irpp = IRPP(self.database, 2020, 3, 2)
         irpp = IRPP(self.database, 2020)
         irpp.add_ligne(LN_nombre_de_part, 3)
         irpp.add_ligne(L4_personne_a_charge, 2)
@@ -160,20 +159,19 @@ class TestIRPP(unittest.TestCase):
         self.assertAlmostEqual(irpp.sum_ligne(LQ_quotient_familial), 30000, 0)
         self.assertAlmostEqual(irpp.sum_ligne(L9_impot_du), 6010.9, 2)
 
-    @unittest.skip('Fix plafonnement enfant')
     def test6_Exemple04(self):
         '''
         https://www.service-public.fr/particuliers/vosdroits/F2705
         '''
         # Sans plafonnement
-        irpp = IRPP(self.database, 2020)
-        irpp.add_ligne(LN_nombre_de_part, 2)
-        irpp.add_ligne(L4_personne_a_charge, 0)
-        irpp.add_ligne(L1AJ_salaire, 63000 / 0.9)
+        irppA = IRPP(self.database, 2020)
+        irppA.add_ligne(LN_nombre_de_part, 2)
+        irppA.add_ligne(L4_personne_a_charge, 0)
+        irppA.add_ligne(L1AJ_salaire, 63000 / 0.9)
 
-        self.assertAlmostEqual(irpp.sum_ligne(L1_5_revenu_brut_global), 63000, 0)
-        self.assertAlmostEqual(irpp.sum_ligne(LQ_quotient_familial), 31500, 0)
-        self.assertAlmostEqual(irpp.sum_ligne(L9_impot_du), 6910.90, 2)
+        self.assertAlmostEqual(irppA.sum_ligne(L1_5_revenu_brut_global), 63000, 0)
+        self.assertAlmostEqual(irppA.sum_ligne(LQ_quotient_familial), 31500, 0)
+        self.assertAlmostEqual(irppA.sum_ligne(L9_impot_du), 6910.90, 2)
 
         # Avec plafonnement
         irpp = IRPP(self.database, 2020)
@@ -183,7 +181,9 @@ class TestIRPP(unittest.TestCase):
 
         self.assertAlmostEqual(irpp.sum_ligne(L1_5_revenu_brut_global), 63000, 0)
         self.assertAlmostEqual(irpp.sum_ligne(LQ_quotient_familial), 25200, 0)
-        self.assertNotEqual(irpp.sum_ligne(L9_impot_du), 4157)  # Dépassement
+        self.assertAlmostEqual(irpp.sum_ligne(L6A_plafonnement_quotient_familial), irppA.sum_ligne(L9_impot_du), 0)
+        self.assertAlmostEqual(irpp.sum_ligne(L6B_plafonnement_quotient_familial), 1570, 0)
+        self.assertAlmostEqual(irpp.sum_ligne(L6C_plafonnement_quotient_familial), 5341, 0)
         self.assertAlmostEqual(irpp.sum_ligne(L9_impot_du), 5341, 0)
 
     def test6_Exemple06(self):
@@ -199,7 +199,6 @@ class TestIRPP(unittest.TestCase):
         self.assertAlmostEqual(irpp.sum_ligne(LQ_quotient_familial), 33420, 0)
         self.assertAlmostEqual(irpp.sum_ligne(L9_impot_du), 4227, 0)
 
-    @unittest.skip('to be fixed')
     def test6_Exemple07(self):
         '''
         http://impotsurlerevenu.org/exemple/125-couple-marie-sans-enfant-revenus-eleves.php
@@ -207,11 +206,11 @@ class TestIRPP(unittest.TestCase):
         irpp = IRPP(self.database, 2018)
         irpp.add_ligne(LN_nombre_de_part, 2)
         irpp.add_ligne(L4_personne_a_charge, 0)
-        irpp.add_ligne(L1AJ_salaire, 146256)
+        irpp.add_ligne(L1AJ_salaire, 119564)
 
-        self.assertAlmostEqual(irpp.sum_ligne(L1_5_revenu_brut_global), 146256 * .9, 0)
-        self.assertAlmostEqual(irpp.sum_ligne(LQ_quotient_familial), 66877, 0)
-        self.assertAlmostEqual(irpp.sum_ligne(L9_impot_du), 28530, 0)
+        self.assertAlmostEqual(irpp.sum_ligne(L1_5_revenu_brut_global), 119564 * .9, 0)
+        self.assertAlmostEqual(irpp.sum_ligne(LQ_quotient_familial), 53804, 0)
+        self.assertAlmostEqual(irpp.sum_ligne(L9_impot_du), 20685.4, 1)
 
     def test6_Exemple08(self):
         '''
@@ -239,7 +238,6 @@ class TestIRPP(unittest.TestCase):
         self.assertAlmostEqual(irpp.sum_ligne(LQ_quotient_familial), 11856, 0)
         self.assertAlmostEqual(irpp.sum_ligne(L9_impot_du), 794, 0)
 
-    @unittest.skip('Fix plafonnement enfant')
     def test6_Exemple11(self):
         '''
         http://impotsurlerevenu.org/exemple/129-couple-marie-avec-enfants-revenus-eleves.php
@@ -253,7 +251,6 @@ class TestIRPP(unittest.TestCase):
         self.assertAlmostEqual(irpp.sum_ligne(LQ_quotient_familial), 37169, 0)
         self.assertAlmostEqual(irpp.sum_ligne(L9_impot_du), 18753, 0)
 
-    @unittest.skip('Fix plafonnement enfant')
     def test6_Exemple12(self):
         '''
         http://impotsurlerevenu.org/exemple/130-couple-marie-avec-1-enfant-aux-revenus-eleves.php
@@ -280,7 +277,6 @@ class TestIRPP(unittest.TestCase):
         self.assertAlmostEqual(irpp.sum_ligne(LQ_quotient_familial), 20000, 0)
         self.assertAlmostEqual(irpp.sum_ligne(L9_impot_du), 4215, 0)
 
-    @unittest.skip('Fix plafonnement enfant')
     def test6_Exemple21(self):
         '''
         http://impotsurlerevenu.org/comprendre-le-calcul-de-l-impot/1194-calcul-de-l-impot-2018.php
