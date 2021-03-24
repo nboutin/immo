@@ -37,7 +37,8 @@ class TestImMir130(unittest.TestCase):
         self.assertEqual(credit.frais_garantie, 0)
 
         # Impot
-        self.assertEqual(an2044_0.sum_ligne(L224_travaux_renovation), total_travaux)
+        deficit_foncier_total = 93000
+        self.assertEqual(an2044_0.sum_ligne(L224_travaux_renovation), deficit_foncier_total)
 
         self.assertEqual(irpp_0.sum_ligne(L1_1_traitements_salaires_pensions), 54600 * .9)
         self.assertEqual(irpp_0.sum_ligne(L4_revenus_ou_deficits_nets_fonciers), -10700)
@@ -64,6 +65,19 @@ class TestImMir130(unittest.TestCase):
         impot_du_bis = (((54600 * .9) / 2.5) - 10085) * .11 * 2.5 - 143 * .66
         self.assertEqual(irpp_0.impot_sans_revenu_foncier, impot_du_bis)
         self.assertAlmostEqual(rdt.cashflow_net_net_annuel(1), cashflow_net - (impot - 143 * .66 - impot_du_bis), 0)
+
+        # Year 2
+        irpp_1 = analyse.irpp_2044_projection[1]
+        an2044_1 = irpp_1.annexe_2044
+
+        impot = ((54600 * .9) / 2.5 - 10085) * .11 * 2.5
+        self.assertEqual(an2044_1.sum_ligne(L224_travaux_renovation), 0)
+        self.assertEqual(irpp_1.sum_ligne(L1_1_traitements_salaires_pensions), 54600 * .9)
+        self.assertEqual(irpp_1.sum_ligne(L4_revenus_ou_deficits_nets_fonciers), 0)
+        self.assertEqual(irpp_1.sum_ligne(L1_5_revenu_brut_global), 54600 * .9)
+        self.assertAlmostEqual(irpp_1.sum_ligne(L9_impot_du), impot - 143 * .66, 0)
+
+        self.assertEqual(an2044_1.sum_ligne(L451_deficit_foncier_anterieur), )
 
 
 if __name__ == '__main__':

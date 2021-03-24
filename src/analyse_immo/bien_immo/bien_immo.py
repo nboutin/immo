@@ -75,6 +75,11 @@ class Bien_Immo:
             sum([lot.travaux.subvention_total for lot in self._lots])
 
     @property
+    def deficit_foncier_montant(self):
+        return self._commun.travaux.deficit_foncier_total + \
+            sum([lot.travaux.deficit_foncier_total for lot in self._lots])
+
+    @property
     def apport(self):
         return self._apport
 

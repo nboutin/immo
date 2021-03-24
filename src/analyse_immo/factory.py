@@ -174,7 +174,7 @@ class Factory:
         an.add_ligne(L229_copropriete_provision, bien_immo.get_charge(Charge.charge_e.copropriete, i_annee))
 
         if i_annee == 1:
-            an.add_ligne(L224_travaux_renovation, bien_immo.travaux_montant)
+            an.add_ligne(L224_travaux_renovation, bien_immo.deficit_foncier_montant)
 
         month_stop = i_annee * 12
         month_start = month_stop - 11
