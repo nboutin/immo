@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+from analyse_immo import credit
 
 
 class Rendement:
@@ -68,3 +69,18 @@ class Rendement:
         b_month = e_month - 12 + 1
         return self._bi.loyer_nu_net_annuel(i_year) - self._credit.get_mensualite_avec_assurance(
             b_month, e_month) - self._bi.charges(i_year) - self._bi.provisions(i_year) - self._irpp[i_year - 1].impots_revenu_foncier
+
+    def ratio_locatif_bancaire(self, i_year):
+        '''
+        :brief Ratio locatif bancaire positif si mensualité de credit < 70% des loyers mensuels HC
+        :return tuple (boolean, ratio)
+        '''
+        e_month = i_year * 12
+        b_month = e_month - 12 + 1
+        credit_mensualite = self._credit.get_mensualite_avec_assurance(b_month, e_month)
+        loyer_mensuel_hc = self._bi.loyer_nu_net_annuel(i_year)
+
+        ratio_status = True if loyer_mensuel_hc * .7 >= credit_mensualite else False
+        ratio_value = credit_mensualite / loyer_mensuel_hc
+
+        return (ratio_status, ratio_value)
