@@ -7,7 +7,7 @@ import statistics
 
 def load_csv(pathname):
     '''
-    Convert CSV file into 
+    Convert CSV file into
     @input: CSV file pathname
     @return: List of Ordered Dictionary
     '''
@@ -23,7 +23,7 @@ def load_csv(pathname):
             row.pop('', None)  # Remove entry with empty key
 
             # Remove row with all fields equal to None or are empty
-            if not all(v == None or v == '' for k, v in row.items()):
+            if not all(v is None or v == '' for k, v in row.items()):
                 result.append(row)
 
     return result
@@ -38,7 +38,7 @@ def calcul_moyenne_median(data_csv, critere, filters):
         select = True
         for k, v in filters.items():
 
-            if (select and row[k] == v) or v == None:
+            if (select and row[k] == v) or v is None:
                 select = True
             else:
                 select = False

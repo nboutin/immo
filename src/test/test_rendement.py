@@ -9,8 +9,9 @@ from analyse_immo.bien_immo.charge import Charge
 from analyse_immo.credit import Credit
 from analyse_immo.rendement import Rendement
 from analyse_immo.database import Database
-from analyse_immo.impots.irpp import IRPP, L1AJ_salaire
-from analyse_immo.impots.annexe_2044 import Annexe_2044, L211_loyer_brut, L250_interet_emprunt
+from analyse_immo.impots.irpp import IRPP
+from analyse_immo.impots.annexe_2044 import Annexe_2044
+from analyse_immo.impots.ligne_definition import *
 
 
 class TestRendement(unittest.TestCase):
@@ -21,31 +22,31 @@ class TestRendement(unittest.TestCase):
         self.database = Database()
 
     def test1_RendementBrut(self):
-        bi = Bien_Immo(50000, 0, 0, 0, 0)
+        bi = Bien_Immo(50000)
         bi.add_lot(Lot("T2", 50, 500))
         rdt = Rendement(bi, self.credit, self.irpp_2044_proj)
         self.assertEqual(rdt.rendement_brut, 0.12)
 
-        bi = Bien_Immo(0, 0, 0, 0, 0)
+        bi = Bien_Immo()
         rdt = Rendement(bi, self.credit, self.irpp_2044_proj)
         self.assertEqual(rdt.rendement_brut, 0)
 
     def test2_RendementMethodeLarcher(self):
-        bi = Bien_Immo(50000, 0, 0, 0, 0)
+        bi = Bien_Immo(50000)
         bi.add_lot(Lot("T2", 50, 500))
         rdt = Rendement(bi, self.credit, self.irpp_2044_proj)
         self.assertEqual(rdt.rendement_methode_larcher, 0.09)
 
-        bi = Bien_Immo(0, 0, 0, 0, 0)
+        bi = Bien_Immo()
         rdt = Rendement(bi, self.credit, self.irpp_2044_proj)
         self.assertEqual(rdt.rendement_methode_larcher, 0)
 
     def test3_RendementNet(self):
-        bi = Bien_Immo(0, 0, 0, 0, 0)
+        bi = Bien_Immo()
         rdt = Rendement(bi, self.credit, self.irpp_2044_proj)
         self.assertEqual(rdt.rendement_net(1), 0)
 
-        bi = Bien_Immo(50000, 0, 0, 0, 0)
+        bi = Bien_Immo(50000)
         bi.add_lot(Lot("T2", 50, 500))
         rdt = Rendement(bi, self.credit, self.irpp_2044_proj)
         self.assertEqual(rdt.rendement_net(1), 0.12)
@@ -94,7 +95,9 @@ class TestRendement(unittest.TestCase):
         bi.add_lot(lot1)
 
         credit = Credit(0, 0, 0, Credit.taux_e.periodique, 0, Credit.mode_e.fixe_CI, 0, 0)
-        irpp = [IRPP(self.database, 2021, 1, 0)]
+        irpp = [IRPP(self.database, 2021)]
+        irpp[0].add_ligne(LN_nombre_de_part, 1)
+        irpp[0].add_ligne(L4_personne_a_charge, 0)
         rdt = Rendement(bi, credit, irpp)
         self.assertEqual(rdt.cashflow_net_net_annuel(1), 12 * 500)
 
@@ -108,7 +111,9 @@ class TestRendement(unittest.TestCase):
         credit = Credit(50000, 240, 0.02, Credit.taux_e.periodique, 0, Credit.mode_e.fixe_CI, 0, 0)
         # montant échéance = 252,94 €
 
-        irpp = [IRPP(self.database, 2021, 1, 0)]
+        irpp = [IRPP(self.database, 2021)]
+        irpp[0].add_ligne(LN_nombre_de_part, 1)
+        irpp[0].add_ligne(L4_personne_a_charge, 0)
         rdt = Rendement(bi, credit, irpp)
 
         loyer = 12 * 500
@@ -124,7 +129,9 @@ class TestRendement(unittest.TestCase):
 
         credit = Credit(0, 0, 0, Credit.taux_e.periodique, 0, Credit.mode_e.fixe_CI, 0, 0)
 
-        irpp = IRPP(self.database, 2021, 1, 0)
+        irpp = IRPP(self.database, 2021)
+        irpp.add_ligne(LN_nombre_de_part, 1)
+        irpp.add_ligne(L4_personne_a_charge, 0)
         irpp.add_ligne(L1AJ_salaire, 15000 / 0.9)
 
         an = Annexe_2044(self.database)
@@ -146,7 +153,9 @@ class TestRendement(unittest.TestCase):
         credit = Credit(50000, 240, 0.02, Credit.taux_e.periodique, 0, Credit.mode_e.fixe_CI, 0, 0)
         # montant échéance = 252,94 €
 
-        irpp = IRPP(self.database, 2021, 1, 0)
+        irpp = IRPP(self.database, 2021)
+        irpp.add_ligne(LN_nombre_de_part, 1)
+        irpp.add_ligne(L4_personne_a_charge, 0)
         irpp.add_ligne(L1AJ_salaire, 15000 / 0.9)
 
         an = Annexe_2044(self.database)
@@ -170,7 +179,9 @@ class TestRendement(unittest.TestCase):
         credit = Credit(50000, 240, 0.02, Credit.taux_e.periodique, 0, Credit.mode_e.fixe_CI, 0, 0)
         # montant échéance = 252,94 €
 
-        irpp = IRPP(self.database, 2021, 1, 0)
+        irpp = IRPP(self.database, 2021)
+        irpp.add_ligne(LN_nombre_de_part, 1)
+        irpp.add_ligne(L4_personne_a_charge, 0)
         irpp.add_ligne(L1AJ_salaire, 15000 / 0.9)
 
         an = Annexe_2044(self.database)

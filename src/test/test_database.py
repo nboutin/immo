@@ -30,6 +30,10 @@ class TestDatabase(unittest.TestCase):
         database = Database()
         self.assertEqual(database.micro_foncier_revenu_foncier_plafond, 15000)
 
+    def testDeficitFoncierPlafondAnnuel(self):
+        database = Database()
+        self.assertEqual(database.deficit_foncier_plafond_annuel, -10700)
+
 
 if __name__ == '__main__':
     unittest.main()

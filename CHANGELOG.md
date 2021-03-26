@@ -11,7 +11,9 @@ All notable changes to this project will be documented in this file.
 - [ ] Manage class bien_immo by year
 
 **Added:**
-- [ ] Release process
+- Prix m² louable et finale
+- Lot etat (louable ou amenageable)
+- Specification_todo.md file
 
 ## [2.0.0] - 2021-02-10
 

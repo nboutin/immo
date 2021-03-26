@@ -2,7 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import statistics
+from .lot import Lot
 from .charge import Charge
+from .commun import Commun
+from .travaux import Travaux
 
 
 class Bien_Immo:
@@ -12,17 +15,31 @@ class Bien_Immo:
     Augmentation annuel des charges 2%
     '''
 
-    def __init__(self, prix_net_vendeur, frais_agence, frais_notaire, budget_travaux, apport):
+    def __init__(
+            self,
+            prix_net_vendeur=0,
+            frais_agence=0,
+            frais_notaire=0,
+            apport=0,
+            commun=Commun(travaux=Travaux())):
 
-        self._prix_net_vendeur = prix_net_vendeur
-        self._budget_travaux = budget_travaux
-        self._apport = apport
+        self._commun = commun
         self._lots = []
+        self._prix_net_vendeur = prix_net_vendeur
+        self._apport = apport
         self.__set_notaire_taux_montant(frais_notaire)
         self.__set_agence_taux_montant(frais_agence)
 
+    # @property
+    # def commun(self):
+        # return self._commun
+
     def add_lot(self, lot):
         self._lots.append(lot)
+
+    @property
+    def lots(self):
+        return self._lots
 
     @property
     def lot_count(self):
@@ -49,8 +66,18 @@ class Bien_Immo:
         return self._agence_montant
 
     @property
-    def budget_travaux(self):
-        return self._budget_travaux
+    def travaux_montant(self):
+        return self._commun.travaux.montant_total + sum([lot.travaux.montant_total for lot in self._lots])
+
+    @property
+    def subvention_montant(self):
+        return self._commun.travaux.subvention_total + \
+            sum([lot.travaux.subvention_total for lot in self._lots])
+
+    @property
+    def deficit_foncier_montant(self):
+        return self._commun.travaux.deficit_foncier_total + \
+            sum([lot.travaux.deficit_foncier_total for lot in self._lots])
 
     @property
     def apport(self):
@@ -59,16 +86,31 @@ class Bien_Immo:
     @property
     def financement_total(self):
         return self._prix_net_vendeur + self._notaire_montant + self._agence_montant + \
-            self._budget_travaux - self._apport
+            self.travaux_montant - self._apport
 
     @property
-    def surface_total(self):
+    def surface_total_louable(self):
+        return sum(lot.surface for lot in self._lots if lot.etat == Lot.etat_e.louable)
+
+    @property
+    def surface_total_amenageable(self):
+        return sum(lot.surface for lot in self._lots if lot.etat == Lot.etat_e.amenageable)
+
+    @property
+    def surface_total_final(self):
         return sum(lot.surface for lot in self._lots)
 
     @property
-    def rapport_surface_prix(self):
+    def rapport_surface_prix_louable(self):
         try:
-            return self._prix_net_vendeur / self.surface_total
+            return self._prix_net_vendeur / self.surface_total_louable
+        except ZeroDivisionError:
+            return 0
+
+    @property
+    def rapport_surface_prix_final(self):
+        try:
+            return self._prix_net_vendeur / self.surface_total_final
         except ZeroDivisionError:
             return 0
 

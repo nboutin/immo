@@ -21,6 +21,7 @@
     "micro_foncier" : {
       "taux" : 0.3,
       "revenu_foncier_plafond" : 15000
-    }
+    },
+    "deficit_foncier_plafond" : -10700
   }
 }

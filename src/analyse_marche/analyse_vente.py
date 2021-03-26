@@ -19,15 +19,15 @@ def main(argv):
     print(data_csv[0])
 
     request = (
-        {'ville': 'CHATELLERAULT', 'type': None, 'data':{}},
-        {'ville':'CHATELLERAULT', 'type':'1', 'data':{}},
-        {'ville':'CHATELLERAULT', 'type':'2', 'data':{}},
-        {'ville':'CHATELLERAULT', 'type':'3', 'data':{}},
-        {'ville':'CHATELLERAULT', 'type':'4', 'data':{}},
-        )
+        {'ville': 'CHATELLERAULT', 'type': None, 'data': {}},
+        {'ville': 'CHATELLERAULT', 'type': '1', 'data': {}},
+        {'ville': 'CHATELLERAULT', 'type': '2', 'data': {}},
+        {'ville': 'CHATELLERAULT', 'type': '3', 'data': {}},
+        {'ville': 'CHATELLERAULT', 'type': '4', 'data': {}},
+    )
 
     for r in request:
-        filters = {'commune':r['ville'], 'nb_pieces':r['type']}
+        filters = {'commune': r['ville'], 'nb_pieces': r['type']}
         n, moy, med = calcul_moyenne_median(data_csv, critere='surface_utile', filters=filters)
         r['data']['count'] = n
         r['data']['surface_moyen'] = moy
@@ -41,7 +41,7 @@ def main(argv):
         r['data']['prix_surface_median'] = r['data']['prix_median'] / r['data']['surface_median']
 
     output = [
-        ['Ville', 'Type', 'Count', 
+        ['Ville', 'Type', 'Count',
          'Surface\nmoyen', 'Surface\nmedian',
          'Prix\nmoyen', 'Prix\nmedian',
          'Prix\nmoyen\ne/m²', 'Prix\nmedian\ne/m²'],
@@ -56,8 +56,8 @@ def main(argv):
                  '{:.2f}'.format(data['surface_median']),
                  '{:.2f}'.format(data['prix_moyen']),
                  '{:.2f}'.format(data['prix_median']),
-                '{:.2f}'.format(data['prix_surface_moyen']),
-                '{:.2f}'.format(data['prix_surface_median']),
+                 '{:.2f}'.format(data['prix_surface_moyen']),
+                 '{:.2f}'.format(data['prix_surface_median']),
                  )
 
         output.append(input)

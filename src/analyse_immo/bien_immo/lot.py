@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from .charge import Charge
+from enum import unique, Enum, auto
+
 from analyse_immo.tools import finance
+from .charge import Charge
+from .travaux import Travaux
 
 
 class Lot:
@@ -16,7 +19,19 @@ class Lot:
     2016 T4: 125.50
     '''
 
-    def __init__(self, type_, surface, loyer_nu_mensuel, irl_taux_annuel=0):
+    @unique
+    class etat_e(Enum):
+        louable = auto()
+        amenageable = auto()
+
+    def __init__(
+            self,
+            type_,
+            surface,
+            loyer_nu_mensuel,
+            irl_taux_annuel=0,
+            etat=etat_e.louable,
+            travaux=Travaux()):
         '''
         @param type_: type du lot T1,T2,T3,T4
         @param surface: surface en m² du lot
@@ -24,14 +39,20 @@ class Lot:
         @param irl_taux: taux d'évolution annuel de l'indice de reference des loyers
         '''
         self._type = type_
+        self._etat = etat
         self._surface = surface
         self._loyer_nu_brut_mensuel = loyer_nu_mensuel
         self._irl_taux_annuel = irl_taux_annuel
         self._charge = Charge(self, None)
+        self._travaux = travaux
 
     @property
     def type(self):
         return self._type
+
+    @property
+    def etat(self):
+        return self._etat
 
     @property
     def surface(self):
@@ -71,6 +92,10 @@ class Lot:
         '''
         vac_loc_taux = self.charge.get_taux(Charge.charge_e.vacance_locative)
         return self.loyer_nu_brut_annuel(i_year) * (1 - vac_loc_taux)
+
+    @property
+    def travaux(self):
+        return self._travaux
 
     @property
     def charge(self):

@@ -4,22 +4,90 @@
 import logging
 from tabulate import tabulate
 
+from analyse_immo.rapports.rapport_annexe_2044 import rapport_annexe_2044
+# from analyse_immo.rapports.rapport_micro_foncier import rapport_micro_foncier
+from analyse_immo.rapports.rapport_irpp import rapport_irpp
+
+
+def rapport(analyse):
+    rapport_achat(analyse.bien_immo)
+    rapport_bien_immo(analyse.bien_immo)
+    rapport_location(analyse.projection_duree, analyse.bien_immo, analyse.annee_achat)
+    rapport_credit(analyse.projection_duree, analyse.credit, analyse.annee_achat)
+    rapport_annexe_2044(analyse.annee_achat, analyse.irpp_2044_projection, analyse.bien_immo)
+    # rapport_micro_foncier(analyse.annee_achat, analyse.irpp_micro_foncier_projection, analyse.bien_immo)
+    rapport_irpp(
+        analyse.annee_achat,
+        analyse.defaut.salaire_taux,
+        analyse.irpp_2044_projection,
+        analyse.irpp_micro_foncier_projection)
+    rapport_rendement(analyse.annee_achat, analyse.projection_duree, analyse.rendement)
+    rapport_overview(
+        analyse.annee_achat,
+        analyse.projection_duree,
+        analyse.bien_immo,
+        analyse.credit,
+        analyse.irpp_2044_projection,
+        analyse.rendement)
+
 
 def rapport_achat(bien_immo):
 
-    rapport = [
-        [bien_immo.prix_net_vendeur,
-         '{:.0f} ({:.2f}%)'.format(bien_immo.notaire_montant, bien_immo.notaire_taux * 100),
-         '{:.0f} ({:.2f}%)'.format(bien_immo.agence_montant, bien_immo.agence_taux * 100),
-         '{:.0f}'.format(bien_immo.budget_travaux),
-         '{:.0f}'.format(bien_immo.apport),
-         '{:.0f}'.format(bien_immo.financement_total),
-         '{:.0f}'.format(bien_immo.rapport_surface_prix)
-         ],
-        ['Prix net vendeur', 'Notaire', 'Agence', 'Travaux', 'Apport', 'Financement total', 'Prix €/m²'],
-    ]
+    rapport = [['{}'.format(bien_immo.prix_net_vendeur),
+                '{:.0f} ({:.2f}%)'.format(bien_immo.notaire_montant,
+                                          bien_immo.notaire_taux * 100),
+                '{:.0f} ({:.2f}%)'.format(bien_immo.agence_montant,
+                                          bien_immo.agence_taux * 100),
+                '{:.0f}'.format(bien_immo.travaux_montant),
+                '{:.0f}'.format(bien_immo.subvention_montant),
+                '{:.0f}'.format(bien_immo.apport),
+                '{:.0f}'.format(bien_immo.financement_total),
+                '{:.0f}/{:.0f}'.format(bien_immo.rapport_surface_prix_louable,
+                                       bien_immo.rapport_surface_prix_final),
+                ],
+               ['Prix net vendeur',
+                'Notaire',
+                'Agence',
+                'Travaux',
+                'Subvention',
+                'Apport',
+                'Financement total',
+                'Prix €/m² (louable/final)',
+                ],
+               ]
     rotate = list(zip(*rapport[::-1]))
     logging.info('# Achat')
+    logging.info(tabulate(rotate) + '\n')
+
+
+def rapport_bien_immo(bien_immo):
+
+    rapport = list()
+
+    for lot in bien_immo.lots:
+        rapport.insert(0,
+                       [lot.type,
+                        lot.etat,
+                        lot.surface,
+                        0,
+                        lot.loyer_nu_brut_mensuel(),
+                        0,
+                        0,
+                        0
+                        ])
+
+    rapport.append([
+        'Type',
+        'Etat',
+        'Surface',
+        'Niveau',
+        'Loyer hc',
+        'charges',
+        'evolution',
+        'locataire'
+    ])
+    rotate = list(zip(*rapport[::-1]))
+    logging.info('# Bien Immo')
     logging.info(tabulate(rotate) + '\n')
 
 
