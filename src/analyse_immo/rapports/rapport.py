@@ -10,6 +10,15 @@ from analyse_immo.rapports.rapport_irpp import rapport_irpp
 
 
 def rapport(analyse):
+    rapport_gonogo(analyse)
+    rapport_overview(
+        analyse.annee_achat,
+        analyse.projection_duree,
+        analyse.bien_immo,
+        analyse.credit,
+        analyse.irpp_2044_projection,
+        analyse.rendement)
+
     rapport_achat(analyse.bien_immo)
     rapport_bien_immo(analyse.bien_immo)
     rapport_location(analyse.projection_duree, analyse.bien_immo, analyse.annee_achat)
@@ -22,13 +31,20 @@ def rapport(analyse):
         analyse.irpp_2044_projection,
         analyse.irpp_micro_foncier_projection)
     rapport_rendement(analyse.annee_achat, analyse.projection_duree, analyse.rendement)
-    rapport_overview(
-        analyse.annee_achat,
-        analyse.projection_duree,
-        analyse.bien_immo,
-        analyse.credit,
-        analyse.irpp_2044_projection,
-        analyse.rendement)
+
+
+def rapport_gonogo(analyse):
+
+    rlb1 = analyse.rendement.ratio_locatif_bancaire(1)
+    cna1 = analyse.rendement.cashflow_net_annuel(1)
+
+    rapport = [['{} {:.2f}%'.format("GO" if rlb1[0] else "NO GO", rlb1[1] * 100),
+                '{} {:.0f}'.format("GO" if cna1 > 0 else "NO GO", cna1), ],
+               ['Ratio locatif bancaire',
+                'Différentiel Net Annuel', ]]
+    rotate = list(zip(*rapport[::-1]))
+    logging.info('# GO / NoGO')
+    logging.info(tabulate(rotate) + '\n')
 
 
 def rapport_achat(bien_immo):
