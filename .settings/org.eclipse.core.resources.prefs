@@ -42,4 +42,5 @@ encoding//src/test/test_irpp.py=utf-8
 encoding//src/test/test_rendement.py=utf-8
 encoding//src/test/test_simulation_a.py=utf-8
 encoding//src/test/test_simulation_b.py=utf-8
+encoding//src/test/test_template.py=utf-8
 encoding//src/test/tools/test_finance.py=utf-8

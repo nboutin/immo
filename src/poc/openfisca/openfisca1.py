@@ -10,8 +10,8 @@ from openfisca_core.simulation_builder import SimulationBuilder
 # syndicat 143
 # 3113
 entities = {
-    'individus': {'Nicolas': {'revenu_assimile_salaire': {'2019': 31407}},
-                  'Audrey': {'revenu_assimile_salaire': {'2019': 23055},
+    'individus': {'Nicolas': {'salaire_imposable': {'2019': 31407}},
+                  'Audrey': {'salaire_imposable': {'2019': 23055},
                              'f7ac': {'2019': 143}},
                   'Lya': {}},
     'foyers_fiscaux': {'foyer1': {'declarants': ['Nicolas', 'Audrey'],
