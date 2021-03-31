@@ -102,6 +102,34 @@ class TestRevenuFoncier(unittest.TestCase):
         self.assertEqual(self.sim.calculate('decote', annee), decote)
         self.assertEqual(self.sim.calculate('irpp', annee), [-impot])
 
+    def test04_A(self):
+        annee = '2021'
+        salaire = 25000
+        base = (salaire * .9 - 10084) * .11
+        decote = round(779 - base * .4525)
+        impot = round(base - decote)
+        self.sim.set_input('salaire_imposable', annee, salaire)
+        self.assertEqual(self.sim.calculate('decote', annee), decote)
+        self.assertEqual(self.sim.calculate('irpp', annee), [-impot])
+
+    def test04_B(self):
+        annee = '2021'
+        salaire = 25000
+        revenu_foncier = 500 * 12 * .60
+
+        revenu = salaire * .9 + revenu_foncier
+        t1 = (min(revenu, 25710) - 10084) * .11
+        t2 = (min(revenu, 73516) - 25710) * .3
+        base = t1 + t2
+        decote = max(0, round(779 - base * .4525))
+        impot = round(base - decote)
+
+        self.sim.set_input('salaire_imposable', annee, salaire)
+        self.sim.set_input('f4ba', annee, revenu_foncier)
+
+        self.assertEqual(self.sim.calculate('decote', annee), decote)
+        self.assertEqual(self.sim.calculate('irpp', annee), [-impot])
+
 
 if __name__ == '__main__':
     unittest.main()
