@@ -13,30 +13,31 @@ def rapport(analyse):
     rapport_gonogo(analyse)
     rapport_overview(
         analyse.annee_achat,
-        analyse.projection_duree,
+        analyse.duration,
         analyse.bien_immo,
         analyse.credit,
-        analyse.irpp_2044_projection,
+        analyse.irpp,
         analyse.rendement)
-
-    rapport_achat(analyse.bien_immo)
-    rapport_bien_immo(analyse.bien_immo)
-    rapport_location(analyse.projection_duree, analyse.bien_immo, analyse.annee_achat)
-    rapport_credit(analyse.projection_duree, analyse.credit, analyse.annee_achat)
-    rapport_annexe_2044(analyse.annee_achat, analyse.irpp_2044_projection, analyse.bien_immo)
-    # rapport_micro_foncier(analyse.annee_achat, analyse.irpp_micro_foncier_projection, analyse.bien_immo)
-    rapport_irpp(
-        analyse.annee_achat,
-        analyse.defaut.salaire_taux,
-        analyse.irpp_2044_projection,
-        analyse.irpp_micro_foncier_projection)
-    rapport_rendement(analyse.annee_achat, analyse.projection_duree, analyse.rendement)
+    #
+    # rapport_achat(analyse.bien_immo)
+    # rapport_bien_immo(analyse.bien_immo)
+    # rapport_location(analyse.projection_duree, analyse.bien_immo, analyse.annee_achat)
+    # rapport_credit(analyse.projection_duree, analyse.credit, analyse.annee_achat)
+    # rapport_annexe_2044(analyse.annee_achat, analyse.irpp_2044_projection, analyse.bien_immo)
+    # # rapport_micro_foncier(analyse.annee_achat, analyse.irpp_micro_foncier_projection, analyse.bien_immo)
+    # rapport_irpp(
+    # analyse.annee_achat,
+    # analyse.defaut.salaire_taux,
+    # analyse.irpp_2044_projection,
+    # analyse.irpp_micro_foncier_projection)
+    # rapport_rendement(analyse.annee_achat, analyse.projection_duree, analyse.rendement)
 
 
 def rapport_gonogo(analyse):
 
-    rlb1 = analyse.rendement.ratio_locatif_bancaire(1)
-    cna1 = analyse.rendement.cashflow_net_annuel(1)
+    rdt = analyse.rendement['foncier_reel']
+    rlb1 = rdt.ratio_locatif_bancaire(1)
+    cna1 = rdt.cashflow_net_annuel(1)
 
     rapport = [['{} {:.2f}%'.format("GO" if rlb1[0] else "NO GO", rlb1[1] * 100),
                 '{} {:.0f}'.format("GO" if cna1 > 0 else "NO GO", cna1), ],
@@ -47,25 +48,22 @@ def rapport_gonogo(analyse):
     logging.info(tabulate(rotate) + '\n')
 
 
-def rapport_overview(annee_achat, projection_duree, bien_immo, credit, irpp, rendement):
+def rapport_overview(annee, duration, bien_immo, credit, irpp, rendement):
 
     rapport = list()
 
-    for i in range(projection_duree):
-
-        i_year = i + 1
-
+    for i_annee in range(annee, annee + duration):
         rapport_year = [
-            annee_achat + i,
+            i_annee,
             '{:.0f}'.format(bien_immo.financement_total),
-            '{:.0f}'.format(bien_immo.loyer_nu_brut_annuel(i_year)),
-            '{:.0f}/{:.0f}'.format(bien_immo.charges(i_year), bien_immo.provisions(i_year)),
-            '{:.0f}'.format(irpp[i].annexe_2044.sum_ligne(L250_total_emprunt)),
+            '{:.0f}'.format(bien_immo.loyer_nu_brut_annuel(i_annee)),
+            '{:.0f}/{:.0f}'.format(bien_immo.charges(i_annee), bien_immo.provisions(i_annee)),
+            '{:.0f}'.format(irpp['foncier_reel'].annexe[str(i_annee)].sum_ligne(L250_total_emprunt)),
             '{:.0f}'.format(credit.get_amortissement(1, 12)),
-            '{:.0f}'.format(irpp[i].annexe_2044.sum_ligne(L420_resultat_foncier)),
+            '{:.0f}'.format(irpp['foncier_reel'].annexe[str(i_annee)].sum_ligne(L420_resultat_foncier)),
             '{:.0f}ans/{:.2f}%'.format(credit.duree_mois / 12, credit.taux * 100),
-            '{:.0f}'.format(irpp[i].impots_revenu_foncier),
-            '{:.2f}'.format(rendement.cashflow_net_net_annuel(i_year))
+            '{:.0f}'.format(irpp['foncier_reel'].impots_revenu_foncier(str(i_annee))),
+            '{:.2f}'.format(rendement['foncier_reel'].cashflow_net_net_annuel(i_annee))
         ]
         rapport.insert(0, rapport_year)
 

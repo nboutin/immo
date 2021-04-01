@@ -61,14 +61,14 @@ class Rendement:
         return self._bi.loyer_nu_net_annuel(i_year) - self._credit.get_mensualite_avec_assurance(
             b_month, e_month) - self._bi.charges(i_year) - self._bi.provisions(i_year)
 
-    def cashflow_net_net_annuel(self, i_year):
+    def cashflow_net_net_annuel(self, annee):
         '''
         cashflow net après impot
         '''
-        e_month = i_year * 12
+        e_month = annee * 12
         b_month = e_month - 12 + 1
-        return self._bi.loyer_nu_net_annuel(i_year) - self._credit.get_mensualite_avec_assurance(
-            b_month, e_month) - self._bi.charges(i_year) - self._bi.provisions(i_year) - self._irpp[i_year - 1].impots_revenu_foncier
+        return self._bi.loyer_nu_net_annuel(annee) - self._credit.get_mensualite_avec_assurance(
+            b_month, e_month) - self._bi.charges(annee) - self._bi.provisions(annee) - self._irpp.impots_revenu_foncier(annee)
 
     def ratio_locatif_bancaire(self, i_year):
         '''

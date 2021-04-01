@@ -130,6 +130,112 @@ class TestRevenuFoncier(unittest.TestCase):
         self.assertEqual(self.sim.calculate('decote', annee), decote)
         self.assertEqual(self.sim.calculate('irpp', annee), [-impot])
 
+    def test05_A(self):
+
+        E = {
+            'individus': {'I1': {}, 'I2': {}, 'I3': {}},
+            'foyers_fiscaux': {'f1': {'declarants': ['I1', 'I2'],
+                                      'personnes_a_charge': ['I3']}}
+        }
+
+        tax_benefit_system = FranceTaxBenefitSystem()
+        simulation_builder = SimulationBuilder()
+        sim = simulation_builder.build_from_entities(tax_benefit_system, E)
+        sim.trace = True
+
+        import math
+        annee = '2021'
+
+        rbg = math.floor((31407 + 23055) * .9 + 5000)
+        revenu = (31407 + 23055) * .9 + 5000
+        t1 = (min(revenu, 25710) / 2.5 - 10084) * 2.5 * .11
+        t2 = (min(revenu, 73516) / 2.5 - 25710) * 2.5 * .3
+        impot = t1 + t2
+        print('impot', impot)
+
+        sim.set_input('salaire_imposable', annee, [31407, 23055, 0])
+        sim.set_input('f4ba', annee, 5000)
+
+        self.assertEqual(sim.calculate('revenu_categoriel_foncier', annee), 5000)
+        self.assertEqual(sim.calculate('rbg', annee), [rbg])
+        # PS 17,2 (CSG 9,2 CRDS 0,5 prelet solida 7,5)
+
+        # 5000 * 17.2% = 860
+        # 5000 * 9.2% = 460
+        # 5000 * 0.5% = 25
+        # 5000 * 7.5% = 375
+
+        # csg [-495.    0.    0.]
+        # prelevements_sociaux_revenus_capital_hors_csg_crds [-340.00003]
+        # crds_revenus_capital [-25.]
+        # total = 495+340+25 = 860
+
+        # prelevements_sociaux.contributions.csg.capital.glob = 0.099
+
+        print('csg_revenus_capital', sim.calculate('csg_revenus_capital', annee))
+        print('csg', sim.calculate('csg', annee))
+        print('prelevements_sociaux_revenus_capital_hors_csg_crds', sim.calculate(
+            'prelevements_sociaux_revenus_capital_hors_csg_crds', annee))
+        print('crds_revenus_capital', sim.calculate('crds_revenus_capital', annee))
+        print('crds', sim.calculate('crds', annee))
+
+        print('prelevements_sociaux_revenus_capital', sim.calculate('prelevements_sociaux_revenus_capital', annee))
+        print('prelevement_forfaitaire_liberatoire', sim.calculate('prelevement_forfaitaire_liberatoire', annee))
+
+        print('bouclier_imp_gen', sim.calculate('bouclier_imp_gen', annee))
+        print('bouclier_sumimp', sim.calculate('bouclier_sumimp', annee))
+
+        print('revenus_nets_du_capital', sim.calculate('revenus_nets_du_capital', annee))
+
+        # print('total_impots_plafonnement_isf_ifi', sim.calculate('total_impots_plafonnement_isf_ifi', annee))
+        # print('isf_ifi_avant_plaf', sim.calculate('isf_ifi_avant_plaf', annee))
+        # print('isf_ifi_apres_plaf', sim.calculate('isf_ifi_apres_plaf', annee))
+        # print('bouclier_imp_gen', sim.calculate('bouclier_imp_gen', annee))
+        #
+        # print('acomptes_ir', sim.calculate('acomptes_ir', annee))
+        # print('irpp', sim.calculate('irpp', annee))
+        # print('irpp_economique', sim.calculate('irpp_economique', annee))
+
+        self.assertEqual(sim.calculate('crds', annee)[0], -5000 * 0.005)
+        # self.assertEqual(sim.calculate('csg', annee)[0], -5000 * 0.092)
+
+        self.assertEqual(sim.calculate('prelevements_sociaux_revenus_capital', annee)[0], round(-5000 * 0.172))
+        # self.assertEqual(sim.calculate('prelevements_sociaux_revenus_capital_hors_csg_crds', annee), [-5000 * 0.075])
+        # self.assertEqual(sim.calculate('crds_revenus_capital', annee), [-5000 * 0.005])
+        # self.assertEqual(sim.calculate('crds', annee)[0], -5000 * 0.005)
+        #
+        # sim.tracer.print_computation_log()
+        # irpp_impot = sim.calculate('irpp', annee)
+        # self.assertEqual(irpp_impot, impot)
+
+    def test05_B(self):
+
+        E = {
+            'individus': {'I1': {}, 'I2': {}, 'I3': {}},
+            'foyers_fiscaux': {'f1': {'declarants': ['I1', 'I2'],
+                                      'personnes_a_charge': ['I3']}}
+        }
+
+        tax_benefit_system = FranceTaxBenefitSystem()
+        simulation_builder = SimulationBuilder()
+        sim = simulation_builder.build_from_entities(tax_benefit_system, E)
+        sim.trace = True
+
+        annee = '2021'
+
+        revenu = (31407 + 23055) * .9 + 5000  # 54015 / 2.5 = 21606
+        impot = round((revenu / 2.5 - 10084) * 2.5 * .11)
+        ps = round(5000 * 0.172)
+
+        sim.set_input('salaire_imposable', annee, [31407, 23055, 0])
+        sim.set_input('f4ba', annee, 5000)
+
+        self.assertEqual(impot, 3169)
+        self.assertEqual(ps, 860)
+
+        self.assertEqual(sim.calculate('prelevements_sociaux_revenus_capital', annee)[0], round(-ps))
+        self.assertEqual(sim.calculate('irpp', annee)[0], round(-impot))
+
 
 if __name__ == '__main__':
     unittest.main()

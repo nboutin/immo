@@ -120,41 +120,73 @@ class Factory:
     @staticmethod
     def make_irpp_projection(duration, annee_achat, database, impot_data, salaire_taux, bien_immo, credit):
 
-        irpp_2044_projection = list()
+        irpp_micro_foncier = Factory.make_irpp(annee_achat, impot_data, duration)
+        irpp_foncier_reel = Factory.make_irpp(annee_achat, impot_data, duration)
 
-        for i_annee in range(duration):
-            annee_revenu = annee_achat + i_annee
-            irpp = Factory.make_irpp(database, impot_data, annee_revenu, i_annee, salaire_taux)
+        for i_annee in range(annee_achat, annee_achat + duration):
+            # Regime Reel
+            deficit_foncier_anterieur = irpp_foncier_reel.calculate('f4bb', i_annee - 1)
+            an_fr = Factory.make_annexe_2044(database, bien_immo, credit, i_annee + 1, deficit_foncier_anterieur)
+            irpp_foncier_reel.set_annexe(str(i_annee), an_fr)
 
-            deficit_foncier_anterieur = 0
-            if i_annee > 0:
-                deficit_foncier_anterieur = irpp_2044_projection[i_annee - \
-                    1].sum_ligne(L4BB_deficit_foncier_imputable_revenu_foncier)
+            # Micro Foncier
+            irpp_micro_foncier.set_input('f4be', str(i_annee), bien_immo.loyer_nu_net_annuel(i_annee))
 
-            irpp.annexe_2044 = Factory.make_annexe_2044(
-                database, bien_immo, credit, i_annee + 1, deficit_foncier_anterieur)
-            irpp_2044_projection.append(irpp)
-        return irpp_2044_projection
+        return irpp_micro_foncier, irpp_foncier_reel
+
+        # irpp_2044_projection = list()
+        # try:
+        # mf = Micro_Foncier(database)
+        #
+        # # bien_immo loyer_nu_net = import loyer_nu_brut
+        # mf.add_ligne(L4EB_recettes_brutes, bien_immo.loyer_nu_net_annuel(i_annee))
+        # return mf
+        # except Exception:
+        # return None
+
+        # for i_annee in range(duration):
+        # annee_revenu = annee_achat + i_annee
+        # # irpp = Factory.make_irpp(database, impot_data, annee_revenu, i_annee, salaire_taux)
+        #
+        # deficit_foncier_anterieur = 0
+        # if i_annee > 0:
+        # deficit_foncier_anterieur = irpp_2044_projection[i_annee -
+        # 1].sum_ligne(L4BB_deficit_foncier_imputable_revenu_foncier)
+        #
+        # irpp.annexe_2044 = Factory.make_annexe_2044(
+        # database, bien_immo, credit, i_annee + 1, deficit_foncier_anterieur)
+        # irpp_2044_projection.append(irpp)
+        # return irpp_2044_projection
 
     @staticmethod
-    def make_irpp(database, impot_data, annee_revenu, i_annee, salaire_taux):
-        '''
-        :param annee_revenu: int, current year
-        :param i_annee: int, index annee
-        '''
-        try:
-            impot = impot_data[str(annee_revenu)]
-        except KeyError:
-            impot = impot_data['2020']
+    def make_irpp(annee, impot_data, duration):
+        irpp = IRPP()
+        impot = None
 
-        irpp = IRPP(database, annee_revenu)
-        irpp.add_ligne(LN_nombre_de_part, impot['parts_fiscales'])
-        irpp.add_ligne(L4_personne_a_charge, impot['enfants'])
-        irpp.add_ligne(L1AJ_salaire, capital_compose(impot['salaires'][0], salaire_taux, i_annee))
-        irpp.add_ligne(L1BJ_salaire, capital_compose(impot['salaires'][1], salaire_taux, i_annee))
-        irpp.add_ligne(L7UF_dons, impot['dons'])
-        irpp.add_ligne(L7AE_syndicat, impot['syndicat'])
+        for i_annee in range(annee, annee + duration):
+            try:
+                impot = impot_data[str(i_annee)]
+            except KeyError:
+                pass
+
+            salaires = [impot['salaires'][0], impot['salaires'][1], 0]
+            irpp.set_input('salaire_imposable', str(i_annee), salaires)
+
         return irpp
+
+        # try:
+        # impot = impot_data[str(annee_revenu)]
+        # except KeyError:
+        # impot = impot_data['2020']
+
+        # irpp = IRPP(database, annee_revenu)
+        # irpp.add_ligne(LN_nombre_de_part, impot['parts_fiscales'])
+        # irpp.add_ligne(L4_personne_a_charge, impot['enfants'])
+        # irpp.add_ligne(L1AJ_salaire, capital_compose(impot['salaires'][0], salaire_taux, i_annee))
+        # irpp.add_ligne(L1BJ_salaire, capital_compose(impot['salaires'][1], salaire_taux, i_annee))
+        # irpp.add_ligne(L7UF_dons, impot['dons'])
+        # irpp.add_ligne(L7AE_syndicat, impot['syndicat'])
+        # return irpp
 
     @staticmethod
     def make_annexe_2044(database, bien_immo, credit, i_annee, deficit_foncier_anterieur):
@@ -164,7 +196,6 @@ class Factory:
         '''
         an = Annexe_2044(database)
 
-        # bien_immo loyer_nu_net = import loyer_nu_brut
         an.add_ligne(L211_loyer_brut, bien_immo.loyer_nu_net_annuel(i_annee))
         an.add_ligne(L221_frais_administration, bien_immo.get_charge(Charge.charge_e.agence_immo, i_annee))
         an.add_ligne(L222_autre_frais_gestion, 20 * bien_immo.lot_count)
@@ -189,16 +220,16 @@ class Factory:
 
         return an
 
-    @staticmethod
-    def make_micro_foncier(database, bien_immo, i_annee):
-        try:
-            mf = Micro_Foncier(database)
-
-            # bien_immo loyer_nu_net = import loyer_nu_brut
-            mf.add_ligne(L4EB_recettes_brutes, bien_immo.loyer_nu_net_annuel(i_annee))
-            return mf
-        except Exception:
-            return None
+    # @staticmethod
+    # def make_micro_foncier(database, bien_immo, i_annee):
+        # try:
+        # mf = Micro_Foncier(database)
+        #
+        # # bien_immo loyer_nu_net = import loyer_nu_brut
+        # mf.add_ligne(L4EB_recettes_brutes, bien_immo.loyer_nu_net_annuel(i_annee))
+        # return mf
+        # except Exception:
+        # return None
 
     @staticmethod
     def make_analyse(input_data):
@@ -219,32 +250,38 @@ class Factory:
         # Impot
         annee_achat = achat_data['annee']
         credit_duree = credit_data['duree_annee']
-        projection_duree = credit_duree + 5
+        duration = credit_duree + 5
         salaire_taux = defaut.salaire_taux
 
-        # IRPP + 2044
-        irpp_2044_projection = Factory.make_irpp_projection(
-            projection_duree, annee_achat, database, impot_data, salaire_taux, bien_immo, credit)
+        # IRPP
+        irpp = dict()
+        irpp['micro_foncier'], irpp['foncier_reel'] = Factory.make_irpp_projection(
+            duration, annee_achat, database, impot_data, salaire_taux, bien_immo, credit)
 
-        # IRPP + Micro foncier
-        irpp_micro_foncier_projection = list()
-
-        for i_annee in range(projection_duree):
-            annee_revenu = annee_achat + i_annee
-            irpp = Factory.make_irpp(database, impot_data, annee_revenu, i_annee, salaire_taux)
-
-            irpp.micro_foncier = Factory.make_micro_foncier(database, bien_immo, i_annee + 1)
-            irpp_micro_foncier_projection.append(irpp)
+        # # IRPP + 2044
+        # irpp_2044_projection = Factory.make_irpp_projection(
+        # duration, annee_achat, database, impot_data, salaire_taux, bien_immo, credit)
+        #
+        # # IRPP + Micro foncier
+        # irpp_micro_foncier_projection = list()
+        #
+        # for i_annee in range(duration):
+        # annee_revenu = annee_achat + i_annee
+        # irpp = Factory.make_irpp(database, impot_data, annee_revenu, i_annee, salaire_taux)
+        #
+        # irpp.micro_foncier = Factory.make_micro_foncier(database, bien_immo, i_annee + 1)
+        # irpp_micro_foncier_projection.append(irpp)
 
         # Rendement
-        rendement = Rendement(bien_immo, credit, irpp_2044_projection)
+        rendement = dict()
+        rendement['micro_foncier'] = Rendement(bien_immo, credit, irpp['micro_foncier'])
+        rendement['foncier_reel'] = Rendement(bien_immo, credit, irpp['foncier_reel'])
 
         return Analyse_Immo(
             defaut=defaut,
             bien_immo=bien_immo,
             annee_achat=annee_achat,
             credit=credit,
-            projection_duree=projection_duree,
-            irpp_2044_projection=irpp_2044_projection,
-            irpp_micro_foncier_projection=irpp_micro_foncier_projection,
+            duration=duration,
+            irpp=irpp,
             rendement=rendement)
