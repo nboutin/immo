@@ -62,8 +62,8 @@ def rapport_overview(annee, duration, bien_immo, credit, irpp, rendement):
             '{:.0f}'.format(credit.get_amortissement(1, 12)),
             '{:.0f}'.format(irpp['foncier_reel'].annexe[str(i_annee)].sum_ligne(L420_resultat_foncier)),
             '{:.0f}ans/{:.2f}%'.format(credit.duree_mois / 12, credit.taux * 100),
-            '{:.0f}'.format(irpp['foncier_reel'].impots_revenu_foncier(str(i_annee))),
-            '{:.2f}'.format(rendement['foncier_reel'].cashflow_net_net_annuel(i_annee))
+            '{:.0f}'.format(irpp['foncier_reel'].impot_revenu_foncier(str(i_annee))[0]),
+            '{:.2f}'.format(rendement['foncier_reel'].cashflow_net_net_annuel(i_annee)[0])
         ]
         rapport.insert(0, rapport_year)
 

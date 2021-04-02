@@ -6,7 +6,7 @@ from openfisca_core.simulation_builder import SimulationBuilder
 
 from .ligne_definition import *
 
-entities = {
+_ENTITIES = {
     'individus': {'Nicolas': {},
                   'Audrey': {},
                   'Lya': {}},
@@ -22,10 +22,14 @@ entities = {
 
 class IRPP:
 
-    def __init__(self):
+    def __init__(self, entities=None):
+        self._entities = entities
+        if not entities:
+            self._entities = _ENTITIES
+
         self._tax_benefit_system = FranceTaxBenefitSystem()
         self._simulation_builder = SimulationBuilder()
-        self._sim = self._simulation_builder.build_from_entities(self._tax_benefit_system, entities)
+        self._sim = self._simulation_builder.build_from_entities(self._tax_benefit_system, self._entities)
 
         self._annexe = dict()  # Key is str(year)
 
@@ -59,7 +63,7 @@ class IRPP:
 
     def impot_sans_revenu_foncier(self, annee: str):
         salaires = self._sim.calculate_add('salaire_imposable', annee)
-        sim = self._simulation_builder.build_from_entities(self._tax_benefit_system, entities)
+        sim = self._simulation_builder.build_from_entities(self._tax_benefit_system, self._entities)
         sim.set_input('salaire_imposable', annee, salaires)
         return sim.calculate('irpp', annee)
 

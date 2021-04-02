@@ -14,6 +14,12 @@ from analyse_immo.impots.annexe_2044 import Annexe_2044
 from analyse_immo.impots.ligne_definition import *
 
 
+celibataire = {
+    'individus': {'I1': {}},
+    'foyers_fiscaux': {'f1': {'declarants': ['I1']}}
+}
+
+
 class TestRendement(unittest.TestCase):
 
     def setUp(self):
@@ -95,11 +101,11 @@ class TestRendement(unittest.TestCase):
         bi.add_lot(lot1)
 
         credit = Credit(0, 0, 0, Credit.taux_e.periodique, 0, Credit.mode_e.fixe_CI, 0, 0)
-        irpp = [IRPP(self.database, 2021)]
-        irpp[0].add_ligne(LN_nombre_de_part, 1)
-        irpp[0].add_ligne(L4_personne_a_charge, 0)
+
+        annee = '2021'
+        irpp = IRPP(celibataire)
         rdt = Rendement(bi, credit, irpp)
-        self.assertEqual(rdt.cashflow_net_net_annuel(1), 12 * 500)
+        self.assertEqual(rdt.cashflow_net_net_annuel(annee), 12 * 500)
 
     def test5b_cashflow_net_net(self):
         ''' In: Loyer, credit
@@ -111,14 +117,13 @@ class TestRendement(unittest.TestCase):
         credit = Credit(50000, 240, 0.02, Credit.taux_e.periodique, 0, Credit.mode_e.fixe_CI, 0, 0)
         # montant échéance = 252,94 €
 
-        irpp = [IRPP(self.database, 2021)]
-        irpp[0].add_ligne(LN_nombre_de_part, 1)
-        irpp[0].add_ligne(L4_personne_a_charge, 0)
+        annee = '2021'
+        irpp = IRPP(celibataire)
         rdt = Rendement(bi, credit, irpp)
 
         loyer = 12 * 500
         mensualite = 12 * 252.942
-        self.assertAlmostEqual(rdt.cashflow_net_net_annuel(1), loyer - mensualite, 2)
+        self.assertAlmostEqual(rdt.cashflow_net_net_annuel(annee)[0], loyer - mensualite, 2)
 
     def test5c_cashflow_net_net(self):
         ''' In: Loyer, Impot

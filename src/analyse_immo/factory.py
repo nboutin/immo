@@ -123,14 +123,17 @@ class Factory:
         irpp_micro_foncier = Factory.make_irpp(annee_achat, impot_data, duration)
         irpp_foncier_reel = Factory.make_irpp(annee_achat, impot_data, duration)
 
-        for i_annee in range(annee_achat, annee_achat + duration):
+        for annee in range(annee_achat, annee_achat + duration):
+
+            i_annee = annee - annee_achat  # start at 0
+
             # Regime Reel
-            deficit_foncier_anterieur = irpp_foncier_reel.calculate('f4bb', i_annee - 1)
+            deficit_foncier_anterieur = irpp_foncier_reel.calculate('f4bb', annee - 1)
             an_fr = Factory.make_annexe_2044(database, bien_immo, credit, i_annee + 1, deficit_foncier_anterieur)
-            irpp_foncier_reel.set_annexe(str(i_annee), an_fr)
+            irpp_foncier_reel.set_annexe(str(annee), an_fr)
 
             # Micro Foncier
-            irpp_micro_foncier.set_input('f4be', str(i_annee), bien_immo.loyer_nu_net_annuel(i_annee))
+            irpp_micro_foncier.set_input('f4be', str(annee), bien_immo.loyer_nu_net_annuel(annee))
 
         return irpp_micro_foncier, irpp_foncier_reel
 
@@ -139,22 +142,22 @@ class Factory:
         # mf = Micro_Foncier(database)
         #
         # # bien_immo loyer_nu_net = import loyer_nu_brut
-        # mf.add_ligne(L4EB_recettes_brutes, bien_immo.loyer_nu_net_annuel(i_annee))
+        # mf.add_ligne(L4EB_recettes_brutes, bien_immo.loyer_nu_net_annuel(annee))
         # return mf
         # except Exception:
         # return None
 
-        # for i_annee in range(duration):
-        # annee_revenu = annee_achat + i_annee
-        # # irpp = Factory.make_irpp(database, impot_data, annee_revenu, i_annee, salaire_taux)
+        # for annee in range(duration):
+        # annee_revenu = annee_achat + annee
+        # # irpp = Factory.make_irpp(database, impot_data, annee_revenu, annee, salaire_taux)
         #
         # deficit_foncier_anterieur = 0
-        # if i_annee > 0:
-        # deficit_foncier_anterieur = irpp_2044_projection[i_annee -
+        # if annee > 0:
+        # deficit_foncier_anterieur = irpp_2044_projection[annee -
         # 1].sum_ligne(L4BB_deficit_foncier_imputable_revenu_foncier)
         #
         # irpp.annexe_2044 = Factory.make_annexe_2044(
-        # database, bien_immo, credit, i_annee + 1, deficit_foncier_anterieur)
+        # database, bien_immo, credit, annee + 1, deficit_foncier_anterieur)
         # irpp_2044_projection.append(irpp)
         # return irpp_2044_projection
 
