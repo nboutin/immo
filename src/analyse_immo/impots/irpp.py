@@ -52,12 +52,16 @@ class IRPP:
     def annexe(self):
         return self._annexe
 
-    def impots_sans_revenu_foncier(self, annee: str):
+    def impot_du(self, annee: str):
+        irpp = self._sim.calculate('irpp', annee)
+        ps = self._sim.calculate('prelevements_sociaux_revenus_capital', annee)
+        return irpp + ps
+
+    def impot_sans_revenu_foncier(self, annee: str):
         salaires = self._sim.calculate_add('salaire_imposable', annee)
         sim = self._simulation_builder.build_from_entities(self._tax_benefit_system, entities)
         sim.set_input('salaire_imposable', annee, salaires)
-        return abs(sim.calculate('irpp', annee)[0])
+        return sim.calculate('irpp', annee)
 
-    def impots_revenu_foncier(self, annee: str):
-        irpp_rf = self._sim.calculate('irpp', annee)
-        return abs(irpp_rf[0]) - self.impots_sans_revenu_foncier(annee)
+    def impot_revenu_foncier(self, annee: str):
+        return self.impot_du(annee) - self.impot_sans_revenu_foncier(annee)
