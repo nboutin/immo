@@ -17,24 +17,22 @@ class Bien_Immo:
 
     def __init__(
             self,
-            prix_net_vendeur=0,
-            frais_agence=0,
-            frais_notaire=0,
-            apport=0,
-            commun=Commun(travaux=Travaux())):
+            annee_achat: str,
+            prix_net_vendeur: int =0,
+            frais_agence: float =0,
+            frais_notaire: float=0,
+            apport: int=0,
+            commun: Commun =Commun(travaux=Travaux())):
 
-        self._commun = commun
-        self._lots = []
+        self._annee_achat = annee_achat
         self._prix_net_vendeur = prix_net_vendeur
         self._apport = apport
         self.__set_notaire_taux_montant(frais_notaire)
         self.__set_agence_taux_montant(frais_agence)
+        self._lots = []
+        self._commun = commun
 
-    # @property
-    # def commun(self):
-        # return self._commun
-
-    def add_lot(self, lot):
+    def add_lot(self, lot: Lot):
         self._lots.append(lot)
 
     @property
