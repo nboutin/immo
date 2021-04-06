@@ -11,9 +11,9 @@ from .population import Population
 
 class Simulation:
 
-    def __init__(self, immosys: ImmoSystemCore, population: Population):
-        # self._immosys = immosys
-        pass
+    def __init__(self, immo_sys: ImmoSystemCore, population: Population):
+        self.immo_sys = immo_sys
+        self.population = population
 
     def get(self, entity: str, period: str, variable: str):
         e = self._immosys.get_entity(entity)

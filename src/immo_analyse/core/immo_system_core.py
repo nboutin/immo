@@ -10,16 +10,23 @@ import glob
 import imp
 import logging
 import inspect
+import typing
 
 from .variable import Variable
+from .entity import Entity
+from .population import Population
 
 log = logging.getLogger(__name__)
 
 
 class ImmoSystemCore:
 
-    def __init__(self):
+    def __init__(self, entities):
+        '''
+        :param entities : list of entity supported
+        '''
         self.variables = {}
+        self.entities = entities
 
     def add_variables_from_directory(self, dir_path):
         """
@@ -89,5 +96,11 @@ class ImmoSystemCore:
             raise Exception(variable_name, self)
         return found
 
-    def build_population(self, entities):
-        pass
+    def build_population(self):
+        '''
+        :return {entity.key : Population(entity)}
+        '''
+        entities: typing.Dict[Entity.key, Population] = {}
+        for entity in self.entities:
+            entities[entity.key] = Population(entity)
+        return entities

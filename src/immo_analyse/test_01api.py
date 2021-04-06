@@ -25,7 +25,16 @@ entities = {
 
 class Test_01API(unittest.TestCase):
 
-    def test01a_get_from_entity(self):
+    def test01_ImmoSystem(self):
+        _ = ImmoSystem()
+
+    def test02_SimulationBuilder(self):
+        immo_sys = ImmoSystem()
+        simu_builder = SimulationBuilder()
+        simu = simu_builder.build_from_entities(immo_sys, entities)
+
+    @unittest.skip('')
+    def test03a_get_from_entity(self):
         immosys = ImmoSystem()
         simu_builder = SimulationBuilder()
         simu = simu_builder.build_from_entities(immosys, entities)
@@ -39,7 +48,7 @@ class Test_01API(unittest.TestCase):
         self.assertEqual(simu.get('lot2', '2022', 'surface'), 60)
 
     @unittest.skip('')
-    def test01b_get_from_entity(self):
+    def test03b_get_from_entity(self):
         immosys = ImmoSystem()
         simu = Simulation(immosys)
 

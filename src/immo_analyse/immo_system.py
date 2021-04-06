@@ -8,6 +8,7 @@
 import os
 
 from immo_analyse.core.immo_system_core import ImmoSystemCore
+from immo_analyse.model.entities import entities
 
 _location_ = os.path.dirname(os.path.abspath(__file__))
 
@@ -15,6 +16,6 @@ _location_ = os.path.dirname(os.path.abspath(__file__))
 class ImmoSystem(ImmoSystemCore):
 
     def __init__(self):
-        ImmoSystemCore.__init__(self)
+        ImmoSystemCore.__init__(self, entities)
 
         self.add_variables_from_directory(os.path.join(_location_, 'model', 'variable'))

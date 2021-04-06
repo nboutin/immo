@@ -9,9 +9,7 @@
 from immo_analyse.core.entity import Entity
 
 
-class Lot(Entity):
-    pass
+Lot = Entity(key='lot')
+BienImmo = Entity(key='bien_immo')
 
-
-class BienImmo(Entity):
-    pass
+entities = [Lot, BienImmo]

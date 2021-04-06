@@ -14,6 +14,10 @@ class SimulationBuilder:
     def __init__(self):
         pass
 
-    def build_from_entities(self, immo_sys: ImmoSystemCore, entities):
+    def build_from_entities(self, immo_sys: ImmoSystemCore, entities_input):
 
-        simulation = Simulation(immo_sys, immo_sys.build_population(entities))
+        simulation = Simulation(immo_sys, immo_sys.build_population())
+
+        # Check entities_input against Population from ImmoSystem entities
+
+        return simulation
