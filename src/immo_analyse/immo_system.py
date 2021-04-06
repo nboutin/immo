@@ -2,21 +2,19 @@
 # -*- coding: utf-8 -*-
 
 '''
-@date: 2021-03
+@date: 2021-04
 @author: nboutin
 '''
+import os
+
+from immo_analyse.core.immo_system_core import ImmoSystemCore
+
+_location_ = os.path.dirname(os.path.abspath(__file__))
 
 
-class ImmoSystem:
-    '''
-    Parameter
-    '''
+class ImmoSystem(ImmoSystemCore):
 
-    def __init__(self, entities):
-        self._lots = entities['lots']
+    def __init__(self):
+        ImmoSystemCore.__init__(self)
 
-    def get_entity(self, entity: str):
-        if entity in self._lots:
-            return self._lots['entity']
-        else:
-            return None
+        self.add_variables_from_directory(os.path.join(_location_, 'model', 'variable'))

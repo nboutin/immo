@@ -6,6 +6,12 @@
 @author: nboutin
 '''
 
+from immo_analyse.core.entity import Entity
 
-class Lot:
+
+class Lot(Entity):
+    pass
+
+
+class BienImmo(Entity):
     pass

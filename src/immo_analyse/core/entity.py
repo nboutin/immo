@@ -7,5 +7,5 @@
 '''
 
 
-class Population:
+class Entity:
     pass

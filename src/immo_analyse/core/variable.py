@@ -16,8 +16,11 @@ class Variable:
 
     '''
 
-    def formula(self):
-        '''
-        To be defined by derived class if necessary
-        '''
-        pass
+    def __init__(self):
+        self.name = self.__class__.__name__
+
+    # def formula(self):
+    # '''
+    # To be defined by derived class if necessary
+    # '''
+    # pass

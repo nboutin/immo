@@ -5,13 +5,13 @@
 @date: 2021-03
 @author: nboutin
 '''
-from .immo_system import ImmoSystem
-from .populaiton import Population
+from .immo_system_core import ImmoSystemCore
+from .population import Population
 
 
 class Simulation:
 
-    def __init__(self, immosys: ImmoSystem, population: Population):
+    def __init__(self, immosys: ImmoSystemCore, population: Population):
         # self._immosys = immosys
         pass
 
