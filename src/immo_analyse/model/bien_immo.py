@@ -6,11 +6,12 @@
 @author: nboutin
 '''
 from ..variable import Variable
-from .entities import Lot
 from ..period import ETERNITY
+from .entities import Lot
 
 
-class type_logement(Variable):
-    type = str
+class lot_type(Variable):
+    value_type = str
     entity = Lot
     period = ETERNITY
+    label = 'Catégorisation du lot suivant son nombre de pièce à vivre'

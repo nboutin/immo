@@ -3,6 +3,7 @@ import unittest
 
 from .immo_system import ImmoSystem
 from .simulation import Simulation
+from .simulation_builder import SimulationBuilder
 
 entities = {
     'lots': {'lot1': {'type': {'2021-01-01': 'T1'},
@@ -19,8 +20,9 @@ entities = {
 class Test_01API(unittest.TestCase):
 
     def test01a_get_from_entity(self):
-        immosys = ImmoSystem(entities)
-        simu = Simulation(immosys)
+        immosys = ImmoSystem()
+        simu_builder = SimulationBuilder()
+        simu = simu_builder.build_from_entities(immosys, entities)
 
         self.assertEqual(simu.get('lot1', '2021', 'type'), 'T1')
         self.assertEqual(simu.get('lot1', '2020', 'type'), '')
