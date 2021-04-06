@@ -12,5 +12,11 @@ class ImmoSystem:
     Parameter
     '''
 
-    def __init__(self):
-        pass
+    def __init__(self, entities):
+        self._lots = entities['lots']
+
+    def get_entity(self, entity: str):
+        if entity in self._lots:
+            return self._lots['entity']
+        else:
+            return None
