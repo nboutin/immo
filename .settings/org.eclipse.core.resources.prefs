@@ -22,6 +22,7 @@ encoding//src/analyse_immo/rapports/rapport_micro_foncier.py=utf-8
 encoding//src/analyse_immo/rendement.py=utf-8
 encoding//src/analyse_immo/tools/finance.py=utf-8
 encoding//src/immo_analyse/core/entity.py=utf-8
+encoding//src/immo_analyse/core/holder.py=utf-8
 encoding//src/immo_analyse/core/immo_system_core.py=utf-8
 encoding//src/immo_analyse/core/period.py=utf-8
 encoding//src/immo_analyse/core/population.py=utf-8

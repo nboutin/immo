@@ -28,10 +28,14 @@ class Test_01API(unittest.TestCase):
     def test01_ImmoSystem(self):
         _ = ImmoSystem()
 
-    def test02_SimulationBuilder(self):
+    def test02a_SimulationBuilder(self):
+        _ = ImmoSystem()
+        _ = SimulationBuilder()
+
+    def test02b_SimulationBuilder(self):
         immo_sys = ImmoSystem()
         simu_builder = SimulationBuilder()
-        simu = simu_builder.build_from_entities(immo_sys, entities)
+        _ = simu_builder.build_from_entities(immo_sys, {'lots': {'lot1_name': {'lot_type': {'2021': 'T1'}}}})
 
     @unittest.skip('')
     def test03a_get_from_entity(self):

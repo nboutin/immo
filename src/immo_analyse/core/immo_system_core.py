@@ -89,11 +89,10 @@ class ImmoSystemCore:
         :param variable_name: Name of the requested variable.
         :param check_existence: If True, raise an error if the requested variable does not exist.
         """
-        variables = self.variables
-        found = variables.get(variable_name)
+        found = self.variables.get(variable_name)
         if not found and check_existence:
             # raise VariableNotFound(variable_name, self)
-            raise Exception(variable_name, self)
+            raise Exception('Variable "{}" not found'.format(variable_name), self)
         return found
 
     def build_population(self):

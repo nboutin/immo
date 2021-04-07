@@ -7,3 +7,9 @@
 '''
 
 ETERNITY = 'ETERNITY'
+
+
+class Period:
+
+    def __init__(self, period: str):
+        self._period_str = period

@@ -17,7 +17,7 @@ class Variable:
     '''
 
     def __init__(self):
-        self.name = self.__class__.__name__
+        self.name: str = self.__class__.__name__
 
     # def formula(self):
     # '''
