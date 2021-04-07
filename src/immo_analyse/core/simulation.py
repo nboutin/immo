@@ -8,6 +8,7 @@
 from .immo_system_core import ImmoSystemCore
 from .entity import Entity
 from .variable import Variable
+from . import periods
 
 
 class Simulation:
@@ -40,25 +41,43 @@ class Simulation:
         '''
         return self.get_holder(variable_name).get_value(period)
 
-    # def compute(self, variable: str, period: str):
-        # var = self.immosys.get_variable(variable)
-        #
-        # self._run_formula()
-        #
-    # def _run_formula(self):
-        # pass
+    def compute(self, variable_name: str, period: str):
+        # Construct period
+        if period is not None and not isinstance(period, periods.Period):
+            period = periods.period(period)
+
+        population = self.get_variable_population(variable_name)
+        holder = population.get_holder(variable_name)
+
+        # Lookup in cache
+        cache = holder.get_value(period)
+        if cache:
+            return cache
+
+        # Run formula
+        # If Variable does not have formula, so it is input variable, get default value
+        # Put variable value into holder (cache)
+        pass
+
+    def _run_formula(self, variable: Variable, population: Population, period: Period):
+        '''
+        :brief Find the variable formula for the given period and apply it to population
+                Also provide ImmoSystem Parameter to formula
+        :return result from variable formula
+        '''
+
+        pass
 
     # --- Getter/Setter
 
-    def get_variable_population(self, variable: Variable):
+    def get_variable_population(self, variable_name: str):
         '''
         :return Population: Population containing variable
         '''
+        # Get Variable Population
+        variable = self.immo_sys.get_variable(variable_name)
         return self.populations[variable.entity.key]
 
     def get_holder(self, variable_name: str):
-        # Get Variable Population
-        variable = self.immo_sys.get_variable(variable_name)
-
         # Get Variable Holder from Population
-        return self.get_variable_population(variable).get_holder(variable_name)
+        return self.get_variable_population(variable_name).get_holder(variable_name)
