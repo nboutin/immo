@@ -37,13 +37,24 @@ class Test_01API(unittest.TestCase):
         simu_builder = SimulationBuilder()
         _ = simu_builder.build_from_entities(immo_sys, {'lots': {'lot1_name': {'lot_type': {'2021': 'T1'}}}})
 
+    def test03a_SimulationGet(self):
+        immo_sys = ImmoSystem()
+        simu_builder = SimulationBuilder()
+        simu = simu_builder.build_from_entities(immo_sys, {'lots': {'lot1_name': {'lot_type': {'2021': 'T1'}}}})
+
+        self.assertEqual(simu.get('lot_type', '2021'), 'T1')
+        # self.assertEqual(simu.get('lot_type', '2020'), '')
+        # self.assertEqual(simu.get('lot1', 'lot_type', '2021'), 'T1')
+        # self.assertEqual(simu.get('lot1', '2020', 'type'), '')
+        # self.assertEqual(simu.get('lot1', '2022', 'type'), 'T1')
+
     @unittest.skip('')
     def test03a_get_from_entity(self):
         immosys = ImmoSystem()
         simu_builder = SimulationBuilder()
         simu = simu_builder.build_from_entities(immosys, entities)
 
-        self.assertEqual(simu.get('lot1', '2021', 'type'), 'T1')
+        self.assertEqual(simu.get('lot1', '2021', 'lot_type'), 'T1')
         self.assertEqual(simu.get('lot1', '2020', 'type'), '')
         self.assertEqual(simu.get('lot1', '2022', 'type'), 'T1')
 

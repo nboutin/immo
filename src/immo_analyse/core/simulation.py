@@ -6,7 +6,8 @@
 @author: nboutin
 '''
 from .immo_system_core import ImmoSystemCore
-from .population import Population
+from .entity import Entity
+from .variable import Variable
 
 
 class Simulation:
@@ -32,16 +33,13 @@ class Simulation:
         # Set input
         holder.set_input(period, value)
 
-    def get_holder(self, variable_name: str):
-        # Get Variable Population
-        variable = self.immo_sys.get_variable(variable_name)
+    def get(self, variable_name: str, period: str, entity: Entity=None):
+        '''
+        :param entity: Entity, Entity type use when Variable support multiple Entity type
+                None for Variable which support only one type, if not an error is raised
+        '''
+        return self.get_holder(variable_name).get_value(period)
 
-        # Get Variable Holder from Population
-        return self.populations[variable.entity.key].get_holder(variable_name)
-
-    # def get(self, entity: str, period: str, variable: str):
-        # e = self._immosys.get_entity(entity)
-        #
     # def compute(self, variable: str, period: str):
         # var = self.immosys.get_variable(variable)
         #
@@ -49,3 +47,18 @@ class Simulation:
         #
     # def _run_formula(self):
         # pass
+
+    # --- Getter/Setter
+
+    def get_variable_population(self, variable: Variable):
+        '''
+        :return Population: Population containing variable
+        '''
+        return self.populations[variable.entity.key]
+
+    def get_holder(self, variable_name: str):
+        # Get Variable Population
+        variable = self.immo_sys.get_variable(variable_name)
+
+        # Get Variable Holder from Population
+        return self.get_variable_population(variable).get_holder(variable_name)

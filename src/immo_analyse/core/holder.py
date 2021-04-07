@@ -7,7 +7,8 @@
 '''
 import typing
 from .variable import Variable
-from .period import Period
+from . import periods
+from .periods import Period
 
 
 class Holder:
@@ -21,5 +22,10 @@ class Holder:
         self.value: typing.Dict[Period] = {}
 
     def set_input(self, period: str, value):
-        period = Period(period)
+        period = periods.period(period)
         self.value[period] = value
+
+    def get_value(self, period: str):
+
+        period = periods.period(period)
+        return self.value[period]

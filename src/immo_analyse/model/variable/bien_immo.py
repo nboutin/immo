@@ -7,7 +7,7 @@
 '''
 # path must be absolute
 from immo_analyse.core.variable import Variable
-from immo_analyse.core.period import ETERNITY
+from immo_analyse.core.periods import ETERNITY
 from immo_analyse.model.entities import Lot, BienImmo
 
 
