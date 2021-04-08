@@ -53,16 +53,17 @@ class Simulation:
 
         population = self.get_variable_population(variable_name)
         holder = population.get_holder(variable_name)
+        variable = self.immo_sys.get_variable(variable_name)
+
+        # Check period consistency
+        self._check_period(period, variable)
 
         # Lookup in cache
         cache = holder.get_value(period)
         if cache:
             return cache
 
-        # Run formula
-        variable = self.immo_sys.get_variable(variable_name)
-
-        # If Variable does not have formula, so it is input variable, get default value
+        # Run formula: If Variable does not have formula, so it is input variable, get default value
         value = self._run_formula(variable, population, period)
         if not value:
             value = holder.get_default()
@@ -71,6 +72,30 @@ class Simulation:
         holder.set_input(period, value)
 
         return value
+
+    def _check_period(self, period: Period, variable: Variable):
+        '''
+        :brief Check that period matches variable.period definition
+        '''
+
+        # For variable constant in time, all periods are accepted
+        if variable.period == periods.ETERNITY:
+            return
+
+        if variable.period == periods.MONTH and period.unit != periods.MONTH:
+            raise ValueError(
+                "Cannot compute variable '{}' for period {}: Must be computed for a month. Use ADD to get it on a year".format(
+                    variable.name, period))
+
+        if variable.period == periods.YEAR and period.unit != periods.YEAR:
+            raise ValueError(
+                "Cannot compute variable '{}' for period {}: Must be computed for a year. Use DIVIDE to get it on a month".format(
+                    variable.name, period))
+
+        if period.size != 1:
+            raise ValueError(
+                "Cannot compute variable '{}' for period {}. Variable period is {}".format(
+                    variable.name, period, variable.period))
 
     def _run_formula(self, variable: Variable, population: Population, period: Period):
         '''
