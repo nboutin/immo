@@ -23,10 +23,11 @@ class Variable:
         self.entity = attr['entity']
         self.period = attr['period']
         self.label = attr['label']
-        self.formula = attr.get('formula', None)
+        self.formulas = attr.get('formula', None)
 
-    # def formula(self):
-    # '''
-    # To be defined by derived class if necessary
-    # '''
-    # pass
+    def get_formula(self, period=None):
+
+        if not self.formulas:
+            return None
+
+        return self.formulas

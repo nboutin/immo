@@ -57,9 +57,17 @@ class Simulation:
             return cache
 
         # Run formula
+        variable = self.immo_sys.get_variable(variable_name)
+
         # If Variable does not have formula, so it is input variable, get default value
+        value = self._run_formula(variable, population, period)
+        if not value:
+            value = holder.get_default()
+
         # Put variable value into holder (cache)
-        pass
+        holder.set_input(value, period)
+
+        return value
 
     def _run_formula(self, variable: Variable, population: Population, period: Period):
         '''
@@ -67,8 +75,11 @@ class Simulation:
                 Also provide ImmoSystem Parameter to formula
         :return result from variable formula
         '''
+        formula = variable.get_formula(period)
+        if not formula:
+            return None
 
-        pass
+        return formula(population, period, None)
 
     # --- Getter/Setter
 

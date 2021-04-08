@@ -46,8 +46,7 @@ class financement(Variable):
     period = ETERNITY
     label = "Somme des cout liés à l'acquisition du bien immobilier"
 
-    def formula(self, population, period, parameter):
-
+    def formula(population, period, parameter):
         prix_achat = population('prix_achat', period)
         notaire = population('frais_notaire', period)
         return prix_achat + notaire

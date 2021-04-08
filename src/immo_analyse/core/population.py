@@ -39,3 +39,6 @@ class Population:
 
         self._holders[variable_name] = holder = Holder(variable, self)
         return holder
+
+    def __call__(self, variable_name: str, period):
+        return self.simulation.compute(variable_name, period)
