@@ -23,6 +23,8 @@ class Variable:
         self.entity = attr['entity']
         self.period = attr['period']
         self.label = attr['label']
+        self.value_accepted = attr.get('value_accepted', [])
+        self.default_value = attr.get('default_value', None)
         self.formulas = attr.get('formula', None)
 
     def get_formula(self, period=None):
@@ -31,3 +33,6 @@ class Variable:
             return None
 
         return self.formulas
+
+    def get_default(self):
+        return self.default_value

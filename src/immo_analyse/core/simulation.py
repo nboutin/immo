@@ -38,10 +38,13 @@ class Simulation:
 
     def get(self, variable_name: str, period: str, entity: Entity=None):
         '''
+        :brief Get value of variable_name if set as input or previously computed
+                Otherwise return None and does not cache value
         :param entity: Entity, Entity type use when Variable support multiple Entity type
                 None for Variable which support only one type, if not an error is raised
         '''
-        return self.get_holder(variable_name).get_value(period)
+        holder = self.get_holder(variable_name)
+        return holder.get_value(period)
 
     def compute(self, variable_name: str, period: str):
         # Construct period
@@ -65,7 +68,7 @@ class Simulation:
             value = holder.get_default()
 
         # Put variable value into holder (cache)
-        holder.set_input(value, period)
+        holder.set_input(period, value)
 
         return value
 
@@ -88,9 +91,12 @@ class Simulation:
         :return Population: Population containing variable
         '''
         # Get Variable Population
-        variable = self.immo_sys.get_variable(variable_name)
+        variable = self.immo_sys.get_variable(variable_name, check_existence=True)
         return self.populations[variable.entity.key]
 
     def get_holder(self, variable_name: str):
-        # Get Variable Holder from Population
-        return self.get_variable_population(variable_name).get_holder(variable_name)
+        '''
+        Get Variable Holder from Population
+        '''
+        population = self.get_variable_population(variable_name)
+        return population.get_holder(variable_name)

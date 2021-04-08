@@ -28,7 +28,8 @@ class SimulationBuilder:
         for entity_instance in entities_input.values():  # entity_type, entity_instance
             for variables in entity_instance.values():  # entity_name, variables
                 for variable_name, period_value in variables.items():
-                    for period, value in period_value.items():
-                        simulation.set_input(variable_name, period, value)
+                    if isinstance(period_value, dict):
+                        for period, value in period_value.items():
+                            simulation.set_input(variable_name, period, value)
 
         return simulation

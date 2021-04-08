@@ -29,3 +29,6 @@ class Holder:
 
         period = periods.period(period)
         return self.value.get(period, None)
+
+    def get_default(self):
+        return self.variable.get_default()
