@@ -18,6 +18,12 @@ class Variable:
 
     def __init__(self):
         self.name: str = self.__class__.__name__
+        attr = {name: value for name, value in self.__class__.__dict__.items() if not name.startswith('__')}
+        self.value_type = attr['value_type']
+        self.entity = attr['entity']
+        self.period = attr['period']
+        self.label = attr['label']
+        self.formula = attr.get('formula', None)
 
     # def formula(self):
     # '''

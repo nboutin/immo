@@ -6,9 +6,11 @@
 @author: nboutin
 '''
 from .immo_system_core import ImmoSystemCore
+from . import periods
+from .periods import Period
 from .entity import Entity
 from .variable import Variable
-from . import periods
+from .population import Population
 
 
 class Simulation:

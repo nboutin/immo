@@ -1,9 +1,10 @@
 
 import unittest
 
-from .immo_system import ImmoSystem
-from .core.simulation import Simulation
-from .core.simulation_builder import SimulationBuilder
+from immo_analyse.immo_system import ImmoSystem
+from immo_analyse.core.simulation import Simulation
+from immo_analyse.core.simulation_builder import SimulationBuilder
+from immo_analyse.model.entities import BienImmo
 
 entities = {
     'lots': {'lot1': {'lot_type': {'2021-01-01': 'T1'},
@@ -47,6 +48,19 @@ class Test_01API(unittest.TestCase):
         # self.assertEqual(simu.get('lot1', 'lot_type', '2021'), 'T1')
         # self.assertEqual(simu.get('lot1', '2020', 'type'), '')
         # self.assertEqual(simu.get('lot1', '2022', 'type'), 'T1')
+
+    def test04_Variable(self):
+        immo_sys = ImmoSystem()
+        variable = immo_sys.get_variable('financement')
+        self.assertEqual(variable.value_type, float)
+        self.assertEqual(variable.entity, BienImmo)
+
+    def test05_Compute(self):
+        immo_sys = ImmoSystem()
+        simu_builder = SimulationBuilder()
+        simu = simu_builder.build_from_entities(immo_sys, {'bien_immo': {'bi1': {'prix_achat': {'2021': 50000},
+                                                                                 'frais_notaire': {'2021': 5000}}}})
+        self.assertEqual(simu.compute('financement', '2021'), 55000)
 
     @unittest.skip('')
     def test03a_get_from_entity(self):

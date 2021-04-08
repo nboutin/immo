@@ -28,4 +28,4 @@ class Holder:
     def get_value(self, period: str):
 
         period = periods.period(period)
-        return self.value[period]
+        return self.value.get(period, None)
