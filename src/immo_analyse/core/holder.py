@@ -23,6 +23,12 @@ class Holder:
 
     def set_input(self, period: str, value):
         period = periods.period(period)
+
+        if period.unit == periods.ETERNITY and self.variable.definition_period != periods.ETERNITY:
+            raise Exception(
+                "Cannot set value for variable '{}' for ETERNITY. Variable period is {}".format(
+                    self.variable.name, self.variable.period))
+
         self.value[period] = value
 
     def get_value(self, period: str):

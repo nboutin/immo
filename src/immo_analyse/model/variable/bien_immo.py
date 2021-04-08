@@ -7,7 +7,7 @@
 '''
 # path must be absolute
 from immo_analyse.core.variable import Variable
-from immo_analyse.core.periods import ETERNITY, YEAR
+from immo_analyse.core.periods import ETERNITY, MONTH, YEAR
 from immo_analyse.model.entities import Lot, BienImmo
 
 # --- Lot
@@ -48,38 +48,38 @@ class pno(Variable):
 class prix_achat(Variable):
     value_type = float
     entity = BienImmo
-    period = ETERNITY
+    period = MONTH
     label = "prix d'achat du bien immobilier sans frais annexe (notaire, agence, apport, subvention, ...)"
 
 
 class frais_notaire(Variable):
     value_type = float
     entity = BienImmo
-    period = ETERNITY
+    period = MONTH
     label = "Frais de notaire pour l'acquisition"
 
 
 class frais_agence(Variable):
     value_type = float
     entity = BienImmo
-    period = ETERNITY
+    period = MONTH
     label = "Frais d'agence pour l'acquisition"
 
 
 class apport(Variable):
     value_type = float
     entity = BienImmo
-    period = ETERNITY
+    period = MONTH
     label = "Apport personnel pour l'acquisition"
 
 
 class financement(Variable):
     value_type = float
     entity = BienImmo
-    period = ETERNITY
+    period = MONTH
     label = "Somme des cout liés à l'acquisition du bien immobilier"
 
     def formula(population, period, parameter):
         prix_achat = population('prix_achat', period)
         notaire = population('frais_notaire', period)
-        return prix_achat + notaire
+        return prix_achat + prix_achat * notaire

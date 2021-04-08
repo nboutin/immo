@@ -7,12 +7,13 @@
 '''
 import logging
 from tabulate import tabulate
+from ..core.periods import Period
 
 
 class ReportGenerator:
 
-    def __init__(self, year_start, duration, simulation):
-        self.year_start = year_start
+    def __init__(self, period: Period, duration, simulation):
+        self.period = period
         self.duration = duration
         self.simu = simulation
 
@@ -26,11 +27,10 @@ class ReportGenerator:
                      'Financement',
                      'Loyer annuel']
 
-        period = str(self.year_start)
         data = [
-            period,
-            self.simu.compute('financement', period),
-            self.simu.compute('loyer', period)
+            self.period,
+            self.simu.compute('financement', self.period),
+            self.simu.compute('loyer_nu', self.period)
         ]
 
         self._print("Overview", data_name, data)

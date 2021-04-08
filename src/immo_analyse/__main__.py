@@ -30,7 +30,7 @@ def main(argv):
     simu_builder = SimulationBuilder()
     simu = simu_builder.build_from_entities(immo_sys, entities)
 
-    rg = ReportGenerator(2021, 25, simu)
+    rg = ReportGenerator('2021-01', 25, simu)
     rg.generate_all()
 
 
