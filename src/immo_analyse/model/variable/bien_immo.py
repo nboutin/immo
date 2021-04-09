@@ -54,11 +54,30 @@ class prix_achat(Variable):
     label = "prix d'achat du bien immobilier sans frais annexe (notaire, agence, apport, subvention, ...)"
 
 
+class taux_notaire(Variable):
+    value_type = float
+    entity = BienImmo
+    period = MONTH
+    label = "Taux des frais de notaire pour l'acquisition"
+
+
 class frais_notaire(Variable):
     value_type = float
     entity = BienImmo
     period = MONTH
     label = "Frais de notaire pour l'acquisition"
+
+    def formula(population, period, parameter):
+        taux_notaire = population('taux_notaire', period)
+        prix_achat = population('prix_achat', period)
+        return prix_achat * taux_notaire
+
+
+class taux_agence(Variable):
+    value_type = float
+    entity = BienImmo
+    period = MONTH
+    label = "Frais d'agence pour l'acquisition"
 
 
 class frais_agence(Variable):
@@ -67,15 +86,37 @@ class frais_agence(Variable):
     period = MONTH
     label = "Frais d'agence pour l'acquisition"
 
+    def formula(population, period, parameter):
+        taux_notaire = population('taux_agence', period)
+        prix_achat = population('prix_achat', period)
+        return prix_achat * taux_notaire
+
+
+class travaux(Variable):
+    value_type = float
+    entity = BienImmo
+    period = MONTH
+    default_value = 0
+    label = "Apport personnel pour l'acquisition"
+
+
+class subvention(Variable):
+    value_type = float
+    entity = BienImmo
+    period = MONTH
+    default_value = 0
+    label = "Apport personnel pour l'acquisition"
+
 
 class apport(Variable):
     value_type = float
     entity = BienImmo
     period = MONTH
+    default_value = 0
     label = "Apport personnel pour l'acquisition"
 
 
-class financement(Variable):
+class acquisition(Variable):
     value_type = float
     entity = BienImmo
     period = MONTH
@@ -83,5 +124,6 @@ class financement(Variable):
 
     def formula(population, period, parameter):
         prix_achat = population('prix_achat', period)
-        notaire = population('frais_notaire', period)
-        return prix_achat + prix_achat * notaire
+        frais_notaire = population('frais_notaire', period)
+        frais_agence = population('frais_agence', period)
+        return prix_achat + frais_notaire + frais_agence
