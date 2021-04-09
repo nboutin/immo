@@ -29,7 +29,15 @@ class Holder:
                 "Cannot set value for variable '{}' for ETERNITY. Variable period is {}".format(
                     self.variable.name, self.variable.period))
 
-        self.value[period] = value
+        if period.unit == self.variable.period:
+            self.value[period] = value
+        elif period.unit == periods.YEAR and self.variable.period == periods.MONTH and self.variable.year_to_month:
+            # Set month variable with year value
+            self._set_month_with_year_value(period, value)
+        else:
+            raise ValueError(
+                "Cannot set variable '{}' for period {}. It does not support convertion year_to_month or month_to_year".format(
+                    self.variable.name, period))
 
     def get_value(self, period: str):
 
@@ -38,3 +46,10 @@ class Holder:
 
     def get_default(self):
         return self.variable.get_default()
+
+    def _set_month_with_year_value(self, period: Period, value):
+        sub_period = period.get_subperiods(periods.MONTH)
+        value = value / len(sub_period)
+
+        for p in sub_period:
+            self.set_input(p, value)

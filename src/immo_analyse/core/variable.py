@@ -25,6 +25,7 @@ class Variable:
         self.label = attr['label']
         self.value_accepted = attr.get('value_accepted', [])
         self.default_value = attr.get('default_value', None)
+        self.year_to_month = attr.get('year_to_month', False)
         self.formulas = attr.get('formula', None)
 
     def get_formula(self, period=None):

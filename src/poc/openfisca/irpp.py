@@ -25,6 +25,24 @@ class TestIRPP(unittest.TestCase):
         simulation_builder = SimulationBuilder()
         self.sim = simulation_builder.build_from_entities(tax_benefit_system, E1)
 
+    def test00a(self):
+        '''
+        variable period month
+        set annee, get month
+        '''
+        annee = '2019'
+        self.sim.set_input('salaire_de_base', annee, [12000, 0, 0])
+        self.assertEqual(self.sim.calculate('salaire_de_base', '2019-01')[0], [1000])
+
+    def test00b(self):
+        '''
+        variable period month
+        set month, get year
+        '''
+        self.sim.set_input('salaire_de_base', '2019-01', [1000, 0, 0])
+        self.sim.set_input('salaire_de_base', '2019-02', [2000, 0, 0])
+        self.assertEqual(self.sim.calculate('salaire_de_base', '2019')[0], [3000])
+
     def test01(self):
         annee = '2019'
         self.sim.set_input('salaire_imposable', annee, [31407, 23055, 0])
