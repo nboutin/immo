@@ -33,7 +33,6 @@ class loyer_nu(Variable):
     value_type = int
     entity = Lot
     period = MONTH
-    default_value = 0
     year_to_month = True
     label = 'Loyer hors charges annuel'
 
@@ -96,7 +95,6 @@ class travaux(Variable):
     value_type = float
     entity = BienImmo
     period = MONTH
-    default_value = 0
     label = "Apport personnel pour l'acquisition"
 
 
@@ -104,7 +102,6 @@ class subvention(Variable):
     value_type = float
     entity = BienImmo
     period = MONTH
-    default_value = 0
     label = "Apport personnel pour l'acquisition"
 
 
@@ -112,18 +109,20 @@ class apport(Variable):
     value_type = float
     entity = BienImmo
     period = MONTH
-    default_value = 0
     label = "Apport personnel pour l'acquisition"
 
 
-class acquisition(Variable):
+class financement(Variable):
     value_type = float
     entity = BienImmo
     period = MONTH
-    label = "Somme des cout liés à l'acquisition du bien immobilier"
+    label = "Somme des cout liés à l'acquisition du bien immobilier moins l'apport"
 
     def formula(population, period, parameter):
         prix_achat = population('prix_achat', period)
         frais_notaire = population('frais_notaire', period)
         frais_agence = population('frais_agence', period)
-        return prix_achat + frais_notaire + frais_agence
+        travaux = population('travaux', period)
+        apport = population('apport', period)
+
+        return prix_achat + frais_notaire + frais_agence + travaux - apport

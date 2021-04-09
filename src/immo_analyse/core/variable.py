@@ -6,6 +6,11 @@
 @author: nboutin
 '''
 
+default_value_by_type = {
+    int: 0,
+    float: 0.0,
+    str: ''}
+
 
 class Variable:
     '''
@@ -24,7 +29,7 @@ class Variable:
         self.period = attr['period']
         self.label = attr['label']
         self.value_accepted = attr.get('value_accepted', [])
-        self.default_value = attr.get('default_value', None)
+        self.default_value = self._set(attr, 'default_value')
         self.year_to_month = attr.get('year_to_month', False)
         self.formulas = attr.get('formula', None)
 
@@ -37,3 +42,11 @@ class Variable:
 
     def get_default(self):
         return self.default_value
+
+    def _set(self, attr, variable_name):
+
+        value = attr.get(variable_name, None)
+        if not value:
+            value = default_value_by_type[self.value_type]
+
+        return value

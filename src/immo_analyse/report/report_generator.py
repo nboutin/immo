@@ -26,7 +26,7 @@ class ReportGenerator:
     def report_overview(self):
 
         data_name = ['Date',
-                     'Acquisition',
+                     'Financement',
                      'Loyer annuel',
                      'Charges/Provision',
                      'Charges credit',
@@ -35,7 +35,7 @@ class ReportGenerator:
 
         data = [
             self.period,
-            self.simu.compute('acquisition', self.period),
+            self.simu.compute('financement', self.period),
             self.simu.compute('loyer_nu', self.period),
             0,
             0,
@@ -67,7 +67,7 @@ class ReportGenerator:
                      'Travaux',
                      'Subvention',
                      'Apport',
-                     'Acquisition',
+                     'Financement',
                      'Prix €/m² (louable/final)',
                      ]
 
@@ -78,7 +78,7 @@ class ReportGenerator:
             self.simu.compute('travaux', self.period),
             self.simu.compute('subvention', self.period),
             self.simu.compute('apport', self.period),
-            self.simu.compute('acquisition', self.period),
+            self.simu.compute('financement', self.period),
             0
         ]
         self._print("Acquisition", data_name, data)
