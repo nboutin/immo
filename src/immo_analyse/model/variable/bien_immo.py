@@ -16,7 +16,7 @@ from immo_analyse.model.entities import Lot, BienImmo
 class lot_type(Variable):
     value_type = str
     entity = Lot
-    period = ETERNITY
+    period = MONTH
     label = 'Catégorisation du lot suivant son nombre de pièce à vivre'
     value_accepted = ['T1', 'T2', 'T3', 'Commercial', 'Commun']
 
@@ -25,7 +25,7 @@ class surface(Variable):
     value_type = float
     entity = Lot
     # entity = [Lot, BienImmo]
-    period = ETERNITY
+    period = MONTH
     label = 'surface habitable suivant la loi carrez'
 
 

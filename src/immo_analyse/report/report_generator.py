@@ -38,7 +38,7 @@ class ReportGenerator:
     def _set_title(self, title: str):
 
         logging.info(title)
-        logging.info('-' * 10)
+        logging.info('#' * 10)
 
     def _print(self, title: str, data_name, data):
 

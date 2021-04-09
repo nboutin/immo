@@ -26,6 +26,8 @@ def main(argv):
     '''
     Demo code, immo_analyse should be use as Python Package
     '''
+    configure_logger()
+
     immo_sys = ImmoSystem()
     simu_builder = SimulationBuilder()
     simu = simu_builder.build_from_entities(immo_sys, entities)
