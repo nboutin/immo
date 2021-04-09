@@ -32,7 +32,8 @@ class surface(Variable):
 class loyer_nu(Variable):
     value_type = int
     entity = Lot
-    period = YEAR
+    period = MONTH
+    default_value = 0
     label = 'Loyer hors charges annuel'
 
 
