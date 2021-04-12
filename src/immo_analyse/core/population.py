@@ -15,14 +15,18 @@ from .entity import Entity
 
 class Population:
     '''
+    There is one instance of Population by Entity.key
     Population is data for Simulation
     Population is link between Variable and Holder (data of Variable)
+    example:
+        holders['loyer_nu'] = Holder()
     '''
 
     def __init__(self, entity: Entity):
         self.entity = entity
+        self.count = 0  # number of instance of Entity type
         self.simulation = None
-        self._holders: typing.Dict[Variable.name] = {}
+        self._holders: typing.Dict[Variable.name, Holder] = {}
 
     def set_simulation(self, simulation):
         self.simulation = simulation

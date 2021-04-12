@@ -9,5 +9,5 @@
 
 class Entity:
 
-    def __init__(self, key):
-        self.key = key
+    def __init__(self, key: str):
+        self.key: str = key

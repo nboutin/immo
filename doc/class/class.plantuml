@@ -1,0 +1,29 @@
+@startuml
+
+class Population {
+    +Entity entity
+    +Simulation simulation
+    +Int count
+    -Dict[Variable.name, Holder] _holders
+}
+
+class Holder {
+    +Variable variable
+    +Population population
+    +Dict[Period, Variable.value_type] value
+}
+
+class Simulation {
+    +Dict[Entity.key, Population] populations
+}
+
+class Entity {
+    +String key
+}
+note right: Entity instance Lot,\nBienImmo, Credit
+
+Population *-- Holder
+Simulation *-- Population
+
+
+@enduml

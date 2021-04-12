@@ -20,8 +20,8 @@ class ReportGenerator:
     def generate_all(self):
 
         self.report_overview()
-        self.report_fiscalite()
         self.report_acquisition()
+        self.report_fiscalite()
 
     def report_overview(self):
 
@@ -44,20 +44,6 @@ class ReportGenerator:
         ]
 
         self._print("Overview", data_name, data)
-
-    def report_fiscalite(self):
-        '''
-        Compare resultat financier suivant le regime fiscale
-        '''
-
-        data_name = ['Regime fiscal',
-                     'Resultat foncier',
-                     'Import foncier',
-                     'Differentiel net-net']
-
-        data = ['', 0, 0, 0]
-
-        self._print("Fiscalite", data_name, data)
 
     def report_acquisition(self):
 
@@ -82,6 +68,20 @@ class ReportGenerator:
             0
         ]
         self._print("Acquisition", data_name, data)
+
+    def report_fiscalite(self):
+        '''
+        Compare resultat financier suivant le regime fiscale
+        '''
+
+        data_name = ['Regime fiscal',
+                     'Resultat foncier',
+                     'Import foncier',
+                     'Differentiel net-net']
+
+        data = ['', 0, 0, 0]
+
+        self._print("Fiscalite", data_name, data)
 
     def _set_title(self, title: str):
 

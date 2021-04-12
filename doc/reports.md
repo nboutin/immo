@@ -1,7 +1,7 @@
 # Reports
 
 # Investisseur
-- marié pacsé
+- marie pacse
 - nb personne a charge
 
 ## Revenus
@@ -26,7 +26,7 @@
 - Estimation travaux de renovation
 - Frais de notaire
 - Revalorisation annuel du bien (1-2%)
-- Régime fiscal
+- Regime fiscal
 - Surface habitable
 - Prix moyen de vente au m/2
 - Prix du projet au m/2
@@ -35,13 +35,13 @@
 # Financement
 - Apport
 - Taux d'emprunt
-- Durée
+- Duree
 - Montant total de l'emprunt
 
 ## Option financement
-- Durée du différé
-- Différé total ou partiel
+- Duree du differe
+- Differe total ou partiel
 - Interet intercalaire
 - Frais de garantie
 - Frais de dossier
-- Mensualité de credit
+- Mensualite de credit

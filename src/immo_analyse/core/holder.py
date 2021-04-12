@@ -6,6 +6,7 @@
 @author: nboutin
 '''
 import typing
+import numpy as np
 from .variable import Variable
 from . import periods
 from .periods import Period
@@ -19,9 +20,16 @@ class Holder:
     def __init__(self, variable: Variable, population):
         self.variable = variable
         self.population = population
-        self.value: typing.Dict[Period] = {}
+        self.value: typing.Dict[Period, Variable.value_type] = {}
 
     def set_input(self, period: str, value):
+
+        # Check value size against population count
+        if value.size != self.population.count:
+            raise Exception(
+                "Value size ({}) is not equal to Population count ({})".format(
+                    value.size(), self.population.count))
+
         period = periods.period(period)
 
         if period.unit == periods.ETERNITY and self.variable.definition_period != periods.ETERNITY:
@@ -45,7 +53,7 @@ class Holder:
         return self.value.get(period, None)
 
     def get_default(self):
-        return self.variable.get_default()
+        return np.array([self.variable.get_default()] * self.population.count)
 
     def _set_month_with_year_value(self, period: Period, value):
         sub_period = period.get_subperiods(periods.MONTH)

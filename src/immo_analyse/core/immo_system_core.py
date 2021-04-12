@@ -25,8 +25,8 @@ class ImmoSystemCore:
         '''
         :param entities : list of entity supported
         '''
-        self.variables = {}
-        self.entities = entities
+        self.variables: typing.Dict[Variable.name, Variable] = {}
+        self.entities: typing.List[Entity] = entities
 
     def add_variables_from_directory(self, dir_path):
         """

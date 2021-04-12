@@ -5,6 +5,7 @@
 @date: 2021-03
 @author: nboutin
 '''
+import typing
 from .immo_system_core import ImmoSystemCore
 from . import periods
 from .periods import Period
@@ -22,10 +23,10 @@ class Simulation:
 
     def __init__(self, immo_sys: ImmoSystemCore, populations):
         '''
-        :param populations: {entity.key : Population(entity)}
+        :param populations: Dict[Entity.key, Population]
         '''
         self.immo_sys = immo_sys
-        self.populations = populations
+        self.populations: typing.Dict[Entity.key, Population] = populations
 
     def set_input(self, variable_name: str, period: str, value):
         # Check if variable is defined by ImmoSystem
@@ -46,7 +47,17 @@ class Simulation:
         holder = self.get_holder(variable_name)
         return holder.get_value(period)
 
-    def compute(self, variable_name: str, period: str):
+    def compute(self, variable_name: str, period: str, add=False):
+        '''
+        :param add:bool, if true try to compute on bigger period than variable period definition
+            for example: month variable compute for a year
+        '''
+        if add:
+            return self._compute_add(variable_name, period)
+        else:
+            return self._compute(variable_name, period)
+
+    def _compute(self, variable_name: str, period: str):
         # Construct period
         if period is not None and not isinstance(period, periods.Period):
             period = periods.period(period)
@@ -60,7 +71,7 @@ class Simulation:
 
         # Lookup in cache
         cache = holder.get_value(period)
-        if cache:
+        if cache is not None:
             return cache
 
         # Run formula: If Variable does not have formula, so it is input variable, get default value
@@ -72,6 +83,30 @@ class Simulation:
         holder.set_input(period, value)
 
         return value
+
+    def _compute_add(self, variable_name: str, period: str):
+        # Construct period
+        if period is not None and not isinstance(period, periods.Period):
+            period = periods.period(period)
+
+        variable = self.immo_sys.get_variable(variable_name)
+
+        # Check that the requested period matches definition_period
+        if periods.unit_weight(variable.period) > periods.unit_weight(period.unit):
+            raise ValueError(
+                "Unable to compute variable '{0}' for period {1}: '{0}' can only be computed for {2}-long periods."
+                "You can use the DIVIDE option to get an estimate of {0} by dividing the yearly value by 12, "
+                "or change the requested period to 'period.this_year'.".format(
+                    variable.name, period, variable.period))
+
+        if variable.period not in [periods.DAY, periods.MONTH, periods.YEAR]:
+            raise ValueError(
+                "Unable to sum constant variable '{}' over period {}: "
+                "only variables defined daily, monthly, or yearly can be summed over time.".format(
+                    variable.name, period))
+
+        return sum(self.compute(variable_name, sub_period)
+                   for sub_period in period.get_subperiods(variable.period))
 
     def _check_period(self, period: Period, variable: Variable):
         '''

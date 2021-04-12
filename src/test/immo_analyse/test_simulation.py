@@ -15,7 +15,7 @@ class TestSimulation(unittest.TestCase):
         '''
         immo_sys = ImmoSystem()
         simu_builder = SimulationBuilder()
-        simu = simu_builder.build_from_entities(immo_sys, {'lots': {'lot1_name': {'lot_type': {'2021': 'T1'}}}})
+        simu = simu_builder.build_from_entities(immo_sys, {'lot': {'lot1_name': {'lot_type': {'2021': 'T1'}}}})
 
         self.assertEqual(simu.get('lot_type', '2021'), 'T1')
 
@@ -25,7 +25,7 @@ class TestSimulation(unittest.TestCase):
         '''
         immo_sys = ImmoSystem()
         simu_builder = SimulationBuilder()
-        simu = simu_builder.build_from_entities(immo_sys, {'lots': {'lot1_name': {'lot_type': {'2021': 'T1'}}}})
+        simu = simu_builder.build_from_entities(immo_sys, {'lot': {'lot1_name': {'lot_type': {'2021': 'T1'}}}})
 
         self.assertEqual(simu.get('lot_type', '2020'), '')
 
