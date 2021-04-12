@@ -25,10 +25,12 @@ class Holder:
     def set_input(self, period: str, value):
 
         # Check value size against population count
-        if value.size != self.population.count:
-            raise Exception(
-                "Value size ({}) is not equal to Population count ({})".format(
-                    value.size(), self.population.count))
+        try:
+            if value.size != self.population.count:
+                raise Exception(
+                    "Value size ({}) is not equal to Population count ({})".format(value.size, self.population.count))
+        except TypeError:
+            raise
 
         period = periods.period(period)
 

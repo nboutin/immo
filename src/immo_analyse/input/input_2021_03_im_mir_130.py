@@ -23,8 +23,10 @@ entities = {
                      'pno': {'2021': 100},
                      },
             'commun': {'lot_type': {'2021-01': 'Commun'}
-                       }},
-    'bien_immo': {'bi1': {'lots': ['lot1', 'lot2', 'lot3'],
+                       },
+            # 'not_used': {'loyer_nu': {'2021-01', 100}},
+            },
+    'bien_immo': {'bi1': {'lot': ['lot1', 'lot2', 'lot3', 'commun'],
                           'prix_achat': {'2021-01': 115000},
                           'taux_notaire': {'2021-01': 0.08},
                           'taux_agence': {'2021-01': 0.07},

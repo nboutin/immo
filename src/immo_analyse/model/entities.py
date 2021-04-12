@@ -10,7 +10,7 @@ from immo_analyse.core.entity import Entity
 
 
 Lot = Entity(key='lot')
-BienImmo = Entity(key='bien_immo')
+BienImmo = Entity(key='bien_immo', sub_entities=[Lot])
 Credit = Entity(key='credit')
 
 entities = [Lot, BienImmo, Credit]

@@ -25,6 +25,7 @@ class SimulationBuilder:
 
         # Check entities_input against Population from ImmoSystem entities
         # Check entity_key from input
+        # Check sub_entities of entity
 
         # Dict[Variable.name, Dict[Period, List[Variable.value_type]]
         buffer = {}
@@ -35,13 +36,24 @@ class SimulationBuilder:
             # Set Population count
             simulation.populations[entity_key].count = len(entities_instances)
 
-            for variables in entities_instances.values():  # entity_name, variables
+            simulation.entities[entity_key] = entities_instances
+
+            for entity_name, variables in entities_instances.items():  # entity_name, variables
                 for variable_name, period_value in variables.items():
 
-                    if variable_name not in buffer:
-                        buffer[variable_name] = {}
+                    # Check for sub-entities
+                    if variable_name in [e.key for e in immo_sys.entities]:
+                        sub_entity_type = variable_name
+                        sub_entities_name = period_value
+                        simulation.entities[entity_key][entity_name][sub_entity_type] = sub_entities_name
+                        continue
 
+                    # Add variable
                     if isinstance(period_value, dict):
+
+                        if variable_name not in buffer:
+                            buffer[variable_name] = {}
+
                         for period, value in period_value.items():
 
                             if period not in buffer[variable_name]:
@@ -52,5 +64,14 @@ class SimulationBuilder:
         for variable_name, periods in buffer.items():
             for period, values in periods.items():
                 simulation.set_input(variable_name, period, np.array(values))
+
+        # Build entities_index
+        for entity_key, entities_instances in entities_input.items():
+
+            if entity_key not in simulation.entities_index:
+                simulation.entities_index[entity_key] = {}
+
+            for i, ei_name in enumerate(entities_instances.keys()):
+                simulation.entities_index[entity_key][ei_name] = i
 
         return simulation

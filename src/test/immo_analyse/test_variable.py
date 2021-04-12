@@ -62,24 +62,6 @@ class TestVariable(unittest.TestCase):
         self.assertEqual(simu.compute('loyer_nu', month1), loyer)
         self.assertEqual(simu.compute('loyer_nu', month2), loyer)
 
-    def test02_BienImmoLoyer(self):
-        '''
-        get loyer bien immo = sommes loyer des lot
-        '''
-        year = '2021'
-        loyer1 = 400
-        loyer2 = 500
-        entities = {'lot': {'l1': {'loyer_nu': {year: loyer1 * 12}},
-                            'l2': {'loyer_nu': {year: loyer2 * 12}}},
-                    'bien_immo': {'bi1': {'lot': ['l1', 'l2']}}}
-
-        immo_sys = ImmoSystem()
-        simu_builder = SimulationBuilder()
-        simu = simu_builder.build_from_entities(immo_sys, entities)
-
-        array = simu.compute('loyer_nu', year, add=True)
-        self.assertTrue(np.array_equal(array, [loyer1 * 12, loyer2 * 12]))
-
 
 if __name__ == "__main__":
     unittest.main()

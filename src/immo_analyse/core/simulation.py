@@ -6,6 +6,7 @@
 @author: nboutin
 '''
 import typing
+import numpy as np
 from .immo_system_core import ImmoSystemCore
 from . import periods
 from .periods import Period
@@ -27,6 +28,8 @@ class Simulation:
         '''
         self.immo_sys = immo_sys
         self.populations: typing.Dict[Entity.key, Population] = populations
+        self.entities: typing.Dict[Entity.key, Entity] = {}
+        self.entities_index: typing.Dict[Entity.key, typing.Dict[str, int]] = {}  # example: [Lot]['Lot1'] = 0
 
     def set_input(self, variable_name: str, period: str, value):
         # Check if variable is defined by ImmoSystem
@@ -47,11 +50,14 @@ class Simulation:
         holder = self.get_holder(variable_name)
         return holder.get_value(period)
 
-    def compute(self, variable_name: str, period: str, add=False):
+    def compute(self, variable_name: str, period: str, add=False, entity_key=None):
         '''
         :param add:bool, if true try to compute on bigger period than variable period definition
             for example: month variable compute for a year
         '''
+        if entity_key:
+            return self._compute_entity(variable_name, period, add, entity_key)
+
         if add:
             return self._compute_add(variable_name, period)
         else:
@@ -83,6 +89,38 @@ class Simulation:
         holder.set_input(period, value)
 
         return value
+
+    def _compute_entity(self, variable_name, period, add, entity_key):
+        '''
+        :param entity_key:str,
+        '''
+        se_values = self.compute(variable_name, period, add)
+        variable = self.immo_sys.get_variable(variable_name)
+        sub_entity_key = variable.entity.key
+
+        values = []
+
+        for entity_name, variable in self.entities[entity_key].items():
+
+            # sub_entities = [v for k, v in variable.items() if k == sub_entity_key]
+            sub_entities = variable[sub_entity_key]
+
+            value = 0
+            for se in sub_entities:
+                se_index = self.entities_index[sub_entity_key][se]
+                value += se_values[se_index]
+            values.append(value)
+
+        return np.array(values)
+
+        # for entity_instance in self.entities[variable.entity.key].values():
+
+        # Check that entities instance of entity key has sub-entity key equal to variable.entity.key
+        # for entity_name, sub_entities in self.entities[entity_key].items():
+        # if sub_entities == entity_key:
+        # for sub_entity in sub_entities:
+        #
+        # for entity_dest in self.entities[variable.entity.key].keys():
 
     def _compute_add(self, variable_name: str, period: str):
         # Construct period
