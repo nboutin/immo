@@ -22,6 +22,7 @@ class ReportGenerator:
         self.report_overview()
         self.report_acquisition()
         self.report_fiscalite()
+        self.report_go_nogo()
 
     def report_overview(self):
 
@@ -36,7 +37,7 @@ class ReportGenerator:
         data = [
             self.period,
             self.simu.compute('financement', self.period),
-            self.simu.compute('loyer_nu', self.period),
+            self.simu.compute('loyer_nu', self.period, entity_key='bien_immo'),
             0,
             0,
             0,
@@ -61,8 +62,8 @@ class ReportGenerator:
             self.simu.compute('prix_achat', self.period),
             self.simu.compute('frais_notaire', self.period),
             self.simu.compute('frais_agence', self.period),
-            self.simu.compute('travaux', self.period),
-            self.simu.compute('subvention', self.period),
+            self.simu.compute('travaux', self.period, entity_key='bien_immo'),
+            self.simu.compute('subvention', self.period, entity_key='bien_immo'),
             self.simu.compute('apport', self.period),
             self.simu.compute('financement', self.period),
             0
@@ -82,6 +83,21 @@ class ReportGenerator:
         data = ['', 0, 0, 0]
 
         self._print("Fiscalite", data_name, data)
+
+    def report_go_nogo(self):
+        '''
+        Indicateur simple pour discriminer les projets
+        '''
+        data_name = [
+            'R Brut (%)',
+            'Ratio locatif bancaire',
+            'Différentiel net', ]
+
+        data = [self.simu.compute('rdt_brut', self.period) * 100,
+                0,
+                0]
+
+        self._print("GO NoGO", data_name, data)
 
     def _set_title(self, title: str):
 

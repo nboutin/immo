@@ -42,7 +42,7 @@ class loyer_nu(Variable):
     entity = Lot
     period = MONTH
     year_to_month = True
-    label = 'Loyer hors charges annuel'
+    label = 'Loyer hors charges'
 
 
 class travaux(Variable):

@@ -33,6 +33,7 @@ encoding//src/immo_analyse/core/variable.py=utf-8
 encoding//src/immo_analyse/immo_system.py=utf-8
 encoding//src/immo_analyse/input/input_2021_03_im_mir_130.py=utf-8
 encoding//src/immo_analyse/model/entities.py=utf-8
+encoding//src/immo_analyse/model/variable/analyse.py=utf-8
 encoding//src/immo_analyse/model/variable/bien_immo.py=utf-8
 encoding//src/immo_analyse/model/variable/credit.py=utf-8
 encoding//src/immo_analyse/model/variable/fiscalite.py=utf-8
