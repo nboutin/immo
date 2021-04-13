@@ -34,11 +34,12 @@ class SimulationBuilder:
         for entity_key, entities_instances in entities_input.items():  # entity_key, entities_instances
 
             # Set Population count
-            simulation.populations[entity_key].count = len(entities_instances)
+            pop_count = len(entities_instances)
+            simulation.populations[entity_key].count = pop_count
 
             simulation.entities[entity_key] = entities_instances
 
-            for entity_name, variables in entities_instances.items():  # entity_name, variables
+            for i, (entity_name, variables) in enumerate(entities_instances.items()):  # entity_name, variables
                 for variable_name, period_value in variables.items():
 
                     # Check for sub-entities
@@ -49,17 +50,15 @@ class SimulationBuilder:
                         continue
 
                     # Add variable
-                    if isinstance(period_value, dict):
+                    if variable_name not in buffer:
+                        buffer[variable_name] = {}
 
-                        if variable_name not in buffer:
-                            buffer[variable_name] = {}
+                    for period, value in period_value.items():
 
-                        for period, value in period_value.items():
+                        if period not in buffer[variable_name]:
+                            buffer[variable_name][period] = [0] * pop_count
 
-                            if period not in buffer[variable_name]:
-                                buffer[variable_name][period] = []
-
-                            buffer[variable_name][period].append(value)
+                        buffer[variable_name][period][i] = value
 
         for variable_name, periods in buffer.items():
             for period, values in periods.items():

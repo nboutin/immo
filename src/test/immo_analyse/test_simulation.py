@@ -9,28 +9,6 @@ from immo_analyse.model.entities import BienImmo
 
 class TestSimulation(unittest.TestCase):
 
-    @unittest.skip('')
-    def test01a_Get(self):
-        '''
-        Get value from entities
-        '''
-        immo_sys = ImmoSystem()
-        simu_builder = SimulationBuilder()
-        simu = simu_builder.build_from_entities(immo_sys, {'lot': {'lot1_name': {'lot_type': {'2021': 'T1'}}}})
-
-        self.assertEqual(simu.get('lot_type', '2021'), 'T1')
-
-    @unittest.skip('')
-    def test01b_Get(self):
-        '''
-        Get value not set by entities
-        '''
-        immo_sys = ImmoSystem()
-        simu_builder = SimulationBuilder()
-        simu = simu_builder.build_from_entities(immo_sys, {'lot': {'lot1_name': {'lot_type': {'2021': 'T1'}}}})
-
-        self.assertEqual(simu.get('lot_type', '2020'), '')
-
     def test02_EntitiesIndex(self):
 
         entities = {'lot': {'l1': {},
@@ -93,6 +71,19 @@ class TestSimulation(unittest.TestCase):
 
         array = simu.compute('loyer_nu', year, add=True, entity_key='bien_immo')
         self.assertTrue(np.array_equal(array, [loyer1 * 12 + loyer2 * 12, loyer3 * 12 + loyer4 * 12]))
+
+    def test03_SimulationBuilder(self):
+        '''
+        same variable not defined for all entities
+        '''
+        year = '2021'
+        loyer1 = 100
+        type2 = 'T2'
+        entities = {'lot': {'l1': {'loyer_nu': {year: loyer1 * 12}},
+                            'l2': {'lot_type': {year + '-01': type2}}, }}
+        immo_sys = ImmoSystem()
+        simu_builder = SimulationBuilder()
+        simu = simu_builder.build_from_entities(immo_sys, entities)
 
 
 if __name__ == "__main__":

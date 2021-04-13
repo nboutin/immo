@@ -24,7 +24,7 @@ entities = {
                      },
             'commun': {'lot_type': {'2021-01': 'Commun'}
                        },
-            # 'not_used': {'loyer_nu': {'2021-01', 100}},
+            'not_used': {'loyer_nu': {'2021-01': 100}},
             },
     'bien_immo': {'bi1': {'lot': ['lot1', 'lot2', 'lot3', 'commun'],
                           'prix_achat': {'2021-01': 115000},
