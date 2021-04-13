@@ -49,6 +49,9 @@ class SimulationBuilder:
                         simulation.entities[entity_key][entity_name][sub_entity_type] = sub_entities_name
                         continue
 
+                    if variable_name == 'openfisca':
+                        continue
+
                     # Add variable
                     if variable_name not in buffer:
                         buffer[variable_name] = {}

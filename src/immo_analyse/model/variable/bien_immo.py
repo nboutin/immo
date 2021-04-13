@@ -29,6 +29,14 @@ class surface(Variable):
     label = 'surface habitable suivant la loi carrez'
 
 
+class surface_annexe(Variable):
+    value_type = float
+    entity = Lot
+    # entity = [Lot, BienImmo]
+    period = MONTH
+    label = 'surface annexe (cave, garage, ...)'
+
+
 class loyer_nu(Variable):
     value_type = int
     entity = Lot
@@ -37,11 +45,115 @@ class loyer_nu(Variable):
     label = 'Loyer hors charges annuel'
 
 
+class travaux(Variable):
+    value_type = float
+    entity = Lot
+    period = MONTH
+    label = "Montant total des travaux"
+
+
+class subvention(Variable):
+    value_type = float
+    entity = Lot
+    period = MONTH
+    label = "Subvention sum"
+
+    def formula(population, period, parameter):
+        anah = population('anah_subvention', period)
+        habiter_mieux = population('prime_habiter_mieux', period)
+        return anah + habiter_mieux
+
+
+class anah_subvention(Variable):
+    value_type = float
+    entity = Lot
+    period = MONTH
+    label = ""
+
+
+class anah_subvention_taux(Variable):
+    value_type = float
+    entity = Lot
+    period = MONTH
+    label = ""
+
+
+class anah_subvention_plafond(Variable):
+    value_type = float
+    entity = Lot
+    period = MONTH
+    label = ""
+
+
+class anah_subvention_base(Variable):
+    value_type = float
+    entity = Lot
+    period = MONTH
+    label = ""
+
+
+class prime_habiter_mieux(Variable):
+    value_type = float
+    entity = Lot
+    period = MONTH
+    label = ""
+
+
+class deficit_foncier_eligible(Variable):
+    value_type = float
+    entity = Lot
+    period = MONTH
+    label = ""
+
+
+class charge_provision(Variable):
+    value_type = int
+    entity = Lot
+    period = YEAR
+    label = ''
+
+
+class copropriete(Variable):
+    value_type = int
+    entity = Lot
+    period = YEAR
+    label = ''
+
+
+class taxe_fonciere(Variable):
+    value_type = int
+    entity = Lot
+    period = YEAR
+    label = ''
+
+
+class gestion_agence_taux(Variable):
+    value_type = float
+    entity = Lot
+    period = YEAR
+    label = ''
+
+
 class pno(Variable):
     value_type = int
     entity = Lot
     period = YEAR
     label = 'Assurance proprietaire non-occupant'
+
+
+class travaux_provision_taux(Variable):
+    value_type = float
+    entity = Lot
+    period = YEAR
+    label = ''
+
+
+class vacance_locative_taux(Variable):
+    value_type = float
+    entity = Lot
+    period = YEAR
+    label = ''
+
 
 # --- Bien Immo
 
@@ -91,20 +203,6 @@ class frais_agence(Variable):
         return prix_achat * taux_notaire
 
 
-class travaux(Variable):
-    value_type = float
-    entity = BienImmo
-    period = MONTH
-    label = "Apport personnel pour l'acquisition"
-
-
-class subvention(Variable):
-    value_type = float
-    entity = BienImmo
-    period = MONTH
-    label = "Apport personnel pour l'acquisition"
-
-
 class apport(Variable):
     value_type = float
     entity = BienImmo
@@ -122,7 +220,7 @@ class financement(Variable):
         prix_achat = population('prix_achat', period)
         frais_notaire = population('frais_notaire', period)
         frais_agence = population('frais_agence', period)
-        travaux = population('travaux', period)
+        travaux = population('travaux', period, entity_key=financement.entity.key)
         apport = population('apport', period)
 
         return prix_achat + frais_notaire + frais_agence + travaux - apport

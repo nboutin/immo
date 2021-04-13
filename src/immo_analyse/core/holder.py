@@ -30,7 +30,7 @@ class Holder:
                 raise Exception(
                     "For variable '{}', value size ({}) is not equal to Population count ({})".format(
                         self.variable.name, value.size, self.population.count))
-        except TypeError:
+        except (TypeError, AttributeError):
             raise
 
         period = periods.period(period)

@@ -35,6 +35,7 @@ encoding//src/immo_analyse/input/input_2021_03_im_mir_130.py=utf-8
 encoding//src/immo_analyse/model/entities.py=utf-8
 encoding//src/immo_analyse/model/variable/bien_immo.py=utf-8
 encoding//src/immo_analyse/model/variable/credit.py=utf-8
+encoding//src/immo_analyse/model/variable/fiscalite.py=utf-8
 encoding//src/immo_analyse/report/report_generator.py=utf-8
 encoding//src/poc/immo_analyse/__main__.py=utf-8
 encoding//src/poc/immo_analyse/immo_system.py=utf-8

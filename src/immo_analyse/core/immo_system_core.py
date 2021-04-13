@@ -91,7 +91,6 @@ class ImmoSystemCore:
         """
         found = self.variables.get(variable_name)
         if not found and check_existence:
-            # raise VariableNotFound(variable_name, self)
             raise Exception('Variable "{}" not found'.format(variable_name), self)
         return found
 

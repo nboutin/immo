@@ -82,7 +82,7 @@ class Simulation:
 
         # Run formula: If Variable does not have formula, so it is input variable, get default value
         value = self._run_formula(variable, population, period)
-        if not value:
+        if value is None:
             value = holder.get_default()
 
         # Put variable value into holder (cache)
