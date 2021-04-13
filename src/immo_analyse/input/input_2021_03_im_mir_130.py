@@ -10,8 +10,7 @@ entities = {
     'lot': {'lot1': {'lot_type': {start: 'Commerce'},
                      'surface': {start: 64.85},
                      'loyer_nu': {'2021': 550 * 12},
-                     # rafraichissement
-                     'travaux': {start: 8000},
+                     'travaux': {start: 8000},  # rafraichissement
                      'anah_subvention_taux': {start: 0},
                      'anah_subvention_plafond': {start: 0},
                      'deficit_foncier_eligible': {start: 8000},

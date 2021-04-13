@@ -58,6 +58,9 @@ class SimulationBuilder:
                         if period not in buffer[variable_name]:
                             buffer[variable_name][period] = [0] * pop_count
 
+                        # value can be an array of value which must be sum
+                        if isinstance(value, list):
+                            value = sum(value)
                         buffer[variable_name][period][i] = value
 
         for variable_name, periods in buffer.items():

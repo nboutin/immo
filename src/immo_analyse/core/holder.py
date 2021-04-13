@@ -28,7 +28,8 @@ class Holder:
         try:
             if value.size != self.population.count:
                 raise Exception(
-                    "Value size ({}) is not equal to Population count ({})".format(value.size, self.population.count))
+                    "For variable '{}', value size ({}) is not equal to Population count ({})".format(
+                        self.variable.name, value.size, self.population.count))
         except TypeError:
             raise
 
