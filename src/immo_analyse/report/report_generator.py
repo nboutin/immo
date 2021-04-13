@@ -23,6 +23,7 @@ class ReportGenerator:
         self.report_acquisition()
         self.report_fiscalite()
         self.report_go_nogo()
+        self.report_credit()
 
     def report_overview(self):
 
@@ -98,6 +99,31 @@ class ReportGenerator:
                 0]
 
         self._print("GO NoGO", data_name, data)
+
+    def report_credit(self):
+
+        data_name = [
+            'Financement',
+            'Durée',
+            'Taux (%)',
+            'Taux assurance (%)',
+            'Frais dossier',
+            'Frais garantie',
+        ]
+
+        data = [
+            self.simu.compute('financement', self.period),
+            self.simu.compute('duree', self.period),
+            self.simu.compute('taux_interet', self.period) * 100,
+            self.simu.compute('taux_assurance', self.period) * 100,
+            self.simu.compute('frais_dossier', self.period),
+            self.simu.compute('frais_garantie', self.period),
+        ]
+
+        self._print('Credit', data_name, data)
+
+    def report_tableau_amortissement(self):
+        pass
 
     def _set_title(self, title: str):
 
