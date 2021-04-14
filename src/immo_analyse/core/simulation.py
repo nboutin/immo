@@ -157,7 +157,8 @@ class Simulation:
 
         if variable.period == periods.MONTH and period.unit != periods.MONTH:
             raise ValueError(
-                "Cannot compute variable '{}' for period {}: Must be computed for a month. Use ADD to get it on a year".format(
+                "Cannot compute variable '{}' for period {}: Must be computed for a month."
+                "Call compute with add=True".format(
                     variable.name, period))
 
         if variable.period == periods.YEAR and period.unit != periods.YEAR:

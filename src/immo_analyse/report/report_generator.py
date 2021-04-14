@@ -153,14 +153,14 @@ class ReportGenerator:
 
             data_year = [
                 year,
-                self.simu.compute('amortissement', str(year)),
-                self.simu.compute('interet', str(year)),
-                self.simu.compute('mensualite_ha', str(year)),
-                self.simu.compute('mensualite_assurance', str(year)),
-                self.simu.compute('mensualite_aa', str(year)),
-                self.simu.compute('capital_restant', str(year)),
+                self.simu.compute('amortissement', str(year), add=True),
+                self.simu.compute('interet', str(year), add=True),
+                self.simu.compute('mensualite_ha', str(year), add=True),
+                self.simu.compute('mensualite_assurance', str(year), add=True),
+                self.simu.compute('mensualite_aa', str(year), add=True),
+                self.simu.compute('capital_restant', str(year), add=True),
             ]
-            data.insert(0, data_year)
+            data.append(data_year)
 
         self._print2('Tableau amortissement annuel', data_name, data)
 
@@ -183,9 +183,11 @@ class ReportGenerator:
         self._set_title(title)
         logging.info(tabulate(report))
 
-    def _print2(self, title: str, data_name, data):
+    def _print2(self, title: str, data_name, data, rotate=False):
 
-        rotate = list(zip(*data[::-1]))
+        data.insert(0, data_name)
+        if rotate:
+            data = list(zip(*data[::-1]))
 
         self._set_title(title)
-        logging.info(tabulate(rotate))
+        logging.info(tabulate(data))
