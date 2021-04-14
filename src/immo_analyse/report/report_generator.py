@@ -153,7 +153,12 @@ class ReportGenerator:
 
             data_year = [
                 year,
-                0,
+                self.simu.compute('amortissement', str(year)),
+                self.simu.compute('interet', str(year)),
+                self.simu.compute('mensualite_ha', str(year)),
+                self.simu.compute('mensualite_assurance', str(year)),
+                self.simu.compute('mensualite_aa', str(year)),
+                self.simu.compute('capital_restant', str(year)),
             ]
             data.insert(0, data_year)
 
