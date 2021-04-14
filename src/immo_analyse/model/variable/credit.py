@@ -45,3 +45,45 @@ class frais_garantie(Variable):
     entity = Credit
     period = MONTH
     label = "Frais de garantie pour le credit"
+
+
+class amortissement(Variable):
+    value_type = float
+    entity = Credit
+    period = MONTH
+    label = ""
+
+
+class interet(Variable):
+    value_type = float
+    entity = Credit
+    period = MONTH
+    label = ""
+
+
+class mensualite_ha(Variable):
+    value_type = float
+    entity = Credit
+    period = MONTH
+    label = "Mensualite hors assurance"
+
+
+class mensualite_assurance(Variable):
+    value_type = float
+    entity = Credit
+    period = MONTH
+    label = "mensualite assurance seul"
+
+
+class mensualite_aa(Variable):
+    value_type = float
+    entity = Credit
+    period = MONTH
+    label = "Mensualite avec assurance"
+
+
+class capital_restant(Variable):
+    value_type = float
+    entity = Credit
+    period = MONTH
+    label = "Capital restant a rembourser"
