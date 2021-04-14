@@ -8,12 +8,16 @@
 import logging
 from tabulate import tabulate
 from ..core.periods import Period
+from ..core import periods
+
+separator = ''
 
 
 class ReportGenerator:
 
-    def __init__(self, period: Period, duration, simulation):
-        self.period = period
+    def __init__(self, period: str, duration, simulation):
+        if period is not None and not isinstance(period, periods.Period):
+            self.period = periods.period(period)
         self.duration = duration
         self.simu = simulation
 
@@ -24,6 +28,7 @@ class ReportGenerator:
         self.report_fiscalite()
         self.report_go_nogo()
         self.report_credit()
+        self.report_tableau_amortissement()
 
     def report_overview(self):
 
@@ -109,6 +114,10 @@ class ReportGenerator:
             'Taux assurance (%)',
             'Frais dossier',
             'Frais garantie',
+            separator,
+            'Total interet',
+            'Total assurance',
+            'Cout credit',
         ]
 
         data = [
@@ -118,12 +127,37 @@ class ReportGenerator:
             self.simu.compute('taux_assurance', self.period) * 100,
             self.simu.compute('frais_dossier', self.period),
             self.simu.compute('frais_garantie', self.period),
+            separator,
+            0,
+            0,
+            0,
         ]
 
         self._print('Credit', data_name, data)
 
     def report_tableau_amortissement(self):
-        pass
+
+        data_name = [
+            'Annee',
+            'Amortissement',
+            'Interet',
+            'Mensualite HA',
+            'Mensualite A',
+            'Mensualite AA',
+            'Capital restant',
+        ]
+
+        data = list()
+        year_start = int(str(self.period.this_year))
+        for year in range(year_start, year_start + self.duration):
+
+            data_year = [
+                year,
+                0,
+            ]
+            data.insert(0, data_year)
+
+        self._print2('Tableau amortissement annuel', data_name, data)
 
     def _set_title(self, title: str):
 
@@ -143,3 +177,10 @@ class ReportGenerator:
 
         self._set_title(title)
         logging.info(tabulate(report))
+
+    def _print2(self, title: str, data_name, data):
+
+        rotate = list(zip(*data[::-1]))
+
+        self._set_title(title)
+        logging.info(tabulate(rotate))
