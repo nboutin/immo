@@ -62,6 +62,27 @@ class TestVariable(unittest.TestCase):
         self.assertEqual(simu.compute('loyer_nu', month1), loyer)
         self.assertEqual(simu.compute('loyer_nu', month2), loyer)
 
+    def test02_Credit(self):
+        '''
+        '''
+        m_start = '2021-01'
+        entities = {
+            'bien_immo': {'bi1': {
+                'lot': [],
+                'date_achat': {m_start: m_start},
+                'prix_achat': {m_start: 115000},
+                'taux_notaire': {m_start: 0.08}, }},
+            'credit': {'c1': {'bien_immo': ['bi1'],
+                              'credit_duree': {m_start: 20 * 12},
+                              'taux_interet': {m_start: 0.0115}, },
+                       }}
+
+        immo_sys = ImmoSystem()
+        simu_builder = SimulationBuilder()
+        simu = simu_builder.build_from_entities(immo_sys, entities)
+
+        self.assertEqual(simu.compute('capital_emprunte', m_start), 0)
+
 
 if __name__ == "__main__":
     unittest.main()

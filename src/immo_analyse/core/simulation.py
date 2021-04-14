@@ -102,8 +102,10 @@ class Simulation:
 
         for entity_name, variable in self.entities[entity_key].items():
 
-            # sub_entities = [v for k, v in variable.items() if k == sub_entity_key]
-            sub_entities = variable[sub_entity_key]
+            try:
+                sub_entities = variable[sub_entity_key]
+            except KeyError:
+                raise Exception("Entity {} does not have sub-entity {}".format(entity_key, sub_entity_key))
 
             value = 0
             for se in sub_entities:

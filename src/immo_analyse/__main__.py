@@ -13,7 +13,7 @@ from immo_analyse.immo_system import ImmoSystem
 from immo_analyse.core.simulation_builder import SimulationBuilder
 from immo_analyse.report.report_generator import ReportGenerator
 
-from immo_analyse.input.input_2021_03_im_mir_130 import entities
+from immo_analyse.input.input_2021_03_im_mir_130 import entities, y_start, m_start
 
 __NAME = 'Immo Analyse'
 __VERSION = '3.0.0-dev'
@@ -32,7 +32,7 @@ def main(argv):
     simu_builder = SimulationBuilder()
     simu = simu_builder.build_from_entities(immo_sys, entities)
 
-    rg = ReportGenerator('2021-01', 25, simu)
+    rg = ReportGenerator(m_start, 25, simu)
     rg.generate_all()
 
 

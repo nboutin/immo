@@ -10,6 +10,7 @@ import numpy as np
 from .variable import Variable
 from . import periods
 from .periods import Period
+from immo_analyse.core.periods import ETERNITY
 
 
 class Holder:
@@ -45,6 +46,8 @@ class Holder:
         elif period.unit == periods.YEAR and self.variable.period == periods.MONTH and self.variable.year_to_month:
             # Set month variable with year value
             self._set_month_with_year_value(period, value)
+        elif self.variable.period == ETERNITY:
+            self.value[ETERNITY] = value
         else:
             raise ValueError(
                 "Cannot set variable '{}' for period {}. It does not support convertion year_to_month or month_to_year".format(

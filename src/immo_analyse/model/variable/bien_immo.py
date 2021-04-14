@@ -157,6 +157,12 @@ class vacance_locative_taux(Variable):
 
 # --- Bien Immo
 
+class date_achat(Variable):
+    value_type = str
+    entity = BienImmo
+    period = ETERNITY
+    label = "Date d'achat du bien"
+
 
 class prix_achat(Variable):
     value_type = float

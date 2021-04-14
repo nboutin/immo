@@ -8,6 +8,7 @@
 from .immo_system_core import ImmoSystemCore
 from .simulation import Simulation
 import numpy as np
+from . import periods
 
 
 class SimulationBuilder:
@@ -58,16 +59,19 @@ class SimulationBuilder:
 
                     for period, value in period_value.items():
 
-                        if period not in buffer[variable_name]:
-                            buffer[variable_name][period] = [0] * pop_count
+                        period = periods.period(period)
+                        for sp in period.get_subperiods(period.unit):
 
-                        # value can be an array of value which must be sum
-                        if isinstance(value, list):
-                            value = sum(value)
-                        buffer[variable_name][period][i] = value
+                            if sp not in buffer[variable_name]:
+                                buffer[variable_name][sp] = [0] * pop_count
 
-        for variable_name, periods in buffer.items():
-            for period, values in periods.items():
+                            # value can be an array of value which must be summed
+                            if isinstance(value, list):
+                                value = sum(value)
+                            buffer[variable_name][sp][i] = value
+
+        for variable_name, periodlist in buffer.items():
+            for period, values in periodlist.items():
                 simulation.set_input(variable_name, period, np.array(values))
 
         # Build entities_index
